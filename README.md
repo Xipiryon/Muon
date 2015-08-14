@@ -1,4 +1,4 @@
 # Muon
 C++ Core Library
 
-[![Build Status](https://drone.io/github.com/Xleek/Muon/status.png)](https://drone.io/github.com/Xleek/Muon/latest)
+[![Build Status](https://travis-ci.org/Xleek/Muon.svg)](https://travis-ci.org/Xleek/Muon)
