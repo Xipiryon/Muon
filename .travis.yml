@@ -4,18 +4,17 @@ compiler:
   - gcc
   - clang
 env:
-  - OPTIM_LEVEL=debug
-  - OPTIM_LEVEL=release
-  - LIB_LINK=dll
-  - LIB_LINK=lib
+  - BUILD_CONFIG=debugdll
+  - BUILD_CONFIG=releasedll
+  - BUILD_CONFIG=debuglib
+  - BUILD_CONFIG=releaselib
 cache: apt
 before_install:
   - chmod +x premake5
 before_script:
   - ./premake5 gmake 
 script:
-  - echo "Configuration is ${OPTIM_LEVEL}${LIB_LINK}"
-  - make config=${OPTIM_LEVEL}${LIB_LINK}
+  - make config=${BUILD_CONFIG}
 branches:
   only:
   - master
