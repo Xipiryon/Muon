@@ -10,9 +10,9 @@ env:
   - LIB_LINK=lib
 cache: apt
 before_install:
-  - sudo apt-get update -qq
+  - chmod +x premake5
 before_script:
-  - ./premake gmake 
+  - ./premake5 gmake 
 script:
   - make config=${OPTIM_LEVEL}${LIB_LINK}
 branches:
