@@ -14,6 +14,7 @@ before_install:
 before_script:
   - ./premake5 gmake 
 script:
+  - echo "Configuration is ${OPTIM_LEVEL}${LIB_LINK}"
   - make config=${OPTIM_LEVEL}${LIB_LINK}
 branches:
   only:
