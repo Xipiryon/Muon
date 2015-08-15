@@ -3,24 +3,18 @@ sudo: false
 compiler:
   - gcc
   - clang
-env:
-  - BUILD_CONFIG=debugdll
-  - BUILD_CONFIG=releasedll
-  - BUILD_CONFIG=debuglib
-  - BUILD_CONFIG=releaselib
 cache: apt
 before_install:
   - chmod +x premake5
+install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 before_script:
   - ./premake5 gmake 
 script:
-  - make config=${BUILD_CONFIG}
+  - make config=releasedll
 branches:
   only:
   - master
-os:
-  - linux
-  - osx
 notifications:
   email: false
 addons:
@@ -30,3 +24,4 @@ addons:
     packages:
       - gcc-4.8
       - g++-4.8
+	  - clang
