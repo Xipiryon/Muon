@@ -29,26 +29,27 @@
 #define _MUON_TYPEDEF_H_INCLUDED
 
 #include "Muon/Core/Define.hpp"
+#include <stdint.h>
 
 namespace muon
 {
 	//! 1 Byte unsigned integer
-	typedef unsigned char		u8;
+	typedef uint8_t		u8;
 	//! 2 Bytes unsigned integer
-	typedef unsigned short		u16;
+	typedef uint16_t	u16;
 	//! 4 Bytes unsigned integer
-	typedef unsigned int		u32;
+	typedef uint32_t	u32;
 	//! 8 Bytes unsigned integer
-	typedef unsigned long long	u64;
+	typedef uint64_t	u64;
 
 	//! 1 Byte integer
-	typedef char		i8;
+	typedef int8_t		i8;
 	//! 2 Bytes integer
-	typedef short		i16;
+	typedef int16_t		i16;
 	//! 4 Bytes integer
-	typedef int			i32;
+	typedef int32_t		i32;
 	//! 8 Bytes integer
-	typedef long long	i64;
+	typedef int64_t		i64;
 
 	//! float
 	typedef float	f32;
