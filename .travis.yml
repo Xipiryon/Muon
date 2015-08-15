@@ -4,6 +4,10 @@ compiler:
   - gcc
   - clang
 cache: apt
+env:
+  global:
+    # Coverity Token
+    - secure: "cfjQzf4clKxv7/owYmfVnUSDM2dJ58BHc7Q/uzwrdxgOzD0VfX+efpsMd5RyCrcmWe2yMW1IKiNOY4koYdPGoUz0f2a2c3ABEpArBANRpDSg9ehdRfSiUfWj16pCzVWkGzeuYCtJvwNxLT88ZDMSw2kjJl2dfIRlyRdpE5e8IiBF/NgGkL7pv/rXNCEAXb2SaJGVNrcT3aTz3fKS4YbhbpunR5pxc4sL3E4PMVbqN7UsmyLHplfK5h5x4inzv6aDZcNud1+Xl2Re/4xKCHvy/DcTrWLRUeyI3lJIG1rOSO0uyBuqxr6+tMc5nrdnjnEni28cu1dqSL6lOwC8Fm3tKeXVPFHX2ekiwNZlKFlrRF5S//oC5tHwRT5/XTuR1Xm036DPfgR+uu+ANpmAq/k05a1uXSS/YzNgwOMASj64lzsPkm2MzWvFSeHjCRjfyNHnz7EaLmwVChpVIqa/v/heOzMe4PzQMsmm6CEu6mtR0vwGSyn/0ckjhnuq01Hmg69toW6z7KaLHkWO+yD6yQh6FJ7njByBPkxxLIzDnG7xM3NK6/f/duTsVfiDDeBM8XkJugMZdEDAARBrx0hiCAwInm6gWhwqTgA3HsbJwR7Vzhx7oyQVjaCwPdCc7+l3ouszo/O6W4UiFaU5AzKRPMb4idj8f1bDUn7VOD7LmZmGX3g="
 before_install:
   - chmod +x premake5
 install:
@@ -11,7 +15,7 @@ install:
 before_script:
   - ./premake5 gmake 
 script:
-  - make config=releasedll
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make config=releasedll ; fi
 branches:
   only:
   - master
@@ -25,3 +29,11 @@ addons:
       - gcc-4.8
       - g++-4.8
       - clang
+
+  coverity_scan:
+    project:
+      name: "Xleek/Muon"
+      description: "Build submitted via Travis CI"
+    build_command_prepend: "./premake5 gmake"
+    build_command:   "make config=releasedll -j 4"
+    branch_pattern: master
