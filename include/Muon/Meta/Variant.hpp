@@ -45,13 +45,14 @@ namespace muon
 
 			MetaData* getMeta() const;
 
-			// Copy Operator
 			template<typename T> Variant& operator=(const T& rhs);
 			Variant& operator=(const Variant& rhs);
 
-			// Value
-			template<typename T> T& value();
-			template<typename T> const T& value() const;
+			template<typename T> Variant& set(const T& rhs);
+			Variant& set(const Variant& rhs);
+
+			template<typename T> T& get();
+			template<typename T> const T& get() const;
 
 		protected:
 			MetaData* _meta;
@@ -66,13 +67,13 @@ namespace muon
 		}
 
 		template <typename T>
-		T& Variant::value()
+		T& Variant::get()
 		{
 			return *reinterpret_cast<T*>(_data);
 		}
 
 		template <typename T>
-		const T& Variant::value() const
+		const T& Variant::get() const
 		{
 			return *reinterpret_cast<T*>(_data);
 		}
@@ -104,6 +105,12 @@ namespace muon
 			}
 
 			return *this;
+		}
+
+		template <typename T>
+		Variant& Variant::set(const T& rhs)
+		{
+			return this->operator=(rhs);
 		}
 	}
 }
