@@ -228,7 +228,7 @@ namespace muon
 	{
 		if (pos >= _charcount)
 		{
-			return -1;
+			return INVALID_INDEX;
 		}
 
 		for (u32 i = pos; i < _charcount; ++i)
@@ -238,15 +238,15 @@ namespace muon
 				return i;
 			}
 		};
-		return -1;
+		return INVALID_INDEX;
 	}
 
-	u32 String::find(const char* other, u32 pos, u32 len) const
+	u32 String::find(const char* other, u32 pos) const
 	{
 		u32 slen = ::strlen(other);
 		if (pos + slen >= _charcount)
 		{
-			return -1;
+			return INVALID_INDEX;
 		}
 
 		u32 maxcount = _charcount - slen;
@@ -277,12 +277,7 @@ namespace muon
 			}
 			++pos;
 		}
-		return -1;
-	}
-
-	u32 String::find(const char* other, u32 pos) const
-	{
-		return find(pos, ::strlen(other));
+		return INVALID_INDEX;
 	}
 
 	u32 String::find(const String& other, u32 pos) const
@@ -307,7 +302,7 @@ namespace muon
 			len = _charcount - pos;
 		}
 
-		String s(len, 0);
+		String s(len + 1, 0);
 		::strncpy(s._str, _str + pos, len);
 		*(s._str + len) = 0;
 		s._charcount = len;

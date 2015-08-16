@@ -33,8 +33,12 @@
 #include "Muon/Meta/TypeTraits.hpp"
 #include "Muon/Type/String.hpp"
 
+/*!
+* @file MetaData.hpp
+*/
 namespace muon
 {
+	//! Meta classes are used mostly for reflection system
 	namespace meta
 	{
 		class MetaData;

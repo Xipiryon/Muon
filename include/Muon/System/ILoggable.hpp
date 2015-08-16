@@ -79,6 +79,7 @@ namespace muon
 	MUON_ILOGGABLE_IMPL(MyClass, ostream)
 	{
 		ostream << "Not implemented yet" << muon::endl;
+		return ostream;
 	}
 * @endcode
 * @param Class Your class name
