@@ -30,7 +30,7 @@
 
 #include <unordered_map>
 #include "Muon/Core/NonCopyable.hpp"
-#include "Muon/Memory/PoolAllocator.hpp"
+#include "Muon/Memory/Allocator.hpp"
 #include "Muon/Meta/MetaData.hpp"
 #include "Muon/Meta/MetaFactory.hpp"
 

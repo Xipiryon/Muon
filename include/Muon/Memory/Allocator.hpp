@@ -25,21 +25,46 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_POOLALLOCATOR_H_INCLUDED
-#define _MUON_POOLALLOCATOR_H_INCLUDED
+#ifndef _MUON_ALLOCATOR_H_INCLUDED
+#define _MUON_ALLOCATOR_H_INCLUDED
 
 #include "Muon/Core/Typedef.hpp"
 #include "Muon/System/Assert.hpp"
 
+/*
+* @file Allocator.hpp
+*/
 namespace muon
 {
+	//!
 	namespace memory
 	{
-		namespace pool
+		struct MUON_API AllocatorInfo
 		{
-			MUON_API void* allocate(const char* file, const char* func, u32 line, u32 size, u32 count);
-			MUON_API void deallocate(const char* file, const char* func, u32 line, u32 size, u32 count, void* ptr);
-			MUON_API void info();
+			const char* file;
+			const char* function;
+			u32 line;
+		};
+
+		namespace global
+		{
+			template<typename T>
+			T* allocate(u32 count, const AllocatorInfo& info)
+			{
+				return (T*)malloc(sizeof(T) * count);
+			}
+
+			template<typename T>
+			void destruct(T* ptr, const AllocatorInfo& info)
+			{
+				ptr->~T();
+			}
+
+			template<typename T>
+			void deallocate(u32 count, T* ptr, const AllocatorInfo& info)
+			{
+				free((void*)ptr);
+			}
 		}
 	}
 }
@@ -49,13 +74,14 @@ namespace muon
 * Allocate memory for given Class instance
 * @param Class Class or Struct to be allocated
 */
-#define MUON_NEW(Class) ((Class*)muon::memory::pool::allocate(__FILE__, __FUNCTION__, __LINE__, sizeof(Class), 1))
+#define MUON_NEW(Class) (::muon::memory::global::allocate<Class>(1, {__FILE__, __FUNCTION__, __LINE__}))
 
 /*!
-* @def MUON_CNEW(Class)
+* @def MUON_CNEW(Class, ...)
 * Allocate memory for given Class instance, and
 * call the placement new constructor on it.
-* @param Class Class or Classure to be allocated and constructed
+* @param Class Class or Struct to be allocated and constructed
+* @param ... Variadic parameters to be forwarded to the constructor
 */
 #define MUON_CNEW(Class, ...) new MUON_NEW(Class) Class(__VA_ARGS__)
 
@@ -65,14 +91,14 @@ namespace muon
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be freed from memory
 */
-#define MUON_DELETE(Pointer) muon::memory::pool::deallocate(__FILE__, __FUNCTION__, __LINE__, sizeof(*Pointer), 1, (void*)Pointer)
+#define MUON_DELETE(Pointer) ::muon::memory::global::deallocate(1, Pointer, {__FILE__, __FUNCTION__, __LINE__})
 
 /*!
-* @def MUON_CDELETE(Pointer, Class)
-* Call the destructor Class on Pointer, and free the object
+* @def MUON_CDELETE(Pointer)
+* Call the destructor on Pointer, and free the object
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be destructed and freed from memory
 */
-#define MUON_CDELETE(Pointer, Class) Pointer->~Class(); MUON_DELETE(Pointer)
+#define MUON_CDELETE(Pointer) ::muon::memory::global::destruct(Pointer, {__FILE__, __FUNCTION__, __LINE__}); MUON_DELETE(Pointer)
 
 #endif

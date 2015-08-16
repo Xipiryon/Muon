@@ -29,7 +29,7 @@
 #define _MUON_VARIANT_H_INCLUDED
 
 #include "Muon/System/Assert.hpp"
-#include "Muon/Memory/PoolAllocator.hpp"
+#include "Muon/Memory/Allocator.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
 
 namespace muon

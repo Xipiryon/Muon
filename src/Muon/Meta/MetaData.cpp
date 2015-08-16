@@ -26,7 +26,7 @@
 *************************************************************************/
 
 #include <cstring>
-#include "Muon/Memory/PoolAllocator.hpp"
+#include "Muon/Memory/Allocator.hpp"
 #include "Muon/Meta/MetaData.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
 
@@ -127,8 +127,8 @@ namespace muon
 
 		MetaData::~MetaData()
 		{
-			MUON_CDELETE(_members, MetaMemberMap);
-			MUON_CDELETE(_methods, MetaMethodMap);
+			MUON_CDELETE(_members);
+			MUON_CDELETE(_methods);
 		}
 
 		const String& MetaData::name() const
