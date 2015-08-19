@@ -27,7 +27,7 @@
 
 #include <fstream>
 #include <map>
-#include "Muon/Memory/PoolAllocator.hpp"
+#include "Muon/Memory/Allocator.hpp"
 #include "Muon/System/Log.hpp"
 #include "Muon/Type/String.hpp"
 
@@ -43,27 +43,5 @@ namespace muon
 {
 	namespace memory
 	{
-		namespace pool
-		{
-			void* allocate(const char* file, const char* func, u32 line, u32 size, u32 count)
-			{
-				++_allocated;
-				++_allocatedTotal;
-				_allocatedSize += size*count;
-				return malloc(size * count);
-			}
-
-			void deallocate(const char* file, const char* func, u32 line, u32 size, u32 count, void* ptr)
-			{
-				MUON_ASSERT(_allocated > 0, "Deallocating more memory than allocated!");
-				--_allocated;
-				free(ptr);
-			}
-
-			void info()
-			{
-				//Log(LOG_INFO, "[PoolAllocator] Alloc. Num: %d | Size Alloc.: %d", _allocatedTotal, _allocatedSize);
-			}
-		}
 	}
 }

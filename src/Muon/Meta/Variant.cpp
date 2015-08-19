@@ -31,7 +31,6 @@ namespace muon
 {
 	namespace meta
 	{
-
 		Variant::Variant(MetaData* m, void* d)
 			: _meta(m)
 			, _data(d)
@@ -70,6 +69,11 @@ namespace muon
 				_meta->memCopy(_data, rhs._data);
 			}
 			return *this;
+		}
+
+		Variant& Variant::set(const Variant& rhs)
+		{
+			return this->operator=(rhs);
 		}
 	}
 }

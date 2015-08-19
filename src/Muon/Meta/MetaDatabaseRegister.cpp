@@ -40,6 +40,7 @@ namespace muon
 			registerMeta<void>();
 			registerMeta<bool>();
 			registerMeta<const char*>();
+			registerMeta<char*>();
 
 			registerMeta<u8>();
 			registerMeta<u16>();
