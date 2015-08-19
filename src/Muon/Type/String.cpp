@@ -333,6 +333,10 @@ namespace muon
 			off = pos[0] + src_size;
 			pos[1] = pos[0] + 1;
 		}
+		if(off < size())
+		{
+			s += substr(off);
+		}
 		return s;
 	}
 

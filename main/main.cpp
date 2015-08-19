@@ -172,7 +172,7 @@ int main(int argc, char** argv)
 		hello = "hale Whale Whale hale";
 		log() << hello.replace("hale", "3") << muon::endl;
 
-		hello = "hale Whale Whale hale";
+		hello = "hale Whale Whale hale things more";
 		log() << hello.replace("hale", "\n") << muon::endl;
 
 		muon::String hale="hale";
