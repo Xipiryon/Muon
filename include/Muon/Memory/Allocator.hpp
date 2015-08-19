@@ -28,6 +28,7 @@
 #ifndef _MUON_ALLOCATOR_H_INCLUDED
 #define _MUON_ALLOCATOR_H_INCLUDED
 
+#include <stdlib.h>
 #include "Muon/Core/Typedef.hpp"
 #include "Muon/System/Assert.hpp"
 
@@ -51,7 +52,7 @@ namespace muon
 			template<typename T>
 			T* allocate(u32 count, const AllocatorInfo& info)
 			{
-				return (T*)malloc(sizeof(T) * count);
+				return (T*)::malloc(sizeof(T) * count);
 			}
 
 			template<typename T>
@@ -63,7 +64,7 @@ namespace muon
 			template<typename T>
 			void deallocate(u32 count, T* ptr, const AllocatorInfo& info)
 			{
-				free((void*)ptr);
+				::free((void*)ptr);
 			}
 		}
 	}
