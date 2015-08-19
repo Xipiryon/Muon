@@ -131,8 +131,15 @@ namespace muon
 		template<> struct TypeTraits<const char*>
 		{
 			_MUON_TRAITS_NAME(const char*)
-			_MUON_TRAITS_ID(const char*)
-			_MUON_TRAITS_SIZE(const char*)
+				_MUON_TRAITS_ID(const char*)
+				_MUON_TRAITS_SIZE(const char*)
+		};
+
+		template<> struct TypeTraits<char*>
+		{
+			_MUON_TRAITS_NAME(char*)
+				_MUON_TRAITS_ID(char*)
+				_MUON_TRAITS_SIZE(char*)
 		};
 
 		// Template Functions to remove qualifier around a Template
@@ -168,10 +175,14 @@ namespace muon
 		{
 			typedef typename RawType<T>::type type;
 		};
-		// The only special case of built-in const char*
+		// Special case of char*
 		template<> struct RawType<const char*>
 		{
 			typedef const char* type;
+		};
+		template<> struct RawType<char*>
+		{
+			typedef char* type;
 		};
 
 		// Function which return a class member offset (works with virtual and abstract classes)

@@ -30,7 +30,7 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "Muon/Memory/PoolAllocator.hpp"
+#include "Muon/Memory/Allocator.hpp"
 #include "Muon/System/Assert.hpp"
 #include "Muon/System/Log.hpp"
 #include "Muon/System/KeyValue.hpp"

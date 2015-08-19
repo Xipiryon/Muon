@@ -41,7 +41,7 @@ namespace muon
 
 		MetaDatabase::~MetaDatabase()
 		{
-			MUON_CDELETE(_metadb, MapMetaType);
+			MUON_CDELETE(_metadb);
 		}
 
 		MetaData* MetaDatabase::createMeta(const String& name)

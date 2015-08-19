@@ -34,7 +34,7 @@
 
 namespace muon
 {
-	//! System namespace
+	//! System classes are used to check, assert or log data
 	namespace system
 	{
 		class Log;
