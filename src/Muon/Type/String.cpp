@@ -244,7 +244,7 @@ namespace muon
 	u32 String::find(const char* other, u32 pos) const
 	{
 		u32 slen = ::strlen(other);
-		if (pos + slen >= _charcount)
+		if (pos + slen > _charcount)
 		{
 			return INVALID_INDEX;
 		}
