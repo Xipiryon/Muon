@@ -161,6 +161,24 @@ int main(int argc, char** argv)
 		log() <<  " ===> MetaData\"\t" << m->name() << "\"\t" << m->id() << "\t(" << m->size() << ")" << muon::endl;
 	}
 
+	{
+		muon::system::Log log("StringReplace");
+		muon::String hello = "Hello haleWhale Whale";
+		log() << hello.replace("hale", "orld") << muon::endl;;
+
+		hello = "Hello Whale Whalehale";
+		log() << hello.replace("hale", "orld_!_:D") << muon::endl;;
+
+		hello = "hale Whale Whale hale";
+		log() << hello.replace("hale", "3") << muon::endl;
+
+		hello = "hale Whale Whale hale";
+		log() << hello.replace("hale", "\n") << muon::endl;
+
+		muon::String hale="hale";
+		muon::String n = "\\n";
+		log() << hello.replace(hale, n) << muon::endl;
+	}
 #ifdef MUON_PLATFORM_WINDOWS
 	::system("PAUSE");
 #endif
