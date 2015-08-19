@@ -188,6 +188,30 @@ namespace muon
 		String substr(u32 pos, u32 len = 0) const;
 
 		/*!
+		* @brief Return a string with some content replaced
+		* @param src The content to be replaced
+		* @param dst The new content
+		* @return A new String instance where 'src' has been replaced by 'dst'
+		* @code
+		String hello = "Hello Whale";
+		hello.replace("hale", "orld"); // "Hello World"
+		* @endcode
+		*/
+		String replace(const String& src, const String& dst) const;
+
+		/*!
+		* @brief Return a string with some content replaced
+		* @param src The content to be replaced
+		* @param dst The new content
+		* @return A new String instance where 'src' has been replaced by 'dst'
+		* @code
+		String hello = "Hello Whale";
+		hello.replace("hale", "orld"); // "Hello World"
+		* @endcode
+		*/
+		String replace(const char* src, const char* dst) const;
+
+		/*!
 		* @brief Check that current stored string is UTF8.
 		* @return True if every characters are encoded as UTF8.
 		*/

@@ -309,6 +309,33 @@ namespace muon
 		return s;
 	}
 
+	String String::replace(const String& src, const String& dst) const
+	{
+		return replace(src.cStr(), dst.cStr());
+	}
+
+	String String::replace(const char* src, const char* dst) const
+	{
+		u32 src_size = strlen(src);
+		String s;
+		u32 pos[2] = { 0, 0 };
+		u32 off = 0;
+		u32 len = 0;
+		while ((pos[0] = find(src, pos[1])) != INVALID_INDEX)
+		{
+			len = pos[0] - off;
+			if(len > 0)
+			{
+				s += substr(off, len);
+			}
+			s += dst;
+
+			off = pos[0] + src_size;
+			pos[1] = pos[0] + 1;
+		}
+		return s;
+	}
+
 	bool String::checkUTF8() const
 	{
 		// Reference:
