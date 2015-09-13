@@ -29,21 +29,13 @@
 #define _MUON_LOG_H_INCLUDED
 
 #include <vector>
+#include "Muon/IO/IStream.hpp"
 #include "Muon/System/ILogImpl.hpp"
 #include "Muon/Type/String.hpp"
 
 namespace muon
 {
-	//! System classes are used to check, assert or log data
-	namespace system
-	{
-		class Log;
-	}
-
-	struct Endl : public system::ILoggable
-	{
-		MUON_ILOGGABLE_DECL;
-	};
+	struct Endl {};
 
 	/*!
 	* @brief End line structure
@@ -71,6 +63,7 @@ namespace muon
 	*/
 	extern MUON_API Endl endl;
 
+	//! System classes are used to check, assert or log data
 	namespace system
 	{
 		/*! 
@@ -173,7 +166,6 @@ namespace muon
 			/*!
 			* @brief Log an object
 			* Dispatch the object to all registererd ILogImpl.
-			* The object must inherits from ILoggable
 			* @tparam Tref A reference to the object to be outputed
 			* @return Instance to the Log class
 			*/
@@ -245,6 +237,16 @@ namespace muon
 		template<> MUON_INLINE Log& Log::operator<<(char* str)
 		{
 			return (*this << (const char*)str);
+		}
+
+		template<> MUON_INLINE Log& Log::operator<<(const Endl& endl)
+		{
+			auto& logImpl = getLogImpl();
+			for (auto it = logImpl.begin(); it != logImpl.end(); ++it)
+			{
+				(*it)->endl();
+			}
+			return *this;
 		}
 	}
 }

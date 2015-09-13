@@ -33,7 +33,7 @@
 #include "Muon/Core/Constant.hpp"
 #include "Muon/Meta/TypeTraits.hpp"
 #include "Muon/Memory/ISerializable.hpp"
-#include "Muon/System/ILoggable.hpp"
+#include "Muon/System/ILogImpl.hpp"
 
 /*!
 * @file String.hpp
@@ -47,11 +47,9 @@ namespace muon
 	* so you don't have to worry about it.
 	* @see String.hpp 
 	*/
-	class MUON_API String : public system::ILoggable
+	class MUON_API String
 	{
 	public:
-		MUON_ILOGGABLE_DECL;
-
 		/*!
 		* @brief Construct an empty String
 		*/
@@ -281,6 +279,8 @@ MUON_API muon::String operator+(const muon::String& str, const muon::String& oth
 * @endcode
 */
 MUON_API muon::String operator+(const char* str, const muon::String& other);
+
+MUON_API muon::system::ILogImpl& operator<<(muon::system::ILogImpl& log, const muon::String& str);
 
 MUON_TRAITS(muon::String)
 
