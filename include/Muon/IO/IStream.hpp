@@ -29,28 +29,18 @@
 #define _MUON_ISTREAM_H_INCLUDED
 
 #include "Muon/Core/Typedef.hpp"
-#include "Muon/Memory/ISerializable.hpp"
+#include "Muon/IO/ISerializable.hpp"
 #include "Muon/Type/String.hpp"
 
 namespace muon
 {
-	namespace memory
+	namespace io
 	{
 		class MUON_API IStream
 		{
 		public:
 			IStream() {}
 			virtual ~IStream() {}
-
-			virtual IStream& operator<<(ISerializable& obj)
-			{
-				return obj << ((IStream&)*this);
-			}
-
-			virtual IStream& operator>>(ISerializable& obj)
-			{
-				return obj >> ((IStream&)*this);
-			}
 
 			// Write
 			virtual IStream& operator<<(u64 pod) = 0;

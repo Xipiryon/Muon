@@ -29,11 +29,11 @@
 
 #include "Muon/System/Assert.hpp"
 #include "Muon/System/Log.hpp"
-#include "Muon/Memory/FileArchive.hpp"
+#include "Muon/IO/FileArchive.hpp"
 
 namespace muon
 {
-	namespace memory
+	namespace io
 	{
 		FileArchive::FileArchive()
 			: IStream()

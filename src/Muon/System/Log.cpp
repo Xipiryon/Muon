@@ -51,13 +51,10 @@ namespace
 		{
 			std::cout << std::endl; return *this;
 		}
+
 		virtual void operator()(muon::LogLevel level)
 		{
 			_level = level;
-		}
-		virtual ILogImpl& operator<<(const muon::system::ILoggable& obj)
-		{
-			return obj << *this;
 		}
 
 		virtual ILogImpl& operator<<(const char* pod)
@@ -143,15 +140,6 @@ namespace
 namespace muon
 {
 	/*extern*/ Endl endl;
-	MUON_ILOGGABLE_IMPL(Endl, stream)
-	{
-		auto& logImpl = privGetLogImpl();
-		for (auto it = logImpl.begin(); it != logImpl.end(); ++it)
-		{
-			(*it)->endl();
-		}
-		return stream;
-	}
 
 	namespace system
 	{

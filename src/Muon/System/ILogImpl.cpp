@@ -61,10 +61,5 @@ namespace muon
 		{
 			return true;
 		}
-
-		ILogImpl& ILogImpl::operator<<(const system::ILoggable& obj)
-		{
-			return obj.operator<<(*this);
-		}
 	}
 }
