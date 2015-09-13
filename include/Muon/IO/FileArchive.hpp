@@ -30,11 +30,11 @@
 
 #include <fstream>
 
-#include "Muon/Memory/IStream.hpp"
+#include "Muon/IO/IStream.hpp"
 
 namespace muon
 {
-	namespace memory
+	namespace io
 	{
 		class MUON_API FileArchive : public IStream
 		{

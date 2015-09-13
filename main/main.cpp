@@ -31,15 +31,16 @@
 // could be modified in any way to ensure new features
 // can be used / are working / pass unit tests / etc...
 
+#include <fstream>
 #include <iostream>
 #include <Muon/System/Log.hpp>
 #include <Muon/Meta/MetaDatabase.hpp>
 #include <Muon/Meta/Variant.hpp>
 #include <Muon/Type/String.hpp>
 
-struct C { virtual void* foo() = 0; private: char c[128]; };
+struct C { virtual void* foo() const = 0; private: char c[128]; };
 
-struct B : C { virtual void* foo() { return (void*) this; } };
+struct B : C { virtual void* foo() const { return (void*) this; } };
 
 struct A : B
 {
@@ -54,9 +55,53 @@ private:
 };
 MUON_TRAITS(A);
 
+class LogFile : public muon::system::ILogImpl
+{
+public:
+	LogFile() {}
+	virtual ~LogFile() {}
+
+	virtual bool open(const muon::String& filename) { _file.open(filename.cStr()); return true;}
+	virtual bool close() { _file.close(); return true;}
+
+	virtual LogFile& endl() { _file << "\n"; return *this;}
+
+	//! Behavior on const char* parameter
+	virtual LogFile& operator<<(const char* pod) { _file << pod; return *this; }
+	//! Behavior on u64 parameter
+	virtual LogFile& operator<<(muon::u64 pod) { _file << pod; return *this;}
+	//! Behavior on u32 parameter
+	virtual LogFile& operator<<(muon::u32 pod) { _file << pod; return *this;}
+	//! Behavior on u16 parameter
+	virtual LogFile& operator<<(muon::u16 pod) { _file << pod; return *this;}
+	//! Behavior on u8 parameter
+	virtual LogFile& operator<<(muon::u8 pod) { _file << pod; return *this;}
+	//! Behavior on i64 parameter
+	virtual LogFile& operator<<(muon::i64 pod) { _file << pod; return *this;}
+	//! Behavior on i32 parameter
+	virtual LogFile& operator<<(muon::i32 pod) { _file << pod; return *this;}
+	//! Behavior on i16 parameter
+	virtual LogFile& operator<<(muon::i16 pod) { _file << pod; return *this;}
+	//! Behavior on i8 parameter
+	virtual LogFile& operator<<(muon::i8 pod) { _file << pod; return *this;}
+	//! Behavior on f64 parameter
+	virtual LogFile& operator<<(muon::f64 pod) { _file << pod; return *this;}
+	//! Behavior on f32 parameter
+	virtual LogFile& operator<<(muon::f32 pod) { _file << pod; return *this;}
+	//! Behavior on bool parameter
+	virtual LogFile& operator<<(bool pod) { _file << pod; return *this;}
+
+	protected:
+		std::ofstream _file;
+};
+
 int main(int argc, char** argv)
 {
+	LogFile logFile;
 	muon::system::Log::registerDefaultLogImpl();
+	muon::system::Log::registerLogImpl(&logFile);
+
+	muon::system::Log::open("output.log");
 	muon::system::Log mainLog("Main", muon::LOG_DEBUG);
 
 	mainLog() << "Number of arguments: " << argc << muon::endl;
@@ -64,7 +109,7 @@ int main(int argc, char** argv)
 	{
 		mainLog() << "\t: " << argv[i] << muon::endl;
 	}
-
+#if 0
 	// META
 	{
 		//*
@@ -100,7 +145,8 @@ int main(int argc, char** argv)
 		PRINT_META_O(metaLog);
 		//*/
 	}
-
+#endif
+#if 0
 	{
 		//*
 		muon::system::Log memberLog("Member", muon::LOG_DEBUG);
@@ -118,7 +164,8 @@ int main(int argc, char** argv)
 		memberLog() << "a.f = " << a.f << " | " << pf << " " << &a.f<< muon::endl;
 		//*/
 	}
-
+#endif
+#if 0
 	{
 		//*
 #define PRINT_VARIANT_O(Value) v = Value; m = v.getMeta(); PRINT_VARIANT(Value)
@@ -135,7 +182,8 @@ int main(int argc, char** argv)
 		PRINT_VARIANT_O(v);
 		//*/
 	}
-
+#endif
+#if 0
 	{
 		//*
 		muon::system::Log log("MetaMember");
@@ -160,7 +208,8 @@ int main(int argc, char** argv)
 		log() <<  " ==> MetaMember\"\t" << mb.name() << "\"\t" << mb.offset() << muon::endl;
 		log() <<  " ===> MetaData\"\t" << m->name() << "\"\t" << m->id() << "\t(" << m->size() << ")" << muon::endl;
 	}
-
+#endif
+#if 0
 	{
 		muon::system::Log log("StringReplace");
 		muon::String hello = "Hello haleWhale Whale";
@@ -179,8 +228,27 @@ int main(int argc, char** argv)
 		muon::String n = "\\n";
 		log() << hello.replace(hale, n) << muon::endl;
 	}
+#endif
+#if 0
+	{
+		muon::system::Log log;
+		muon::String world = "World";
+		A a;
+		a.i = 42;
+		log << "Hello " << world << ", A a = " << a << muon::endl;
+	}
+#endif
+
+
+	muon::system::Log::close();
 #ifdef MUON_PLATFORM_WINDOWS
 	::system("PAUSE");
 #endif
 	return 0;
+}
+
+muon::system::ILogImpl& operator<<(muon::system::ILogImpl& log, const A& a)
+{
+	log << a.i << " " << (muon::u64)a.foo();
+	return log;
 }

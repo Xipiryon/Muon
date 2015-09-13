@@ -29,7 +29,6 @@
 #define _MUON_ILOGIMPL_H_INCLUDED
 
 #include "Muon/Core/Typedef.hpp"
-#include "Muon/System/ILoggable.hpp"
 
 /*!
 * @file ILogImpl.hpp
@@ -116,15 +115,6 @@ namespace muon
 			* @return ILogImpl The instance of the ILogImpl class
 			*/
 			virtual ILogImpl& endl() = 0;
-
-			/*!
-			* @brief Behavior on ILoggable object
-			*
-			* Default behavior is to forward the instance to the 
-			* system::ILoggable object
-			* @param obj Reference to an ILoggable object
-			*/
-			virtual ILogImpl& operator<<(const system::ILoggable& obj);
 
 			//! Behavior on const char* parameter
 			virtual ILogImpl& operator<<(const char* pod) = 0;

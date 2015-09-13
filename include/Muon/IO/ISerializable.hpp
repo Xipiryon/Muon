@@ -32,7 +32,7 @@
 
 namespace muon
 {
-	namespace memory
+	namespace io
 	{
 		class IStream;
 		struct MUON_API ISerializable

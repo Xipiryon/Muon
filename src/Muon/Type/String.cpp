@@ -407,11 +407,6 @@ namespace muon
 		}
 		return v;
 	}
-
-	MUON_ILOGGABLE_IMPL(String, stream)
-	{
-		return stream << cStr();
-	}
 }
 
 muon::String operator+(const muon::String& str, const char* other)
@@ -438,4 +433,9 @@ muon::String operator+(const muon::String& str, const char c)
 muon::String operator+(const char* str, const muon::String& other)
 {
 	return muon::String(str) + other;
+}
+
+muon::system::ILogImpl& operator<<(muon::system::ILogImpl& log, const muon::String& str)
+{
+	return (log << str.cStr());
 }
