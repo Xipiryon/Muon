@@ -301,3 +301,7 @@ namespace muon
 	}
 }
 
+std::ostream& operator<<(std::ostream& stream, const muon::Endl& endl)
+{
+	return (stream << std::endl);
+}

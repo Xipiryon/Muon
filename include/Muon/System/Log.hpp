@@ -253,4 +253,6 @@ namespace muon
 
 MUON_TRAITS(muon::system::Log)
 
+MUON_API std::ostream& operator<<(std::ostream& stream, const muon::Endl& endl);
+
 #endif	//_MUON_LOG_H_INCLUDED
