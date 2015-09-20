@@ -23,11 +23,6 @@ script:
 after_success:
   - codecov
 
-branches:
-  only:
-  - master
-  - dev
-
 notifications:
   email: false
 
@@ -39,6 +34,7 @@ addons:
       - gcc-4.8
       - g++-4.8
       - clang
+
   coverity_scan:
     project:
       name: "Xleek/Muon"
