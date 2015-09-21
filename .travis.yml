@@ -3,10 +3,6 @@ sudo: false
 compiler:
   - gcc
 cache: apt
-env:
-  global:
-    # (Fix Me Later)
-    # - secure: "LEAdkie+786ZhZwBvmDkK+rtMjwSG4+tJdQtMmS7JvHTVFo/I9014VGuAg9XyctVPQensoW38tA2o5987zabiAFrUvCcBtxjQUD3wm7HWWOHbcTEj18k3WXosIEAHTjdkt1XzZWj9cxkRftvdJTDrlxnGryWadK7n+f5PAkZQqK3vQi6jj9Fu1VVX/q5KpaGUkq4XCYQFd2igdMM38ACiOYKo/98kyBYPCsYz6uXT3j/lhRb6xf2dqIrqSVrlkxLB+GJ1gS8K2JOsJNYrrDa0j2I43B+NlManHWMKiAcHqGItPWR0QBi5BMhqxPLDl6jnjdu1GoBE+oiA8kLZCvLj5NiUcsjjXYsJ+ncd3uP4z/WpgRbF73lJXQTLTpvNjTSidG+JOvAfPwp8PqQliD3tsA2alNQjQ3i5NXOn2M3BY4osmfLVCbuaxUoqvFWZ462wkZpyyJkJuDVCYAy3hFCj8GxWOkGlI7ipHca6dqt+TgIR/PgOhPzPo2eMgZjCzIZZx0W/C+vs5DCyLI3xBQBwxSR7GInHW8c72e9YS8IA990cy3/SV0Wv5F6CKh8kS49CdHu1DauIXG2zFMdyvplD5afU08OTR7hx1o41djca9EnxlNHIZVFQ1mzbOYqc54nHUjdYs10MPtx7KO0+ZGeA5K8k5TwB/mPJEIYOCmp/CU="
 
 before_install:
   - chmod +x premake5
@@ -18,7 +14,6 @@ before_script:
   - ./premake5 gmake
 
 script:
-  #- if [ ${COVERITY_SCAN_BRANCH} != 1 ]; make config=releasedll -j4; fi
   - make config=releasedll
 
 notifications:
@@ -31,12 +26,3 @@ addons:
     packages:
       - gcc-4.8
       - g++-4.8
-
-  # This currently don't work at all.
-  coverity_scan:
-    project:
-      name: "Xleek/Muon"
-      description: "Build submitted via Travis CI"
-    build_command_prepend: "./premake5 gmake"
-    build_command:   "make config=releasedll -j4"
-    branch_pattern: master
