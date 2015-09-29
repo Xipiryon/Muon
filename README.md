@@ -1,7 +1,7 @@
 Muon
 ====================
 
-[![Build Status](http://louis-schnellbach.com:8080/buildStatus/icon?job=Muon)](http://louis-schnellbach.com:8080/job/Muon/)
+[![Build Status](http://ci.louis-schnellbach.com/buildStatus/icon?job=Muon)](http://ci.louis-schnellbach.com/job/Muon/)
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/88rhc1uem65bebd6/branch/master?svg=true)](https://ci.appveyor.com/project/Xleek/muon/branch/master)
 
 Muon is a C++ framework designed to be used as a layer between the Standard Library and some missing feature I'm using in other projects.
