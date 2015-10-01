@@ -34,14 +34,14 @@ namespace muon
 {
 	namespace meta
 	{
-		template<typename T> 
-		struct HasPointer 
+		template<typename T>
+		struct HasPointer
 		{
 			static const bool value = false;
 		};
 	}
 }
 
-#define MUON_HASPOINTER(Class) template<> struct muon::meta::HasPointer<Class> { static const bool value = true; };
+#define MUON_HASPOINTER(Class) namespace muon { namespace meta { template<> struct HasPointer<Class> { static const bool value = true; }; } }
 #endif
 
