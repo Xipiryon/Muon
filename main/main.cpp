@@ -34,6 +34,7 @@
 #include <fstream>
 #include <iostream>
 #include <Muon/System/Log.hpp>
+#include <Muon/Meta/TypeInfo.hpp>
 #include <Muon/Meta/MetaDatabase.hpp>
 #include <Muon/Meta/Variant.hpp>
 #include <Muon/Type/String.hpp>
@@ -49,11 +50,18 @@ struct A : B
 	int i;
 	float f;
 
-
 private:
 	char c;
 };
+
+struct Z 
+{
+	A* a;
+};
+
 MUON_TRAITS(A);
+MUON_TRAITS(Z);
+MUON_HASPOINTER(Z);
 
 class LogFile : public muon::system::ILogImpl
 {
@@ -238,7 +246,23 @@ int main(int argc, char** argv)
 		log << "Hello " << world << ", A a = " << a << muon::endl;
 	}
 #endif
-
+#if 1
+	{
+		MUON_META_REGISTER(A);
+		MUON_META_REGISTER(Z);
+		std::cout << "As pointer? : " << std::boolalpha << muon::meta::HasPointer<A>::value << std::endl;
+		std::cout << "As pointer? : " << std::boolalpha << muon::meta::HasPointer<Z>::value << std::endl;
+		A a;
+		a.f = 0.42;
+		a.i = 64;
+		Z z;
+		z.a = &a;
+		// Should operate on two different implementation
+		muon::meta::Variant v;
+		v.set(a);
+		v.set(z);
+	}
+#endif
 
 	muon::system::Log::close();
 #ifdef MUON_PLATFORM_WINDOWS

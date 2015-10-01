@@ -89,21 +89,8 @@ namespace muon
 
 		static const char* TYPE_NAME_UNREGISTERED = "#Unregistered#";
 
-		template<typename T> struct TypeTraits
-		{
-			static MUON_INLINE const char* name()
-			{
-				return TYPE_NAME_UNREGISTERED;
-			}
-			static MUON_INLINE muon::u64 id()
-			{
-				return MetaConstant::TYPE_ID_INVALID;
-			}
-			static MUON_INLINE muon::u32 size()
-			{
-				return 0;
-			}
-		};
+		// Let the compiler not compile unregistered TypeTraits
+		template<typename T> struct TypeTraits {};
 
 		template<> struct TypeTraits<void>
 		{

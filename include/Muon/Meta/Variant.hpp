@@ -31,6 +31,7 @@
 #include "Muon/System/Assert.hpp"
 #include "Muon/Memory/Allocator.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
+#include "Muon/Meta/TypeInfo.hpp"
 
 namespace muon
 {
@@ -38,18 +39,23 @@ namespace muon
 	{
 		class MUON_API Variant
 		{
+			template<typename T> Variant& operator=(const T&);
+
 		public:
 			template<typename T> Variant(const T& value);
 			Variant(MetaData* meta, void* data);
 			Variant();
 
+			Variant& operator=(const Variant& rhs);
+			Variant& set(const Variant& rhs);
+
 			MetaData* getMeta() const;
 
-			template<typename T> Variant& operator=(const T& rhs);
-			Variant& operator=(const Variant& rhs);
-
-			template<typename T> Variant& set(const T& rhs);
-			Variant& set(const Variant& rhs);
+			template<typename T>
+			Variant& set(const T& rhs, typename std::enable_if<HasPointer<T>::value, T>::type* = 0)
+			{
+				return *this;
+			}
 
 			template<typename T> T& get();
 			template<typename T> const T& get() const;
@@ -78,8 +84,9 @@ namespace muon
 			return *reinterpret_cast<T*>(_data);
 		}
 
-		template <typename T>
-		Variant& Variant::operator=(const T& rhs)
+		/*
+		template<typename T>
+		Variant& Variant::set(const T& rhs, typename std::enable_if<HasPointer<T>::value, Variant>) 
 		{
 			MetaData* m = MUON_META(T);
 			MUON_ASSERT(m, "Cannot copy an NULL MetaData!");
@@ -106,12 +113,7 @@ namespace muon
 
 			return *this;
 		}
-
-		template <typename T>
-		Variant& Variant::set(const T& rhs)
-		{
-			return this->operator=(rhs);
-		}
+		//*/
 	}
 }
 
