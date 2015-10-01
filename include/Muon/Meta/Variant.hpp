@@ -39,11 +39,10 @@ namespace muon
 	{
 		class MUON_API Variant
 		{
-			template<typename T> Variant& operator=(const T&);
-
 		public:
-			template<typename T> Variant(const T& value);
-			Variant(MetaData* meta, void* data);
+			template<typename T> explicit Variant(const T& value);
+			explicit Variant(MetaData* meta, void* data);
+			Variant(const Variant& rhs);
 			Variant();
 
 			Variant& operator=(const Variant& rhs);
@@ -51,11 +50,10 @@ namespace muon
 
 			MetaData* getMeta() const;
 
-			template<typename T>
-			Variant& set(const T& rhs, typename std::enable_if<HasPointer<T>::value, T>::type* = 0)
-			{
-				return *this;
-			}
+			template<typename T> Variant& set(const typename std::enable_if<MemCopyable<T>::value, T>::type& rhs);
+			template<typename T> Variant& set(const typename std::enable_if<NonMemCopyable<T>::value, T>::type& rhs);
+
+			template<typename T> Variant& operator=(const T& rhs);
 
 			template<typename T> T& get();
 			template<typename T> const T& get() const;
@@ -68,8 +66,7 @@ namespace muon
 		template <typename T>
 		Variant::Variant(const T& value)
 		{
-			_meta = MUON_META(T);
-			_data = _meta->memNewCopy(&value);
+			set<T>(value);
 		}
 
 		template <typename T>
@@ -84,9 +81,14 @@ namespace muon
 			return *reinterpret_cast<T*>(_data);
 		}
 
-		/*
 		template<typename T>
-		Variant& Variant::set(const T& rhs, typename std::enable_if<HasPointer<T>::value, Variant>) 
+		Variant& Variant::operator=(const T& rhs)
+		{
+			return set<T>(rhs);
+		}
+
+		template<typename T>
+		Variant& Variant::set(const typename std::enable_if<MemCopyable<T>::value, T>::type& rhs)
 		{
 			MetaData* m = MUON_META(T);
 			MUON_ASSERT(m, "Cannot copy an NULL MetaData!");
@@ -113,7 +115,35 @@ namespace muon
 
 			return *this;
 		}
-		//*/
+
+		template<typename T>
+		Variant& Variant::set(const typename std::enable_if<NonMemCopyable<T>::value, T>::type& rhs)
+		{
+			MetaData* m = MUON_META(T);
+			MUON_ASSERT(m, "Cannot copy an NULL MetaData!");
+			if(m == NULL)
+			{
+				// Resetting our Variant
+				_meta->memDelete(_data);
+				_meta = MUON_META(void);
+				return *this;
+			}
+
+			// Meta are different, erase the stored one and replace by the new
+			if(_meta != MUON_META(T))
+			{
+				_meta->memDelete(_data);
+				_meta = m;
+				_data = _meta->memNewCopy(&rhs);
+			}
+			else
+			{
+				// They are the same, just copy the value
+				_meta->memCopy(_data, &rhs);
+			}
+
+			return *this;
+		}
 	}
 }
 

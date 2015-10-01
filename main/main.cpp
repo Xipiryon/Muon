@@ -54,14 +54,14 @@ private:
 	char c;
 };
 
-struct Z 
+struct Z
 {
 	A* a;
 };
 
 MUON_TRAITS(A);
 MUON_TRAITS(Z);
-MUON_HASPOINTER(Z);
+MUON_USEPOINTER(Z);
 
 class LogFile : public muon::system::ILogImpl
 {
@@ -250,8 +250,16 @@ int main(int argc, char** argv)
 	{
 		MUON_META_REGISTER(A);
 		MUON_META_REGISTER(Z);
-		std::cout << "As pointer? : " << std::boolalpha << muon::meta::HasPointer<A>::value << std::endl;
-		std::cout << "As pointer? : " << std::boolalpha << muon::meta::HasPointer<Z>::value << std::endl;
+		std::cout	<< " MemCopy == " << std::boolalpha << muon::meta::MemCopyable<A>::value
+					<< "\t| NonMemCop == " << std::boolalpha << muon::meta::NonMemCopyable<A>::value
+					<< "\t| UsePointer == " << std::boolalpha << muon::meta::UsePointer<A>::value
+					<< "\t| UseReference == " << std::boolalpha << muon::meta::UseReference<A>::value
+					<< std::endl;
+		std::cout	<< " MemCopy == " << std::boolalpha << muon::meta::MemCopyable<Z>::value
+					<< "\t| NonMemCop == " << std::boolalpha << muon::meta::NonMemCopyable<Z>::value
+					<< "\t| UsePointer == " << std::boolalpha << muon::meta::UsePointer<Z>::value
+					<< "\t| UseReference == " << std::boolalpha << muon::meta::UseReference<Z>::value
+					<< std::endl;
 		A a;
 		a.f = 0.42;
 		a.i = 64;
@@ -259,8 +267,8 @@ int main(int argc, char** argv)
 		z.a = &a;
 		// Should operate on two different implementation
 		muon::meta::Variant v;
-		v.set(a);
-		v.set(z);
+		v.set<A>(a);
+		v.set<Z>(z);
 	}
 #endif
 
