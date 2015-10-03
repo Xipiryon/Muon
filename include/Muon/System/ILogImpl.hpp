@@ -44,12 +44,12 @@ namespace muon
 	*/
 	enum LogLevel
 	{
-		LOG_DEBUG       = 0x1,		//!< Every print with a level of Debug or higher will be printed
-		LOG_INFO        = 0x2,		//!< Every print with a level of Info or higher will be printed
-		LOG_WARNING     = 0x4,		//!< Every print with a level of Warning or higher will be printed
-		LOG_ERROR       = 0x8,		//!< Every print with a level of Error or higher will be printed
+		LOG_DEBUG       = 0x1,
+		LOG_INFO        = 0x2,
+		LOG_WARNING     = 0x4,
+		LOG_ERROR       = 0x8,
 
-		_LOG_USERDEFINED = 0		//!< Special internal value
+		LOG_INTERNAL    = 0			//!< Internal, should not be used directly
 	};
 
 	class String;

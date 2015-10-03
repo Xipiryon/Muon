@@ -205,7 +205,7 @@ namespace muon
 			* the default behavior is to use the last level set.
 			* @param level New level required to print
 			*/
-			virtual Log& operator()(LogLevel level = _LOG_USERDEFINED);
+			virtual Log& operator()(LogLevel level = LOG_INTERNAL);
 
 		protected:
 			String _tag;

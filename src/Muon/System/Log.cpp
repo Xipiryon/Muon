@@ -280,7 +280,7 @@ namespace muon
 		Log& Log::operator()(LogLevel level)
 		{
 			auto& logImpl = getLogImpl();
-			_level = (level == _LOG_USERDEFINED ? _level : level);
+			_level = (level == LOG_INTERNAL ? _level : level);
 			for (auto it = logImpl.begin(); it != logImpl.end(); ++it)
 			{
 				(*it)->operator()(_level);
