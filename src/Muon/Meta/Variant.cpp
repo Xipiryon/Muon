@@ -37,6 +37,11 @@ namespace muon
 		{
 		}
 
+		Variant::Variant(const Variant& rhs)
+			: Variant(rhs._meta, rhs._data)
+		{
+		}
+
 		Variant::Variant()
 			: _meta(MUON_META(void))
 			, _data(NULL)

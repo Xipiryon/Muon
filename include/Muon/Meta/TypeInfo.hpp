@@ -34,14 +34,34 @@ namespace muon
 {
 	namespace meta
 	{
-		template<typename T> 
-		struct HasPointer 
+		template<typename T>
+		struct UsePointer
 		{
 			static const bool value = false;
+		};
+
+		template<typename T>
+		struct UseReference
+		{
+			static const bool value = false;
+		};
+
+		template<typename T>
+		struct MemCopyable
+		{
+			static const bool value = (!UsePointer<T>::value && !UseReference<T>::value);
+		};
+
+		template<typename T>
+		struct NonMemCopyable
+		{
+			static const bool value = !MemCopyable<T>::value;
 		};
 	}
 }
 
-#define MUON_HASPOINTER(Class) template<> struct muon::meta::HasPointer<Class> { static const bool value = true; };
+#define MUON_USEPOINTER(Class) namespace muon { namespace meta { template<> struct UsePointer<Class> { static const bool value = true; }; } }
+#define MUON_USEREFERENCE(Class) namespace muon { namespace meta { template<> struct UseReference<Class> { static const bool value = true; }; } }
+
 #endif
 
