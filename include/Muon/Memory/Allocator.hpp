@@ -30,6 +30,7 @@
 
 #include <stdlib.h>
 #include "Muon/Core/Typedef.hpp"
+#include "Muon/Core/NonCopyable.hpp"
 #include "Muon/System/Assert.hpp"
 
 /*
@@ -46,27 +47,29 @@ namespace muon
 			const char* function;
 			u32 line;
 		};
+#define _MUON_ALLOCINFO {__FILE__, __FUNCTION__, __LINE__}
 
-		namespace global
+		class DefaultAllocator : public NonCopyable
 		{
+		public:
 			template<typename T>
-			T* allocate(u32 count, const AllocatorInfo& info)
+			static T* allocate(u32 count, const AllocatorInfo& info)
 			{
 				return (T*)::malloc(sizeof(T) * count);
 			}
 
 			template<typename T>
-			void destruct(T* ptr, const AllocatorInfo& info)
+			static void destruct(T* ptr, const AllocatorInfo& info)
 			{
 				ptr->~T();
 			}
 
 			template<typename T>
-			void deallocate(u32 count, T* ptr, const AllocatorInfo& info)
+			static void deallocate(u32 count, T* ptr, const AllocatorInfo& info)
 			{
 				::free((void*)ptr);
 			}
-		}
+		};
 	}
 }
 
@@ -75,7 +78,7 @@ namespace muon
 * Allocate memory for given Class instance
 * @param Class Class or Struct to be allocated
 */
-#define MUON_NEW(Class) (::muon::memory::global::allocate<Class>(1, {__FILE__, __FUNCTION__, __LINE__}))
+#define MUON_NEW(Class) (::muon::memory::DefaultAllocator::allocate<Class>(1, _MUON_ALLOCINFO))
 
 /*!
 * @def MUON_CNEW(Class, ...)
@@ -92,7 +95,7 @@ namespace muon
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be freed from memory
 */
-#define MUON_DELETE(Pointer) ::muon::memory::global::deallocate(1, Pointer, {__FILE__, __FUNCTION__, __LINE__})
+#define MUON_DELETE(Pointer) ::muon::memory::DefaultAllocator::deallocate(1, Pointer, _MUON_ALLOCINFO)
 
 /*!
 * @def MUON_CDELETE(Pointer)
@@ -100,6 +103,6 @@ namespace muon
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be destructed and freed from memory
 */
-#define MUON_CDELETE(Pointer) ::muon::memory::global::destruct(Pointer, {__FILE__, __FUNCTION__, __LINE__}); MUON_DELETE(Pointer)
+#define MUON_CDELETE(Pointer) ::muon::memory::DefaultAllocator::destruct(Pointer, _MUON_ALLOCINFO); MUON_DELETE(Pointer)
 
 #endif
