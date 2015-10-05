@@ -25,23 +25,19 @@
 *
 *************************************************************************/
 
-#include <fstream>
-#include <map>
-#include "Muon/Memory/Allocator.hpp"
-#include "Muon/System/Log.hpp"
-#include "Muon/Type/String.hpp"
+#include "Muon/Memory/DequeAllocator.hpp"
 
-namespace
+namespace 
 {
-	using namespace muon;
-	u32 _allocated = 0;
-	u32 _allocatedTotal = 0;
-	u32 _allocatedSize = 0;
+	std::deque<muon::RawPointer> g_Allocated;
+	std::deque<muon::u32> g_Free;
 }
 
 namespace muon
 {
 	namespace memory
 	{
+		std::deque<RawPointer>* DequeAllocator::_allocated = &g_Allocated;
+		std::deque<u32>* DequeAllocator::_free = &g_Free;
 	}
 }
