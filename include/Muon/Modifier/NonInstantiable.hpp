@@ -52,7 +52,7 @@ namespace muon
 		class MUON_API NonInstantiable
 		{
 		protected:
-			~NonInstantiable();
+			~NonInstantiable() {}
 
 		private:
 			NonInstantiable();
