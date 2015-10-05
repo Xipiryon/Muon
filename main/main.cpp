@@ -248,7 +248,7 @@ int main(int argc, char** argv)
 		log << "Hello " << world << ", A a = " << a << muon::endl;
 	}
 #endif
-#if 1
+#if 0
 	{
 		MUON_META_REGISTER(A);
 		MUON_META_REGISTER(Z);
@@ -263,14 +263,16 @@ int main(int argc, char** argv)
 					<< "\t| UseReference == " << std::boolalpha << muon::meta::UseReference<Z>::value
 					<< std::endl;
 		A a;
-		a.f = 0.42;
+		a.f = 0.42f;
 		a.i = 64;
 		Z z;
 		z.a = &a;
 		// Should operate on two different implementation
 		muon::meta::Variant v;
-		v.set<A>(a);
-		v.set<Z>(z);
+		v = a;
+		v = z;
+
+		std::cout << "Z: " << v.get<Z>().a << " (A)=> " << ((A*)v.get<Z>().a)->f << std::endl;
 	}
 #endif
 

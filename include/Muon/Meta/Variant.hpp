@@ -29,7 +29,7 @@
 #define _MUON_VARIANT_H_INCLUDED
 
 #include "Muon/System/Assert.hpp"
-#include "Muon/Memory/Allocator.hpp"
+#include "Muon/Memory/DequeAllocator.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
 #include "Muon/Meta/TypeInfo.hpp"
 
@@ -129,18 +129,16 @@ namespace muon
 				return *this;
 			}
 
-			// Meta are different, erase the stored one and replace by the new
-			if(_meta != MUON_META(T))
+			// As we are non copyable, erase and re-allocate in any cases
+			if(_data)
 			{
-				_meta->memDelete(_data);
-				_meta = m;
-				_data = _meta->memNewCopy(&rhs);
+				memory::DequeAllocator::destroy<T>((T*)_data);
+				memory::DequeAllocator::deallocate<T>(1, (T*)_data);
 			}
-			else
-			{
-				// They are the same, just copy the value
-				_meta->memCopy(_data, &rhs);
-			}
+			_meta = m;
+			// Allocate memory
+			_data = memory::DequeAllocator::allocate<T>(1);
+			new (_data) T(rhs);
 
 			return *this;
 		}
