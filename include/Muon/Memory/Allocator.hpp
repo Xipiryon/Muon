@@ -66,7 +66,7 @@ namespace muon
 			}
 
 			template<typename T>
-			static void destruct(T* ptr, const AllocatorInfo& info)
+			static void destroy(T* ptr, const AllocatorInfo& info)
 			{
 				ptr->~T();
 			}
@@ -110,6 +110,6 @@ namespace muon
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be destructed and freed from memory
 */
-#define MUON_CDELETE(Pointer) ::muon::memory::DefaultAllocator::destruct(Pointer, _MUON_ALLOCINFO); MUON_DELETE(Pointer)
+#define MUON_CDELETE(Pointer) ::muon::memory::DefaultAllocator::destroy(Pointer, _MUON_ALLOCINFO); MUON_DELETE(Pointer)
 
 #endif
