@@ -112,6 +112,8 @@ int main(int argc, char** argv)
 	muon::system::Log::open("output.log");
 	muon::system::Log mainLog("Main", muon::LOG_DEBUG);
 
+	muon::meta::MetaDatabase::instantiate();
+
 	mainLog() << "Number of arguments: " << argc << muon::endl;
 	for (muon::i32 i = 0; i < argc; ++i)
 	{

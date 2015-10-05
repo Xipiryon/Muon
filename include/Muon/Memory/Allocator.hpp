@@ -30,17 +30,20 @@
 
 #include <stdlib.h>
 #include "Muon/Core/Typedef.hpp"
-#include "Muon/Core/NonCopyable.hpp"
 #include "Muon/System/Assert.hpp"
+#include "Muon/Modifier/NonInstantiable.hpp"
 
 /*
 * @file Allocator.hpp
 */
 namespace muon
 {
-	//!
 	namespace memory
 	{
+		/*!
+		* @brief
+		*
+		*/
 		struct MUON_API AllocatorInfo
 		{
 			const char* file;
@@ -49,7 +52,11 @@ namespace muon
 		};
 #define _MUON_ALLOCINFO {__FILE__, __FUNCTION__, __LINE__}
 
-		class DefaultAllocator : public NonCopyable
+		/*!
+		* @brief
+		*
+		*/
+		class DefaultAllocator : public modifier::NonInstantiable
 		{
 		public:
 			template<typename T>

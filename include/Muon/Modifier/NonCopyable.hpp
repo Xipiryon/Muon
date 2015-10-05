@@ -30,18 +30,37 @@
 
 #include "Muon/Core/Typedef.hpp"
 
+/*
+* @file NonCopyable.hpp
+*/
 namespace muon
 {
-	class MUON_API NonCopyable
+	namespace modifier
 	{
-	public:
-		NonCopyable() {}
-	private:
-		NonCopyable(const NonCopyable&);
-		NonCopyable& operator=(const NonCopyable&);
-	};
+		/*!
+		* @brief Disallow the copy of a class
+		*
+		* When a class inherits from Static, it will not
+		* be possible to copy this class.
+		* (Unless by specifying constructor, etc... with the public keyword,
+		*  which in a way defy the purpose of this class.)
+		*
+		* @note 
+		* Default Constructor is specified as public,
+		* Copy and Assignment operator are made private.
+		*/
+		class MUON_API NonCopyable
+		{
+		public:
+			NonCopyable()
+			{
+			}
 
-#define MUON_SINGLETON_GET(T) static T& get() { static T instance; return instance; }
+		private:
+			NonCopyable(const NonCopyable&);
+			NonCopyable& operator=(const NonCopyable&);
+		};
+	}
 }
 
 #endif
