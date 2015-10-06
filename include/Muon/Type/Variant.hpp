@@ -28,6 +28,7 @@
 #ifndef _MUON_VARIANT_H_INCLUDED
 #define _MUON_VARIANT_H_INCLUDED
 
+#include <cstring>
 #include "Muon/System/Assert.hpp"
 #include "Muon/Memory/DequeAllocator.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
