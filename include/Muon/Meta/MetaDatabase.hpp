@@ -32,7 +32,7 @@
 #include "Muon/Memory/Allocator.hpp"
 #include "Muon/Meta/MetaData.hpp"
 #include "Muon/Meta/MetaFactory.hpp"
-#include "Muon/Modifier/Singleton.hpp"
+#include "Muon/Helper/Singleton.hpp"
 
 namespace muon
 {
@@ -42,9 +42,9 @@ namespace muon
 		* @brief
 		*
 		*/
-		class MUON_API MetaDatabase : public modifier::Singleton<MetaDatabase>
+		class MUON_API MetaDatabase : public helper::Singleton<MetaDatabase>
 		{
-			friend class modifier::Singleton<MetaDatabase>;
+			friend class helper::Singleton<MetaDatabase>;
 		public:
 			template<typename T>
 			MetaData* registerMeta();

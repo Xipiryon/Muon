@@ -151,28 +151,6 @@ namespace muon
 			return (_id & TYPE_ID_CUSTOM_MASK) == TYPE_ID_CUSTOM_MASK;
 		}
 
-		void* MetaData::memNew() const
-		{
-			return malloc(size());
-		}
-
-		void* MetaData::memNewCopy(const void* data) const
-		{
-			void* mem = memNew();
-			memcpy(mem, data, size());
-			return mem;
-		}
-
-		void MetaData::memDelete(void* data) const
-		{
-			free(data);
-		}
-
-		void MetaData::memCopy(void* dest, const void* data) const
-		{
-			memcpy(dest, data, size());
-		}
-
 		u32 MetaData::getAttributeCount() const
 		{
 			return _members->size();

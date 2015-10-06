@@ -42,7 +42,7 @@ namespace muon
 		* @brief
 		*
 		*/
-		class MUON_API DequeAllocator : public modifier::NonInstantiable
+		class MUON_API DequeAllocator : public helper::NonInstantiable
 		{
 		public:
 			template<typename T>

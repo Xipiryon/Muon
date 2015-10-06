@@ -35,7 +35,7 @@
 */
 namespace muon
 {
-	namespace modifier
+	namespace helper
 	{
 		/*!
 		* @brief Disallow instantiation of a class

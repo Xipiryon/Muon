@@ -98,7 +98,6 @@ namespace muon
 		class MUON_API MetaData
 		{
 			friend class MetaDatabase;
-			friend class Variant;
 		public:
 			MetaData();
 			MetaData(const MetaData&);
@@ -140,12 +139,6 @@ namespace muon
 
 		private:
 			void init();
-
-			// Memory Management
-			void* memNew() const;
-			void* memNewCopy(const void* data) const;
-			void memDelete(void* data) const;
-			void memCopy(void* dest, const void* data) const;
 
 			String _name;
 			u64 _id;

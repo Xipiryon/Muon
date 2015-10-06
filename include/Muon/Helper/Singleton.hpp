@@ -28,14 +28,14 @@
 #ifndef _MUON_SINGLETON_H_INCLUDED
 #define _MUON_SINGLETON_H_INCLUDED
 
-#include "Muon/Modifier/NonCopyable.hpp"
+#include "Muon/Helper/NonCopyable.hpp"
 
 /*
 * @file Sinleton.hpp
 */
 namespace muon
 {
-	namespace modifier
+	namespace helper
 	{
 		/*!
 		* @brief Singleton pattern class

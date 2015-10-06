@@ -26,10 +26,10 @@
 *************************************************************************/
 
 #include "Muon/Meta/MetaDatabase.hpp"
-#include "Muon/Meta/Variant.hpp"
 #include "Muon/System/Log.hpp"
 #include "Muon/System/Time.hpp"
 #include "Muon/Type/String.hpp"
+#include "Muon/Type/Variant.hpp"
 
 namespace muon
 {
@@ -61,8 +61,8 @@ namespace muon
 			registerMeta<system::Time>();
 			registerMeta<system::Timer>();
 
-			registerMeta<String>();
-			registerMeta<Variant>();
+			registerMeta<muon::String>();
+			registerMeta<muon::Variant>();
 		}
 	}
 }

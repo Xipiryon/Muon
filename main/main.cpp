@@ -36,7 +36,7 @@
 #include <Muon/System/Log.hpp>
 #include <Muon/Meta/TypeInfo.hpp>
 #include <Muon/Meta/MetaDatabase.hpp>
-#include <Muon/Meta/Variant.hpp>
+#include <Muon/Type/Variant.hpp>
 #include <Muon/Type/String.hpp>
 
 struct C { virtual void* foo() const = 0; private: char c[128]; };
@@ -248,7 +248,7 @@ int main(int argc, char** argv)
 		log << "Hello " << world << ", A a = " << a << muon::endl;
 	}
 #endif
-#if 0
+#if 1
 	{
 		MUON_META_REGISTER(A);
 		MUON_META_REGISTER(Z);
@@ -268,7 +268,7 @@ int main(int argc, char** argv)
 		Z z;
 		z.a = &a;
 		// Should operate on two different implementation
-		muon::meta::Variant v;
+		muon::Variant v;
 		v = a;
 		v = z;
 

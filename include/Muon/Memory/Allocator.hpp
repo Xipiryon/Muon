@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include "Muon/Core/Typedef.hpp"
 #include "Muon/System/Assert.hpp"
-#include "Muon/Modifier/NonInstantiable.hpp"
+#include "Muon/Helper/NonInstantiable.hpp"
 
 /*
 * @file Allocator.hpp
@@ -56,7 +56,7 @@ namespace muon
 		* @brief
 		*
 		*/
-		class DefaultAllocator : public modifier::NonInstantiable
+		class DefaultAllocator : public helper::NonInstantiable
 		{
 		public:
 			template<typename T>

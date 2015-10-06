@@ -25,60 +25,42 @@
 *
 *************************************************************************/
 
-#include "Muon/Meta/Variant.hpp"
+#ifndef _MUON_NONCOPYABLE_H_INCLUDED
+#define _MUON_NONCOPYABLE_H_INCLUDED
 
+#include "Muon/Core/Typedef.hpp"
+
+/*
+* @file NonCopyable.hpp
+*/
 namespace muon
 {
-	namespace meta
+	namespace helper
 	{
-		Variant::Variant(MetaData* m, void* d)
-			: _meta(m)
-			, _data(d)
+		/*!
+		* @brief Disallow the copy of a class
+		*
+		* When a class inherits from Static, it will not
+		* be possible to copy this class.
+		* (Unless by specifying constructor, etc... with the public keyword,
+		*  which in a way defy the purpose of this class.)
+		*
+		* @note 
+		* Default Constructor is specified as public,
+		* Copy and Assignment operator are made private.
+		*/
+		class MUON_API NonCopyable
 		{
-		}
-
-		Variant::Variant(const Variant& rhs)
-			: Variant(rhs._meta, rhs._data)
-		{
-		}
-
-		Variant::Variant()
-			: _meta(MUON_META(void))
-			, _data(NULL)
-		{
-		}
-
-		MetaData* Variant::getMeta() const
-		{
-			return _meta;
-		}
-
-		Variant& Variant::operator=(const Variant& rhs)
-		{
-			if(this == &rhs)
+		public:
+			NonCopyable()
 			{
-				return *this;
 			}
 
-			MUON_ASSERT(rhs._meta, "Cannot copy an NULL MetaData!");
-			// Meta are different, erase the stored one and replace by the new
-			if(_meta != rhs._meta)
-			{
-				_meta->memDelete(_data);
-				_meta = rhs._meta;
-				_data = _meta->memNewCopy(rhs._data);
-			}
-			else
-			{
-				// They are the same, just copy the value
-				_meta->memCopy(_data, rhs._data);
-			}
-			return *this;
-		}
-
-		Variant& Variant::set(const Variant& rhs)
-		{
-			return this->operator=(rhs);
-		}
+		private:
+			NonCopyable(const NonCopyable&);
+			NonCopyable& operator=(const NonCopyable&);
+		};
 	}
 }
+
+#endif
