@@ -34,34 +34,7 @@
 #include <fstream>
 #include <iostream>
 #include <Muon/System/Log.hpp>
-#include <Muon/Meta/TypeInfo.hpp>
 #include <Muon/Meta/MetaDatabase.hpp>
-#include <Muon/Type/Variant.hpp>
-#include <Muon/Type/String.hpp>
-
-struct C { virtual void* foo() const = 0; private: char c[128]; };
-
-struct B : C { virtual void* foo() const { return (void*) this; } };
-
-struct A : B
-{
-	A() { std::cout << "A()" << std::endl; }
-	~A() { std::cout << "~A()" << std::endl; }
-	int i;
-	float f;
-
-private:
-	char c;
-};
-
-struct Z
-{
-	A* a;
-};
-
-MUON_TRAITS(A);
-MUON_TRAITS(Z);
-MUON_USEPOINTER(Z);
 
 class LogFile : public muon::system::ILogImpl
 {
@@ -109,7 +82,7 @@ int main(int argc, char** argv)
 	muon::system::Log::registerDefaultLogImpl();
 	muon::system::Log::registerLogImpl(&logFile);
 
-	muon::system::Log::open("output.log");
+	muon::system::Log::open("unit_test.log");
 	muon::system::Log mainLog("Main", muon::LOG_DEBUG);
 
 	muon::meta::MetaDatabase::instantiate();
@@ -119,172 +92,16 @@ int main(int argc, char** argv)
 	{
 		mainLog() << "\t: " << argv[i] << muon::endl;
 	}
-#if 0
-	// META
-	{
-		//*
-		muon::system::Log metaLog("Meta", muon::LOG_DEBUG);
-		// "#NULL#"
-		muon::meta::MetaData* m = NULL;
 
-#define PRINT_META_T(Value) m = MUON_META(Value); PRINT_META(Value)
-#define PRINT_META_O(Value) m = MUON_META_OBJECT(Value); PRINT_META(Value)
-#define PRINT_META_N(Value) m = MUON_META_NAME(Value); PRINT_META(Value)
+	// ***************
+	// BEGIN UNIT TEST
 
-#define PRINT_META(Value) \
-	if(m) metaLog() << "\"" << #Value << "\" \n\t==> \"" << m->name() << "\"\t" << m->id() << "\t(" << m->size() << ")" << muon::endl << muon::endl; \
-	else metaLog() << "#NULL#" << muon::endl << muon::endl; //
-
-		// ok
-		PRINT_META_T(void);
-		PRINT_META_T(unsigned int);
-		PRINT_META_T(muon::u32);
-
-		muon::String s;
-		muon::String***** sptr = NULL;
-		muon::String sarray[2];
-		// ok
-		PRINT_META_T(muon::String);
-		PRINT_META_O((const muon::String&)s);
-		PRINT_META_O(sptr);
-		PRINT_META_O(sptr);
-		PRINT_META_N("muon::String");
-		// "#NULL#" because there is no such registered type
-		PRINT_META_N("String");
-
-		PRINT_META_O(metaLog);
-		//*/
-	}
-#endif
-#if 0
-	{
-		//*
-		muon::system::Log memberLog("Member", muon::LOG_DEBUG);
-#define META_MEMBER_PRINT(Member) memberLog() << "meta::offsetof: " << #Member << " = " << muon::meta::offset(Member)<< muon::endl
-
-		META_MEMBER_PRINT(&A::i);
-		META_MEMBER_PRINT(&A::f);
-
-		A a;
-		char* obj = (char*)&a;
-		muon::u64 o = muon::meta::offset(&A::f);
-		float* pf = (float*)(obj + o);
-		*pf = 7.4f;
-
-		memberLog() << "a.f = " << a.f << " | " << pf << " " << &a.f<< muon::endl;
-		//*/
-	}
-#endif
-#if 0
-	{
-		//*
-#define PRINT_VARIANT_O(Value) v = Value; m = v.getMeta(); PRINT_VARIANT(Value)
-#define PRINT_VARIANT(Value) \
-	if(m) variantLog() << "\"" << #Value << "\" \n\t==> \"" << m->name() << "\"\t" << m->id() << "\t(" << m->size() << ")" << muon::endl << muon::endl; \
-	else variantLog() << "#NULL#" << muon::endl << muon::endl; //
-
-		muon::meta::MetaData* m = NULL;
-		muon::system::Log variantLog("Variant", muon::LOG_DEBUG);
-
-		muon::meta::Variant v;
-		PRINT_VARIANT_O(12);
-		PRINT_VARIANT_O(4.7);
-		PRINT_VARIANT_O(v);
-		//*/
-	}
-#endif
-#if 0
-	{
-		//*
-		muon::system::Log log("MetaMember");
-		MUON_META_REGISTER(A);
-		//muon::meta::Variant v;
-		muon::meta::MetaData* custom = MUON_META_CREATE("Custom");
-		muon::meta::MetaData* m = custom;
-		m = MUON_META_NAME("Custom");
-		log() <<  " ==> \"" << m->name() << "\"\t" << m->id() << "\t(" << m->size() << ")" << muon::endl;
-
-		m->addAttribute<int>("i");
-		m->addAttribute<float>("f");
-		m->addAttribute<char>("i");
-
-		muon::meta::MetaMember mb = custom->getAttribute("i");
-		m = mb.meta();
-		log() <<  " ==> MetaMember\"\t" << mb.name() << "\"\t" << mb.offset() << muon::endl;
-		log() <<  " ===> MetaData\"\t" << m->name() << "\"\t" << m->id() << "\t(" << m->size() << ")" << muon::endl;
-
-		mb = custom->getAttribute(4);
-		m = mb.meta();
-		log() <<  " ==> MetaMember\"\t" << mb.name() << "\"\t" << mb.offset() << muon::endl;
-		log() <<  " ===> MetaData\"\t" << m->name() << "\"\t" << m->id() << "\t(" << m->size() << ")" << muon::endl;
-	}
-#endif
-#if 0
-	{
-		muon::system::Log log("StringReplace");
-		muon::String hello = "Hello haleWhale Whale";
-		log() << hello.replace("hale", "orld") << muon::endl;;
-
-		hello = "Hello Whale Whalehale";
-		log() << hello.replace("hale", "orld_!_:D") << muon::endl;;
-
-		hello = "hale Whale Whale hale";
-		log() << hello.replace("hale", "3") << muon::endl;
-
-		hello = "hale Whale Whale hale things more";
-		log() << hello.replace("hale", "\n") << muon::endl;
-
-		muon::String hale="hale";
-		muon::String n = "\\n";
-		log() << hello.replace(hale, n) << muon::endl;
-	}
-#endif
-#if 0
-	{
-		muon::system::Log log;
-		muon::String world = "World";
-		A a;
-		a.i = 42;
-		log << "Hello " << world << ", A a = " << a << muon::endl;
-	}
-#endif
-#if 1
-	{
-		MUON_META_REGISTER(A);
-		MUON_META_REGISTER(Z);
-		std::cout	<< " MemCopy == " << std::boolalpha << muon::meta::MemCopyable<A>::value
-					<< "\t| NonMemCop == " << std::boolalpha << muon::meta::NonMemCopyable<A>::value
-					<< "\t| UsePointer == " << std::boolalpha << muon::meta::UsePointer<A>::value
-					<< "\t| UseReference == " << std::boolalpha << muon::meta::UseReference<A>::value
-					<< std::endl;
-		std::cout	<< " MemCopy == " << std::boolalpha << muon::meta::MemCopyable<Z>::value
-					<< "\t| NonMemCop == " << std::boolalpha << muon::meta::NonMemCopyable<Z>::value
-					<< "\t| UsePointer == " << std::boolalpha << muon::meta::UsePointer<Z>::value
-					<< "\t| UseReference == " << std::boolalpha << muon::meta::UseReference<Z>::value
-					<< std::endl;
-		A a;
-		a.f = 0.42f;
-		a.i = 64;
-		Z z;
-		z.a = &a;
-		// Should operate on two different implementation
-		muon::Variant v;
-		v = a;
-		v = z;
-
-		std::cout << "Z: " << v.get<Z>().a << " (A)=> " << ((A*)v.get<Z>().a)->f << std::endl;
-	}
-#endif
+	// END UNIT TEST
+	// ***************
 
 	muon::system::Log::close();
 #ifdef MUON_PLATFORM_WINDOWS
 	::system("PAUSE");
 #endif
 	return 0;
-}
-
-muon::system::ILogImpl& operator<<(muon::system::ILogImpl& log, const A& a)
-{
-	log << a.i << " " << (muon::u64)a.foo();
-	return log;
 }
