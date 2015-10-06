@@ -25,9 +25,8 @@ MuonRoot = os.getcwd()
 
 solution "Muon"
 
-	startproject "MuonExecutable"
 	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL" }
-	
+
 	if not os.is("windows") then
 		buildoptions { "--std=c++11" }
 		linkoptions { "-Wl,-rpath,"..MuonRoot.."/bin/lib/" }
@@ -50,7 +49,7 @@ solution "Muon"
 		MuonRoot.."/bin/lib",
 		G_Install.Lib
 	}
-	
+
 	filter "Debug*"
 		targetsuffix "-d"
         flags   { "Symbols" }
@@ -78,38 +77,40 @@ project "Muon"
 
 	language "C++"
 	targetdir(MuonRoot.."/bin/lib")
-	
+
 	if os.is("windows") then
 		postbuildcommands { string.gsub("copy "..MuonRoot.."/bin/lib/*.dll "..MuonRoot.."/bin/", "/", "\\") }
 	end
-	
+
 	files {
        MuonRoot.."/src/**.cpp",
        MuonRoot.."/include/**.hpp",
     }
-	
+
 	filter  "*DLL"
 		defines { "MUON_EXPORTS" }
 
-	
--- Console Application
+
+-- Unit Tests
 -------------------------------------------
 
-project "MuonExecutable"
-	language "C++"
-	targetname "MuonExe"
-	targetdir "bin"
-	kind "ConsoleApp"
+if _OPTIONS["unittests"] == "true" then
 
-	files	{
-		MuonRoot.."/main/main.cpp"
-	}
-	
-	filter "Debug*"
-		links	{ "Muon-d" }
-	filter "Release*"
-		links { "Muon" }
-		
+	project "UnitTests"
+		language "C++"
+		targetname "UnitTests"
+		targetdir "bin"
+		kind "ConsoleApp"
+
+		files	{
+			MuonRoot.."/unittests/main.cpp"
+		}
+
+		filter "Debug*"
+			links	{ "Muon-d" }
+		filter "Release*"
+			links { "Muon" }
+end
 ------------------------------
 -- Options
 ------------------------------
@@ -118,6 +119,12 @@ newoption {
 	trigger     = "basedir",
 	value       = "PATH",
 	description = "Folder to search lib & include; default: '"..G_Install.Root.."'",
+}
+
+newoption {
+	trigger     = "unittests",
+	value       = "[true|false]",
+	description = "Enable compilation of unit tests; default: false",
 }
 
 ------------------------------
