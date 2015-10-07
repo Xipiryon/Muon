@@ -94,7 +94,7 @@ project "Muon"
 -- Unit Tests
 -------------------------------------------
 
-if _OPTIONS["unittests"] == "true" then
+if _OPTIONS["unittests"] then
 
 	project "UnitTests"
 		language "C++"
@@ -123,8 +123,7 @@ newoption {
 
 newoption {
 	trigger     = "unittests",
-	value       = "[true|false]",
-	description = "Enable compilation of unit tests; default: false",
+	description = "Enable compilation of unit tests",
 }
 
 ------------------------------
