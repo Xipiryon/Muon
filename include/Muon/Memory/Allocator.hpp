@@ -65,6 +65,16 @@ namespace muon
 				return (T*)::malloc(sizeof(T) * count);
 			}
 
+			template<typename T, typename... Args>
+			static T* construct(u32 count, T* ptr, const AllocatorInfo& info, Args... args)
+			{
+				for(u32 c = 0; c < count; ++c)
+				{
+					new (ptr + c) T(args...);
+				}
+				return ptr;
+			}
+
 			template<typename T>
 			static void destroy(T* ptr, const AllocatorInfo& info)
 			{
@@ -85,7 +95,7 @@ namespace muon
 * Allocate memory for given Class instance
 * @param Class Class or Struct to be allocated
 */
-#define MUON_NEW(Class) (::muon::memory::DefaultAllocator::allocate<Class>(1, _MUON_ALLOCINFO))
+#define MUON_NEW(Class) ::muon::memory::DefaultAllocator::allocate<Class>(1, _MUON_ALLOCINFO)
 
 /*!
 * @def MUON_CNEW(Class, ...)
@@ -94,7 +104,7 @@ namespace muon
 * @param Class Class or Struct to be allocated and constructed
 * @param ... Variadic parameters to be forwarded to the constructor
 */
-#define MUON_CNEW(Class, ...) new MUON_NEW(Class) Class(__VA_ARGS__)
+#define MUON_CNEW(Class, ...) ::muon::memory::DefaultAllocator::construct(1, MUON_NEW(Class), _MUON_ALLOCINFO, __VA_ARGS__)
 
 /*!
 * @def MUON_DELETE(Pointer)
