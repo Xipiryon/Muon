@@ -70,7 +70,7 @@ namespace muon
 			{
 				for(u32 c = 0; c < count; ++c)
 				{
-					new (ptr + c) T(args...);
+					new ((T*)ptr + c) T(args...);
 				}
 				return ptr;
 			}
@@ -104,7 +104,11 @@ namespace muon
 * @param Class Class or Struct to be allocated and constructed
 * @param ... Variadic parameters to be forwarded to the constructor
 */
-#define MUON_CNEW(Class, ...) ::muon::memory::DefaultAllocator::construct(1, MUON_NEW(Class), _MUON_ALLOCINFO, __VA_ARGS__)
+#if defined(MUON_PLATFORM_WINDOWS)
+#	define MUON_CNEW(Class, ...) ::muon::memory::DefaultAllocator::construct(1, MUON_NEW(Class), _MUON_ALLOCINFO, __VA_ARGS__ )
+#else
+#	define MUON_CNEW(Class, args...) ::muon::memory::DefaultAllocator::construct(1, MUON_NEW(Class), _MUON_ALLOCINFO, ##args )
+#endif //MUON_PLATFORM_WINDOWS
 
 /*!
 * @def MUON_DELETE(Pointer)

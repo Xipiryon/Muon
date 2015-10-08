@@ -76,7 +76,7 @@ public:
 	protected:
 		std::ofstream _file;
 };
-	
+
 struct UnitTestObject
 {
 	static const muon::u32 ConstructedValue = 64;
@@ -114,7 +114,12 @@ int main(int argc, char** argv)
 	muon::u32 errorCount = 0;
 
 #define MUON_TITLE(msg) mainLog() << msg << muon::endl
-#define MUON_CHECK(cond, err, ...) MUON_ASSERT(cond, "\t-> " err, __VA_ARGS__); if(!(cond)) {++errorCount;}
+#if defined(MUON_PLATFORM_WINDOWS)
+#	define MUON_CHECK(cond, err, ...) MUON_ASSERT(cond, "\t-> " err, __VA_ARGS__); if(!(cond)) {++errorCount;}
+#else
+#	define MUON_CHECK(cond, err, args...) MUON_ASSERT(cond, "\t-> " err, ##args); if(!(cond)) {++errorCount;}
+#endif
+
 	// ***************
 	// BEGIN UNIT TEST
 	void* pointer = NULL;

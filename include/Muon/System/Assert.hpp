@@ -43,30 +43,30 @@ namespace muon
 //		--------------------------
 #ifdef MUON_DEBUG
 
-#ifdef EMSCRIPTEN
+#	ifdef EMSCRIPTEN
 
-#	define MUON_ASSERT(cond, format, ...)
-#	define MUON_ASSERT_BREAK(cond, format, ...)
-#	define MUON_ERROR(format, ...)
-#	define MUON_ERROR_BREAK(format, ...)
+#		define MUON_ASSERT(cond, format, ...)
+#		define MUON_ASSERT_BREAK(cond, format, ...)
+#		define MUON_ERROR(format, ...)
+#		define MUON_ERROR_BREAK(format, ...)
 
-#else	//EMSCRIPTEN
+#	else	//EMSCRIPTEN
 
-#if defined(MUON_PLATFORM_WINDOWS)
-#	define _MUON_ASSERT(format, ...) muon::system::assertMessage(__FILE__, __FUNCTION__, __LINE__, format, __VA_ARGS__)
-#	define MUON_ASSERT(cond, format, ...) do { if ((cond) == false) { _MUON_ASSERT(format, __VA_ARGS__); } } while(0)
-#	define MUON_ASSERT_BREAK(cond, format, ...) do { if ((cond) == false) { _MUON_ASSERT(format, __VA_ARGS__); MUON_ASM_BREAK;} } while(0)
-#	define MUON_ERROR(format, ...) do { _MUON_ASSERT(format, __VA_ARGS__); } while(0)
-#	define MUON_ERROR_BREAK(format, ...) do { _MUON_ASSERT(format, __VA_ARGS__); MUON_ASM_BREAK; } while(0)
-#else //MUON_PLATFORM_WINDOWS
-#	define _MUON_ASSERT(format, args...) muon::system::assertMessage(__FILE__, __FUNCTION__, __LINE__, format, ##args)
-#	define MUON_ASSERT(cond, format, args...) do { if ((cond) == false) { _MUON_ASSERT(format, ##args); } } while(0)
-#	define MUON_ASSERT_BREAK(cond, format, args...) do { if ((cond) == false) { _MUON_ASSERT(format, ##args); MUON_ASM_BREAK;} } while(0)
-#	define MUON_ERROR(format, args...) do { _MUON_ASSERT(format, ##args); } while(0)
-#	define MUON_ERROR_BREAK(format, args...) do { _MUON_ASSERT(format, ##args); MUON_ASM_BREAK; } while(0)
-#endif
+#		if defined(MUON_PLATFORM_WINDOWS)
+#			define _MUON_ASSERT(format, ...) muon::system::assertMessage(__FILE__, __FUNCTION__, __LINE__, format, __VA_ARGS__)
+#			define MUON_ASSERT(cond, format, ...) do { if ((cond) == false) { _MUON_ASSERT(format, __VA_ARGS__); } } while(0)
+#			define MUON_ASSERT_BREAK(cond, format, ...) do { if ((cond) == false) { _MUON_ASSERT(format, __VA_ARGS__); MUON_ASM_BREAK;} } while(0)
+#			define MUON_ERROR(format, ...) do { _MUON_ASSERT(format, __VA_ARGS__); } while(0)
+#			define MUON_ERROR_BREAK(format, ...) do { _MUON_ASSERT(format, __VA_ARGS__); MUON_ASM_BREAK; } while(0)
+#		else
+#			define _MUON_ASSERT(format, args...) muon::system::assertMessage(__FILE__, __FUNCTION__, __LINE__, format, ##args)
+#			define MUON_ASSERT(cond, format, args...) do { if ((cond) == false) { _MUON_ASSERT(format, ##args); } } while(0)
+#			define MUON_ASSERT_BREAK(cond, format, args...) do { if ((cond) == false) { _MUON_ASSERT(format, ##args); MUON_ASM_BREAK;} } while(0)
+#			define MUON_ERROR(format, args...) do { _MUON_ASSERT(format, ##args); } while(0)
+#			define MUON_ERROR_BREAK(format, args...) do { _MUON_ASSERT(format, ##args); MUON_ASM_BREAK; } while(0)
+#		endif //MUON_PLATFORM_WINDOWS
 
-#endif	//EMSCRIPTEN
+#	endif	//EMSCRIPTEN
 
 #else	//MUON_DEBUG
 
@@ -76,4 +76,5 @@ namespace muon
 #	define MUON_ERROR_BREAK(format, ...)
 
 #endif	//MUON_DEBUG
+
 #endif	//_MUON_ASSERT_H_INCLUDED
