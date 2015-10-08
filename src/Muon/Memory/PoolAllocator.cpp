@@ -25,19 +25,33 @@
 *
 *************************************************************************/
 
-#include "Muon/Memory/DequeAllocator.hpp"
-
-namespace 
-{
-	std::deque<muon::RawPointer> g_Allocated;
-	std::deque<muon::u32> g_Free;
-}
+#include "Muon/Memory/PoolAllocator.hpp"
 
 namespace muon
 {
 	namespace memory
 	{
-		std::deque<RawPointer>* DequeAllocator::_allocated = &g_Allocated;
-		std::deque<u32>* DequeAllocator::_free = &g_Free;
+		PoolAllocator::MemBlock::MemBlock(u32 size)
+			: data((u32*)::malloc(size))
+		{
+		}
+
+		PoolAllocator::MemBlock::MemBlock(const MemBlock& block)
+			: data(block.data)
+		{
+		}
+
+		PoolAllocator::MemBlock::~MemBlock()
+		{
+			::free(data);
+		}
+
+		PoolAllocator::FreeBlock::FreeBlock(u32* poolIndex)
+			: index(poolIndex)
+		{
+		}
+
+		PoolAllocator::MemBlockList* PoolAllocator::_pool = NULL;
+		PoolAllocator::MapFreeBlockList* PoolAllocator::_free = NULL;
 	}
 }

@@ -30,7 +30,7 @@
 
 #include <cstring>
 #include "Muon/System/Assert.hpp"
-#include "Muon/Memory/DequeAllocator.hpp"
+#include "Muon/Memory/PoolAllocator.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
 #include "Muon/Meta/TypeInfo.hpp"
 
@@ -132,12 +132,12 @@ namespace muon
 		// As we are non copyable, erase and re-allocate in any cases
 		if (_data)
 		{
-			memory::DequeAllocator::destroy<T>((T*)_data);
-			memory::DequeAllocator::deallocate<T>(1, (T*)_data);
+			memory::PoolAllocator::destroy<T>((T*)_data);
+			memory::PoolAllocator::deallocate<T>(1, (T*)_data);
 		}
 		_meta = m;
 		// Allocate memory
-		_data = memory::DequeAllocator::allocate<T>(1);
+		_data = memory::PoolAllocator::allocate<T>(1);
 		new (_data)T(rhs);
 
 		return *this;
