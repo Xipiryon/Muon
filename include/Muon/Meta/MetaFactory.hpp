@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_METAFACTORY_H_INCLUDED
-#define _MUON_METAFACTORY_H_INCLUDED
+#ifndef INCLUDE_MUON_METAFACTORY_HPP
+#define INCLUDE_MUON_METAFACTORY_HPP
 
 #include "Muon/Meta/MetaData.hpp"
 

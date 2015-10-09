@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_METADATA_H_INCLUDED
-#define _MUON_METADATA_H_INCLUDED
+#ifndef INCLUDE_MUON_METADATA_HPP
+#define INCLUDE_MUON_METADATA_HPP
 
 #include <unordered_map>
 #include "Muon/System/Assert.hpp"

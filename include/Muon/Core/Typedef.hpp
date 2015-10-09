@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_TYPEDEF_H_INCLUDED
-#define _MUON_TYPEDEF_H_INCLUDED
+#ifndef INCLUDE_MUON_TYPEDEF_HPP
+#define INCLUDE_MUON_TYPEDEF_HPP
 
 #include "Muon/Core/Define.hpp"
 #include <stdint.h>

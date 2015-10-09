@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_ISERIALIZABLE_H_INCLUDED
-#define _MUON_ISERIALIZABLE_H_INCLUDED
+#ifndef INCLUDE_MUON_ISERIALIZABLE_HPP
+#define INCLUDE_MUON_ISERIALIZABLE_HPP
 
 #include "Muon/Core/Typedef.hpp"
 

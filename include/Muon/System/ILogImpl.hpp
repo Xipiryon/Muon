@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_ILOGIMPL_H_INCLUDED
-#define _MUON_ILOGIMPL_H_INCLUDED
+#ifndef INCLUDE_MUON_ILOGIMPL_HPP
+#define INCLUDE_MUON_ILOGIMPL_HPP
 
 #include "Muon/Core/Typedef.hpp"
 

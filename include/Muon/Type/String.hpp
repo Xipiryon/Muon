@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_STRING_H_INCLUDED
-#define _MUON_STRING_H_INCLUDED
+#ifndef INCLUDE_MUON_STRING_HPP
+#define INCLUDE_MUON_STRING_HPP
 
 #include <functional>
 #include <ostream>

@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_CONSTANT_H_INCLUDED
-#define _MUON_CONSTANT_H_INCLUDED
+#ifndef INCLUDE_MUON_CONSTANT_HPP
+#define INCLUDE_MUON_CONSTANT_HPP
 
 #include "Muon/Core/Typedef.hpp"
 

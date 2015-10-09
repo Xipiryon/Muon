@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_POOLALLOCATOR_H_INCLUDED
-#define _MUON_POOLALLOCATOR_H_INCLUDED
+#ifndef INCLUDE_MUON_POOLALLOCATOR_HPP
+#define INCLUDE_MUON_POOLALLOCATOR_HPP
 
 #include <map>
 #include <deque>

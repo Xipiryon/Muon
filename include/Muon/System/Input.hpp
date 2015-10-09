@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_INPUT_H_INCLUDED
-#define _MUON_INPUT_H_INCLUDED
+#ifndef INCLUDE_MUON_INPUT_HPP
+#define INCLUDE_MUON_INPUT_HPP
 
 #include "Muon/Core/Typedef.hpp"
 

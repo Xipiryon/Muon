@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_SINGLETON_H_INCLUDED
-#define _MUON_SINGLETON_H_INCLUDED
+#ifndef INCLUDE_MUON_SINGLETON_HPP
+#define INCLUDE_MUON_SINGLETON_HPP
 
 #include "Muon/Helper/NonCopyable.hpp"
 

@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_LOG_H_INCLUDED
-#define _MUON_LOG_H_INCLUDED
+#ifndef INCLUDE_MUON_LOG_HPP
+#define INCLUDE_MUON_LOG_HPP
 
 #include <vector>
 #include "Muon/IO/IStream.hpp"
@@ -255,4 +255,4 @@ MUON_TRAITS(muon::system::Log)
 
 MUON_API std::ostream& operator<<(std::ostream& stream, const muon::Endl& endl);
 
-#endif	//_MUON_LOG_H_INCLUDED
+#endif	//INCLUDE_MUON_LOG_HPP

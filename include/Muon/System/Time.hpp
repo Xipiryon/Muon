@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_TIME_H_INCLUDED
-#define _MUON_TIME_H_INCLUDED
+#ifndef INCLUDE_MUON_TIME_HPP
+#define INCLUDE_MUON_TIME_HPP
 
 #include <ctime>
 #include "Muon/Core/Typedef.hpp"

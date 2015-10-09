@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_VARIANT_H_INCLUDED
-#define _MUON_VARIANT_H_INCLUDED
+#ifndef INCLUDE_MUON_VARIANT_HPP
+#define INCLUDE_MUON_VARIANT_HPP
 
 #include <cstring>
 #include "Muon/System/Assert.hpp"

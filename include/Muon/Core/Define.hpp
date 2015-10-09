@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_DEFINE_H_INCLUDED
-#define _MUON_DEFINE_H_INCLUDED
+#ifndef INCLUDE_MUON_DEFINE_HPP
+#define INCLUDE_MUON_DEFINE_HPP
 
 /*!
 * @file Define.hpp
@@ -161,4 +161,4 @@ namespace muon {}
 #	pragma warning(disable: 4996)
 #endif
 
-#endif //_MUON_DEFINE_H_INCLUDED
+#endif //INCLUDE_MUON_DEFINE_HPP

@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_KEYVALUE_H_INCLUDED
-#define _MUON_KEYVALUE_H_INCLUDED
+#ifndef INCLUDE_MUON_KEYVALUE_HPP
+#define INCLUDE_MUON_KEYVALUE_HPP
 
 #include "Muon/Type/String.hpp"
 

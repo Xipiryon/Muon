@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_TYPETRAITS_H_INCLUDED
-#define _MUON_TYPETRAITS_H_INCLUDED
+#ifndef INCLUDE_MUON_TYPETRAITS_HPP
+#define INCLUDE_MUON_TYPETRAITS_HPP
 
 #include "Muon/Core/Constant.hpp"
 

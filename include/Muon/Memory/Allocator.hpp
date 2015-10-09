@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_ALLOCATOR_H_INCLUDED
-#define _MUON_ALLOCATOR_H_INCLUDED
+#ifndef INCLUDE_MUON_ALLOCATOR_HPP
+#define INCLUDE_MUON_ALLOCATOR_HPP
 
 #include <stdlib.h>
 #include "Muon/Core/Typedef.hpp"

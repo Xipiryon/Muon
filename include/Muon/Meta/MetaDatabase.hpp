@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_METADATABASE_H_INCLUDED
-#define _MUON_METADATABASE_H_INCLUDED
+#ifndef INCLUDE_MUON_METADATABASE_HPP
+#define INCLUDE_MUON_METADATABASE_HPP
 
 #include <unordered_map>
 #include "Muon/Memory/Allocator.hpp"

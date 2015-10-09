@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_ASSERT_H_INCLUDED
-#define _MUON_ASSERT_H_INCLUDED
+#ifndef INCLUDE_MUON_ASSERT_HPP
+#define INCLUDE_MUON_ASSERT_HPP
 
 #include "Muon/Core/Constant.hpp"
 #include "Muon/Core/Typedef.hpp"
@@ -77,4 +77,4 @@ namespace muon
 
 #endif	//MUON_DEBUG
 
-#endif	//_MUON_ASSERT_H_INCLUDED
+#endif	//INCLUDE_MUON_ASSERT_HPP

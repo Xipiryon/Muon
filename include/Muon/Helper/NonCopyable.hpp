@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_NONCOPYABLE_H_INCLUDED
-#define _MUON_NONCOPYABLE_H_INCLUDED
+#ifndef INCLUDE_MUON_NONCOPYABLE_HPP
+#define INCLUDE_MUON_NONCOPYABLE_HPP
 
 #include "Muon/Core/Typedef.hpp"
 

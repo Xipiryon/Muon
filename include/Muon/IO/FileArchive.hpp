@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_FILEARCHIVE_H_INCLUDED
-#define _MUON_FILEARCHIVE_H_INCLUDED
+#ifndef INCLUDE_MUON_FILEARCHIVE_HPP
+#define INCLUDE_MUON_FILEARCHIVE_HPP
 
 #include <fstream>
 

@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef _MUON_ISTREAM_H_INCLUDED
-#define _MUON_ISTREAM_H_INCLUDED
+#ifndef INCLUDE_MUON_ISTREAM_HPP
+#define INCLUDE_MUON_ISTREAM_HPP
 
 #include "Muon/Core/Typedef.hpp"
 #include "Muon/IO/ISerializable.hpp"
