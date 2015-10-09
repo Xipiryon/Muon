@@ -51,7 +51,7 @@ namespace muon
 		{
 		}
 
-		PoolAllocator::MemBlockList* PoolAllocator::_pool = NULL;
-		PoolAllocator::MapFreeBlockList* PoolAllocator::_free = NULL;
+		PoolAllocator::MemBlockList* PoolAllocator::m_pool = NULL;
+		PoolAllocator::MapFreeBlockList* PoolAllocator::m_free = NULL;
 	}
 }

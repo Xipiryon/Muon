@@ -62,9 +62,9 @@ namespace muon
 			MetaData* meta() const;
 
 			private:
-			MetaData* _meta;
-			String _name;
-			u32 _offset;
+			MetaData* m_meta;
+			String m_name;
+			u32 m_offset;
 			// */
 		};
 
@@ -86,9 +86,9 @@ namespace muon
 			MetaData* meta() const;
 
 		private:
-			MetaData* _meta;
-			String _name;
-			u32 _offset;
+			MetaData* m_meta;
+			String m_name;
+			u32 m_offset;
 		};
 
 		/*!
@@ -105,9 +105,9 @@ namespace muon
 
 			template<typename T>
 			MetaData(const TypeTraits<T>&)
-				: _name(TypeTraits<T>::name())
-				, _id(TypeTraits<T>::id())
-				, _size(TypeTraits<T>::size())
+				: m_name(TypeTraits<T>::name())
+				, m_id(TypeTraits<T>::id())
+				, m_size(TypeTraits<T>::size())
 			{
 				init();
 			}
@@ -140,14 +140,14 @@ namespace muon
 		private:
 			void init();
 
-			String _name;
-			u64 _id;
-			u32 _size;
+			String m_name;
+			u64 m_id;
+			u32 m_size;
 
 			typedef std::unordered_map<String, meta::MetaMember> MetaMemberMap;
 			typedef std::unordered_map<String, meta::MetaFunction> MetaMethodMap;
-			MetaMemberMap* _members;
-			MetaMethodMap* _methods;
+			MetaMemberMap* m_members;
+			MetaMethodMap* m_methods;
 		};
 
 

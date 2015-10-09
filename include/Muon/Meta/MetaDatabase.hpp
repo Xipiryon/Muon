@@ -63,7 +63,7 @@ namespace muon
 			void registerInternal();
 
 			typedef std::unordered_map<String, MetaData> MapMetaType;
-			MapMetaType* _metadb;
+			MapMetaType* m_metadb;
 		};
 
 
@@ -71,12 +71,12 @@ namespace muon
 		MetaData* MetaDatabase::registerMeta()
 		{
 			String name = TypeTraits<T>::name();
-			if (_metadb->find(name) == _metadb->end())
+			if (m_metadb->find(name) == m_metadb->end())
 			{
-				//(*_metadb)[name] = MetaData(TypeTraits<T>());
-				_metadb->insert(std::make_pair(name, TypeTraits<T>()));
+				//(*m_metadb)[name] = MetaData(TypeTraits<T>());
+				m_metadb->insert(std::make_pair(name, TypeTraits<T>()));
 			}
-			return &(*_metadb)[name];
+			return &(*m_metadb)[name];
 		}
 
 		template<typename T>

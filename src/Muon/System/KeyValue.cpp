@@ -94,18 +94,18 @@ namespace
 		}
 		std::vector<KeyValueInfo*> v;
 	};
-	static StaticDataInstance _data;
+	static StaticDataInstance m_data;
 
 	std::vector<KeyValueInfo*>::iterator find(const muon::String& name)
 	{
-		for (auto it = _data.v.begin(); it != _data.v.end(); ++it)
+		for (auto it = m_data.v.begin(); it != m_data.v.end(); ++it)
 		{
 			if ((*it)->nameInfo == name)
 			{
 				return it;
 			}
 		}
-		return _data.v.end();
+		return m_data.v.end();
 	}
 
 
@@ -114,7 +114,7 @@ namespace
 	{
 		auto it = find(name);
 		//Already existing: update
-		if (it != _data.v.end())
+		if (it != m_data.v.end())
 		{
 			KeyValueInfo* kvi = *it;
 			MUON_ASSERT(kvi->typeInfo == type
@@ -168,7 +168,7 @@ namespace
 				MUON_ERROR("Can't store unknow type!");
 				break;
 		};
-		_data.v.push_back(kvi);
+		m_data.v.push_back(kvi);
 		muon::system::Log("KEYVALUE", muon::LOG_DEBUG)
 				<< "Added \"" << name
 				<< "\" with type \"" << KeyValueTypeToString(type) << "\""
@@ -180,7 +180,7 @@ namespace
 	bool retrieveT(T& val, const muon::String& name, KeyValueType type)
 	{
 		auto it = find(name);
-		if (it != _data.v.end())
+		if (it != m_data.v.end())
 		{
 			KeyValueInfo* kvi = *it;
 			MUON_ASSERT(kvi->typeInfo == type
@@ -230,7 +230,7 @@ namespace muon
 	{
 		bool KeyValue::exists(const String& name)
 		{
-			return (find(name) != _data.v.end());
+			return (find(name) != m_data.v.end());
 		}
 
 		bool KeyValue::store(const String& name, const String& val)
@@ -361,11 +361,11 @@ namespace muon
 		bool KeyValue::erase(const String& name)
 		{
 			auto it = find(name);
-			if (it != _data.v.end())
+			if (it != m_data.v.end())
 			{
 				KeyValueInfo* kvi = *it;
 				MUON_DELETE(kvi);
-				_data.v.erase(it);
+				m_data.v.erase(it);
 				Log("KEYVALUE", LOG_DEBUG) << "Successfuly erased \"" << name << "\"" << muon::endl;
 				return true;
 			}

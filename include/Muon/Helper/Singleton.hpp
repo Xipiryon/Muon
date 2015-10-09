@@ -68,9 +68,9 @@ namespace muon
 			*/
 			static T& instantiate()
 			{
-				MUON_ASSERT_BREAK(!_instance, "Singleton instance already created!");
+				MUON_ASSERT_BREAK(!s_instance, "Singleton instance already created!");
 				static T gInstance;
-				_instance = &gInstance;
+				s_instance = &gInstance;
 				return get();
 			}
 
@@ -79,8 +79,8 @@ namespace muon
 			*/
 			static T& get()
 			{
-				MUON_ASSERT_BREAK(_instance, "Singleton instance has not been created!");
-				return *_instance;
+				MUON_ASSERT_BREAK(s_instance, "Singleton instance has not been created!");
+				return *s_instance;
 			}
 
 		protected:
@@ -91,10 +91,10 @@ namespace muon
 			}
 
 		private:
-			static T* _instance;
+			static T* s_instance;
 		};
 
-		template<typename T> T* Singleton<T>::_instance = NULL;
+		template<typename T> T* Singleton<T>::s_instance = NULL;
 	}
 }
 

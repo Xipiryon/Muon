@@ -43,38 +43,38 @@ public:
 	LogFile() {}
 	virtual ~LogFile() {}
 
-	virtual bool open(const muon::String& filename) { _file.open(filename.cStr()); return true;}
-	virtual bool close() { _file.close(); return true;}
+	virtual bool open(const muon::String& filename) { m_file.open(filename.cStr()); return true;}
+	virtual bool close() { m_file.close(); return true;}
 
-	virtual LogFile& endl() { _file << "\n"; return *this;}
+	virtual LogFile& endl() { m_file << "\n"; return *this;}
 
 	//! Behavior on const char* parameter
-	virtual LogFile& operator<<(const char* pod) { _file << pod; return *this; }
+	virtual LogFile& operator<<(const char* pod) { m_file << pod; return *this; }
 	//! Behavior on u64 parameter
-	virtual LogFile& operator<<(muon::u64 pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(muon::u64 pod) { m_file << pod; return *this;}
 	//! Behavior on u32 parameter
-	virtual LogFile& operator<<(muon::u32 pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(muon::u32 pod) { m_file << pod; return *this;}
 	//! Behavior on u16 parameter
-	virtual LogFile& operator<<(muon::u16 pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(muon::u16 pod) { m_file << pod; return *this;}
 	//! Behavior on u8 parameter
-	virtual LogFile& operator<<(muon::u8 pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(muon::u8 pod) { m_file << pod; return *this;}
 	//! Behavior on i64 parameter
-	virtual LogFile& operator<<(muon::i64 pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(muon::i64 pod) { m_file << pod; return *this;}
 	//! Behavior on i32 parameter
-	virtual LogFile& operator<<(muon::i32 pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(muon::i32 pod) { m_file << pod; return *this;}
 	//! Behavior on i16 parameter
-	virtual LogFile& operator<<(muon::i16 pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(muon::i16 pod) { m_file << pod; return *this;}
 	//! Behavior on i8 parameter
-	virtual LogFile& operator<<(muon::i8 pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(muon::i8 pod) { m_file << pod; return *this;}
 	//! Behavior on f64 parameter
-	virtual LogFile& operator<<(muon::f64 pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(muon::f64 pod) { m_file << pod; return *this;}
 	//! Behavior on f32 parameter
-	virtual LogFile& operator<<(muon::f32 pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(muon::f32 pod) { m_file << pod; return *this;}
 	//! Behavior on bool parameter
-	virtual LogFile& operator<<(bool pod) { _file << pod; return *this;}
+	virtual LogFile& operator<<(bool pod) { m_file << pod; return *this;}
 
 	protected:
-		std::ofstream _file;
+		std::ofstream m_file;
 };
 
 struct UnitTestObject

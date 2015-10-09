@@ -43,8 +43,8 @@ namespace muon
 			f32 now();
 
 		private:
-			clock_t _start;
-			clock_t _end;
+			clock_t m_start;
+			clock_t m_end;
 		};
 
 		class MUON_API Timer
@@ -56,10 +56,10 @@ namespace muon
 			bool isElapsed();
 
 		private:
-			clock_t _start;
-			clock_t _end;
-			bool _elapsed = false;
-			f32 _delay = 0.f;
+			clock_t m_start;
+			clock_t m_end;
+			bool m_elapsed = false;
+			f32 m_delay = 0.f;
 		};
 	}
 }

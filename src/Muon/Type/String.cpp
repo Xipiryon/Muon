@@ -36,9 +36,9 @@
 namespace muon
 {
 	String::String()
-		: _str(NULL)
-		, _charcount(0)
-		, _memsize(0)
+		: m_str(NULL)
+		, m_charcount(0)
+		, m_memsize(0)
 	{
 	}
 
@@ -47,26 +47,26 @@ namespace muon
 	{
 		if (str && *str != 0)
 		{
-			_memsize = ::strlen(str);
-			_charcount = _memsize;
-			_str = (char*)::malloc(sizeof(char) * (_memsize + 1));
-			MUON_ASSERT_BREAK(_str != NULL, "String(const char*) failed!");
-			::strcpy(_str, str);
-			*(_str + _memsize) = 0;
+			m_memsize = ::strlen(str);
+			m_charcount = m_memsize;
+			m_str = (char*)::malloc(sizeof(char) * (m_memsize + 1));
+			MUON_ASSERT_BREAK(m_str != NULL, "String(const char*) failed!");
+			::strcpy(m_str, str);
+			*(m_str + m_memsize) = 0;
 		}
 	}
 
 	String::String(const String& str)
 		: String()
 	{
-		if (str._charcount > 0)
+		if (str.m_charcount > 0)
 		{
-			_charcount = str._charcount;
-			_memsize = _charcount;
-			_str = (char*)::malloc(sizeof(char) * (_charcount + 1));
-			MUON_ASSERT_BREAK(_str != NULL, "String(const String&) failed!");
-			::strcpy(_str, str._str);
-			*(_str + _charcount) = 0;
+			m_charcount = str.m_charcount;
+			m_memsize = m_charcount;
+			m_str = (char*)::malloc(sizeof(char) * (m_charcount + 1));
+			MUON_ASSERT_BREAK(m_str != NULL, "String(const String&) failed!");
+			::strcpy(m_str, str.m_str);
+			*(m_str + m_charcount) = 0;
 		}
 	}
 
@@ -75,48 +75,48 @@ namespace muon
 	{
 		if (size != 0)
 		{
-			_memsize = (size + 1) * sizeof(char);
-			_str = (char*)::malloc(_memsize);
-			MUON_ASSERT_BREAK(_str != NULL, "String(u32, char) failed!");
+			m_memsize = (size + 1) * sizeof(char);
+			m_str = (char*)::malloc(m_memsize);
+			MUON_ASSERT_BREAK(m_str != NULL, "String(u32, char) failed!");
 			if (c != 0)
 			{
-				_charcount = size;
-				::memcpy(_str, &c, _memsize);
-				*(_str + _charcount) = 0;
+				m_charcount = size;
+				::memcpy(m_str, &c, m_memsize);
+				*(m_str + m_charcount) = 0;
 			}
 			else
 			{
-				(*_str) = 0;
+				(*m_str) = 0;
 			}
 		}
 	}
 
 	String::~String()
 	{
-		if (_str)
+		if (m_str)
 		{
-			free(_str);
+			free(m_str);
 		}
 	}
 
 	char String::operator[](u32 i) const
 	{
-		return *(_str + i);
+		return *(m_str + i);
 	}
 
 	char& String::operator[](u32 i)
 	{
-		return *(_str + i);
+		return *(m_str + i);
 	}
 
 
 	bool String::operator==(const char* other) const
 	{
-		if (_str == NULL || other == NULL)
+		if (m_str == NULL || other == NULL)
 		{
 			return false;
 		}
-		return (strcmp(_str, other) == 0);
+		return (strcmp(m_str, other) == 0);
 	}
 
 	bool String::operator!=(const char* other) const
@@ -140,14 +140,14 @@ namespace muon
 		{
 			muon::u32 size = ::strlen(other);
 			//Realloc only if needed
-			if (_charcount + size >= _memsize)
+			if (m_charcount + size >= m_memsize)
 			{
-				_str = (char*)::realloc(_str, sizeof(char) * (_charcount + size + 1));
-				_memsize = _charcount + size;
+				m_str = (char*)::realloc(m_str, sizeof(char) * (m_charcount + size + 1));
+				m_memsize = m_charcount + size;
 			}
-			::strncpy(_str + _charcount, other, size);
-			_charcount += size;
-			*(_str + _charcount) = 0;
+			::strncpy(m_str + m_charcount, other, size);
+			m_charcount += size;
+			*(m_str + m_charcount) = 0;
 		}
 		return *this;
 	}
@@ -168,12 +168,12 @@ namespace muon
 		if (str)
 		{
 			clear();
-			_charcount = ::strlen(str);
-			_memsize = _charcount;
-			_str = (char*)::malloc(sizeof(char) * (_charcount + 1));
-			MUON_ASSERT_BREAK(_str != NULL, "operator=() failed!");
-			::strcpy(_str, str);
-			*(_str + _charcount) = 0;
+			m_charcount = ::strlen(str);
+			m_memsize = m_charcount;
+			m_str = (char*)::malloc(sizeof(char) * (m_charcount + 1));
+			MUON_ASSERT_BREAK(m_str != NULL, "operator=() failed!");
+			::strcpy(m_str, str);
+			*(m_str + m_charcount) = 0;
 		}
 		return *this;
 	}
@@ -185,12 +185,12 @@ namespace muon
 
 	void String::clear()
 	{
-		if (_str)
+		if (m_str)
 		{
-			::free(_str);
-			_str = NULL;
-			_memsize = 0;
-			_charcount = 0;
+			::free(m_str);
+			m_str = NULL;
+			m_memsize = 0;
+			m_charcount = 0;
 		}
 	}
 
@@ -200,40 +200,40 @@ namespace muon
 		clear();
 		if (size > 0)
 		{
-			_str = (char*)::malloc(sizeof(char) * (size + 1));
-			MUON_ASSERT_BREAK(_str != NULL, "resize() failed!");
-			::strncpy(_str, cpy._str, cpy._charcount < size ? cpy._charcount : size);
-			*(_str + size) = 0;
-			_memsize = cpy._memsize;
-			_charcount = cpy._charcount;
+			m_str = (char*)::malloc(sizeof(char) * (size + 1));
+			MUON_ASSERT_BREAK(m_str != NULL, "resize() failed!");
+			::strncpy(m_str, cpy.m_str, cpy.m_charcount < size ? cpy.m_charcount : size);
+			*(m_str + size) = 0;
+			m_memsize = cpy.m_memsize;
+			m_charcount = cpy.m_charcount;
 		}
 	}
 
 	const char* String::cStr() const
 	{
-		return (_memsize > 0 ? _str : "");
+		return (m_memsize > 0 ? m_str : "");
 	}
 
 	bool String::empty() const
 	{
-		return _charcount == 0;
+		return m_charcount == 0;
 	}
 
 	u32 String::size() const
 	{
-		return _charcount;
+		return m_charcount;
 	}
 
 	u32 String::find(char c, u32 pos) const
 	{
-		if (pos >= _charcount)
+		if (pos >= m_charcount)
 		{
 			return INVALID_INDEX;
 		}
 
-		for (u32 i = pos; i < _charcount; ++i)
+		for (u32 i = pos; i < m_charcount; ++i)
 		{
-			if (*(_str + i) == c)
+			if (*(m_str + i) == c)
 			{
 				return i;
 			}
@@ -244,21 +244,21 @@ namespace muon
 	u32 String::find(const char* other, u32 pos) const
 	{
 		u32 slen = ::strlen(other);
-		if (pos + slen > _charcount)
+		if (pos + slen > m_charcount)
 		{
 			return INVALID_INDEX;
 		}
 
-		u32 maxcount = _charcount - slen;
+		u32 maxcount = m_charcount - slen;
 		while (pos <= maxcount)
 		{
-			if (*(_str + pos) == *other)
+			if (*(m_str + pos) == *other)
 			{
 				bool ok = true;
 				u32 i = 0;
 				for (; i < slen; ++i)
 				{
-					ok &= (*(_str + i + pos) == *(other + i));
+					ok &= (*(m_str + i + pos) == *(other + i));
 					//Useless to continue iterating
 					if (!ok)
 					{
@@ -287,25 +287,25 @@ namespace muon
 
 	String String::substr(u32 pos, u32 len) const
 	{
-		if (pos >= _charcount)
+		if (pos >= m_charcount)
 		{
 			return String();
 		}
 
 		if (len == 0)
 		{
-			len = _charcount;
+			len = m_charcount;
 		}
 
-		if ((pos + len) >= _charcount)
+		if ((pos + len) >= m_charcount)
 		{
-			len = _charcount - pos;
+			len = m_charcount - pos;
 		}
 
 		String s(len + 1, 0);
-		::strncpy(s._str, _str + pos, len);
-		*(s._str + len) = 0;
-		s._charcount = len;
+		::strncpy(s.m_str, m_str + pos, len);
+		*(s.m_str + len) = 0;
+		s.m_charcount = len;
 		return s;
 	}
 
@@ -355,7 +355,7 @@ namespace muon
 		const u8 subByteResult = 0x80;
 
 		//Iterate over all character
-		for (u32 c = 0; c < _charcount; ++c)
+		for (u32 c = 0; c < m_charcount; ++c)
 		{
 			u8 nbByte = 0;
 			u8 idxByte = 0;
@@ -363,7 +363,7 @@ namespace muon
 			// Look for byte indicator, reverse order
 			for (int i = 0; i < 4; ++i)
 			{
-				if (((u8)*(_str + c) & mask[i]) == maskResult[i])
+				if (((u8)*(m_str + c) & mask[i]) == maskResult[i])
 				{
 					idxByte = i;
 					nbByte = i + 1;
@@ -380,7 +380,7 @@ namespace muon
 			// Loop for (if any) others
 			for (int i = 1; i < nbByte; ++i)
 			{
-				if ((*(_str + c + i) & subByte) != subByteResult)
+				if ((*(m_str + c + i) & subByte) != subByteResult)
 				{
 					// An error occured, return false.
 					return false;
@@ -396,9 +396,9 @@ namespace muon
 	{
 		// www.cse.yorku.ca/~oz/hash.html
 		u64 v = 5381;
-		if (_str)
+		if (m_str)
 		{
-			char* str = (char*)_str;
+			char* str = (char*)m_str;
 			int c;
 			while ((c = *str++) != 0)
 			{

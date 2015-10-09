@@ -34,7 +34,7 @@ namespace muon
 	namespace system
 	{
 		ILogImpl::ILogImpl()
-			: _level(LOG_INFO)
+			: m_level(LOG_INFO)
 		{
 		}
 

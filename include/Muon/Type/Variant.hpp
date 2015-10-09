@@ -58,8 +58,8 @@ namespace muon
 		template<typename T> const T& get() const;
 
 	protected:
-		meta::MetaData* _meta;
-		void* _data;
+		meta::MetaData* m_meta;
+		void* m_data;
 	};
 
 	template <typename T>
@@ -71,13 +71,13 @@ namespace muon
 	template <typename T>
 	T& Variant::get()
 	{
-		return *reinterpret_cast<T*>(_data);
+		return *reinterpret_cast<T*>(m_data);
 	}
 
 	template <typename T>
 	const T& Variant::get() const
 	{
-		return *reinterpret_cast<T*>(_data);
+		return *reinterpret_cast<T*>(m_data);
 	}
 
 	template<typename T>
@@ -94,23 +94,23 @@ namespace muon
 		if (m == NULL)
 		{
 			// Resetting our Variant
-			::free(_data);
-			_meta = MUON_META(void);
+			::free(m_data);
+			m_meta = MUON_META(void);
 			return *this;
 		}
 
 		// Meta are different, erase the stored one and replace by the new
-		if (_meta != MUON_META(T))
+		if (m_meta != MUON_META(T))
 		{
-			::free(_data);
-			_meta = m;
-			_data = ::malloc(_meta->size());
-			::memcpy(_data, &rhs, _meta->size());
+			::free(m_data);
+			m_meta = m;
+			m_data = ::malloc(m_meta->size());
+			::memcpy(m_data, &rhs, m_meta->size());
 		}
 		else
 		{
 			// They are the same, just copy the value
-			::memcpy(_data, &rhs, _meta->size());
+			::memcpy(m_data, &rhs, m_meta->size());
 		}
 
 		return *this;
@@ -124,21 +124,21 @@ namespace muon
 		if (m == NULL)
 		{
 			// Resetting our Variant
-			::free(_data);
-			_meta = MUON_META(void);
+			::free(m_data);
+			m_meta = MUON_META(void);
 			return *this;
 		}
 
 		// As we are non copyable, erase and re-allocate in any cases
-		if (_data)
+		if (m_data)
 		{
-			memory::PoolAllocator::destroy<T>((T*)_data);
-			memory::PoolAllocator::deallocate<T>(1, (T*)_data);
+			memory::PoolAllocator::destroy<T>((T*)m_data);
+			memory::PoolAllocator::deallocate<T>(1, (T*)m_data);
 		}
-		_meta = m;
+		m_meta = m;
 		// Allocate memory
-		_data = memory::PoolAllocator::allocate<T>(1);
-		new (_data)T(rhs);
+		m_data = memory::PoolAllocator::allocate<T>(1);
+		new (m_data)T(rhs);
 
 		return *this;
 	}

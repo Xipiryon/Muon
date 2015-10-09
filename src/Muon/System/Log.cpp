@@ -54,7 +54,7 @@ namespace
 
 		virtual void operator()(muon::LogLevel level)
 		{
-			_level = level;
+			m_level = level;
 		}
 
 		virtual ILogImpl& operator<<(const char* pod)
@@ -106,23 +106,23 @@ namespace
 			std::cout << pod; return *this;
 		}
 	};
-	DefaultLogImpl _defaultLogImpl;
+	DefaultLogImpl m_defaultLogImpl;
 
 	std::vector<muon::system::ILogImpl*>& privGetLogImpl()
 	{
-		static std::vector<muon::system::ILogImpl*> _logImpl;
-		return _logImpl;
+		static std::vector<muon::system::ILogImpl*> m_logImpl;
+		return m_logImpl;
 	}
 	;
 #if defined(MUON_DEBUG)
-	muon::LogLevel _logLevel = muon::LOG_DEBUG;
+	muon::LogLevel m_logLevel = muon::LOG_DEBUG;
 #else
-	muon::LogLevel _logLevel = muon::LOG_INFO;
+	muon::LogLevel m_logLevel = muon::LOG_INFO;
 #endif
 
-	muon::String _openFilename;
-	muon::String _filename = "log_output";
-	bool _opened = false;
+	muon::String m_openFilename;
+	muon::String m_filename = "log_output";
+	bool m_opened = false;
 
 	template<typename T> bool notInVector(std::vector<T>& v, T f)
 	{
@@ -151,9 +151,9 @@ namespace muon
 		bool Log::addLogImpl(ILogImpl* impl)
 		{
 			getLogImpl().push_back(impl);
-			if (_opened)
+			if (m_opened)
 			{
-				impl->open(_openFilename);
+				impl->open(m_openFilename);
 			}
 			//No real reason to return false
 			return true;
@@ -172,38 +172,38 @@ namespace muon
 		}
 
 		Log::Log(const String& tag, LogLevel level)
-			: _level(level)
-			, _tagDisplayed(false)
+			: m_level(level)
+			, m_tagDisplayed(false)
 		{
 			if (tag.empty())
 			{
-				_tag = " ";
+				m_tag = " ";
 			}
 			else
 			{
-				_tag = " [" + tag + "] ";
+				m_tag = " [" + tag + "] ";
 			}
 
-			(*this)(_level);
+			(*this)(m_level);
 		}
 
 		Log::Log(LogLevel level)
-			: _level(level)
-			, _tagDisplayed(false)
+			: m_level(level)
+			, m_tagDisplayed(false)
 		{
-			(*this)(_level);
+			(*this)(m_level);
 		}
 
 		void Log::displayTag()
 		{
-			if (!_tagDisplayed)
+			if (!m_tagDisplayed)
 			{
-				_tagDisplayed = true;
+				m_tagDisplayed = true;
 				auto& logImpl = getLogImpl();
 
 				for (auto it = logImpl.begin(); it != logImpl.end(); ++it)
 				{
-					**it << _tag;
+					**it << m_tag;
 				}
 			}
 		}
@@ -223,8 +223,8 @@ namespace muon
 					++count;
 				}
 			}
-			_openFilename = filename;
-			_opened = true;
+			m_openFilename = filename;
+			m_opened = true;
 			return count;
 		}
 
@@ -239,8 +239,8 @@ namespace muon
 					++count;
 				}
 			}
-			_openFilename.clear();
-			_opened = false;
+			m_openFilename.clear();
+			m_opened = false;
 			return count;
 		}
 
@@ -255,7 +255,7 @@ namespace muon
 
 		bool Log::registerDefaultLogImpl()
 		{
-			return registerLogImpl(&_defaultLogImpl);
+			return registerLogImpl(&m_defaultLogImpl);
 		}
 
 		bool Log::unregisterLogImpl(ILogImpl* logImpl)
@@ -280,23 +280,23 @@ namespace muon
 		Log& Log::operator()(LogLevel level)
 		{
 			auto& logImpl = getLogImpl();
-			_level = (level == LOG_INTERNAL ? _level : level);
+			m_level = (level == LOG_INTERNAL ? m_level : level);
 			for (auto it = logImpl.begin(); it != logImpl.end(); ++it)
 			{
-				(*it)->operator()(_level);
+				(*it)->operator()(m_level);
 			}
-			_tagDisplayed = false;
+			m_tagDisplayed = false;
 			return *this;
 		}
 
 		void Log::setLevel(LogLevel level)
 		{
-			_logLevel = level;
+			m_logLevel = level;
 		}
 
 		LogLevel Log::getLevel()
 		{
-			return _logLevel;
+			return m_logLevel;
 		}
 	}
 }

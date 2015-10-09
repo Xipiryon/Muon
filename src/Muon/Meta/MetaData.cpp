@@ -42,9 +42,9 @@ namespace muon
 		// 			META MEMBER
 		// *****************************
 		MetaMember::MetaMember(MetaData* meta, const String& name, u32 offset)
-			: _meta(meta)
-			, _name(name)
-			, _offset(offset)
+			: m_meta(meta)
+			, m_name(name)
+			, m_offset(offset)
 		{
 		}
 
@@ -53,9 +53,9 @@ namespace muon
 		}
 
 		MetaMember::MetaMember(const MetaMember& o)
-			: _meta(o._meta)
-			, _name(o._name)
-			, _offset(o._offset)
+			: m_meta(o.m_meta)
+			, m_name(o.m_name)
+			, m_offset(o.m_offset)
 		{
 		}
 
@@ -63,26 +63,26 @@ namespace muon
 		{
 			if(this != &o)
 			{
-				_meta = o._meta;
-				_name = o._name;
-				_offset = o._offset;
+				m_meta = o.m_meta;
+				m_name = o.m_name;
+				m_offset = o.m_offset;
 			}
 			return *this;
 		}
 
 		const String& MetaMember::name() const
 		{
-			return _name;
+			return m_name;
 		}
 
 		u32 MetaMember::offset() const
 		{
-			return _offset;
+			return m_offset;
 		}
 
 		MetaData* MetaMember::meta() const
 		{
-			return _meta;
+			return m_meta;
 		}
 
 		// *****************************
@@ -90,81 +90,81 @@ namespace muon
 		// *****************************
 		void MetaData::init()
 		{
-			_members = MUON_CNEW(MetaMemberMap);
-			_methods = MUON_CNEW(MetaMethodMap);
+			m_members = MUON_CNEW(MetaMemberMap);
+			m_methods = MUON_CNEW(MetaMethodMap);
 		}
 
 		MetaData::MetaData()
-			: _name("#Unregistered#")
-			, _id(TYPE_ID_INVALID)
-			, _size(0)
+			: m_name("#Unregistered#")
+			, m_id(TYPE_ID_INVALID)
+			, m_size(0)
 		{
 			init();
 		}
 
 		MetaData::MetaData(const MetaData& o)
-			: _name(o._name)
-			, _id(o._id)
-			, _size(o._size)
+			: m_name(o.m_name)
+			, m_id(o.m_id)
+			, m_size(o.m_size)
 		{
 			init();
-			_members->operator=(*o._members);
-			_methods->operator=(*o._methods);
+			m_members->operator=(*o.m_members);
+			m_methods->operator=(*o.m_methods);
 		}
 
 		MetaData& MetaData::operator=(const MetaData& o)
 		{
 			if(this != &o)
 			{
-				_name = o._name;
-				_id = o._id;
-				_size = o._size;
-				_members->operator=(*o._members);
-				_methods->operator=(*o._methods);
+				m_name = o.m_name;
+				m_id = o.m_id;
+				m_size = o.m_size;
+				m_members->operator=(*o.m_members);
+				m_methods->operator=(*o.m_methods);
 			}
 			return *this;
 		}
 
 		MetaData::~MetaData()
 		{
-			MUON_CDELETE(_members);
-			MUON_CDELETE(_methods);
+			MUON_CDELETE(m_members);
+			MUON_CDELETE(m_methods);
 		}
 
 		const String& MetaData::name() const
 		{
-			return _name;
+			return m_name;
 		}
 
 		u64 MetaData::id() const
 		{
-			return _id;
+			return m_id;
 		}
 
 		u32 MetaData::size() const
 		{
-			return _size;
+			return m_size;
 		}
 
 		bool MetaData::isCustom() const
 		{
-			return (_id & TYPE_ID_CUSTOM_MASK) == TYPE_ID_CUSTOM_MASK;
+			return (m_id & TYPE_ID_CUSTOM_MASK) == TYPE_ID_CUSTOM_MASK;
 		}
 
 		u32 MetaData::getAttributeCount() const
 		{
-			return _members->size();
+			return m_members->size();
 		}
 
 		u32 MetaData::getMethodCount() const
 		{
-			return _methods->size();
+			return m_methods->size();
 		}
 
 		MetaData* MetaData::addAttribute(const char* name, const MetaData* meta)
 		{
-			auto it = _members->find(name);
-			if(it != _members->end())
+			auto it = m_members->find(name);
+			if(it != m_members->end())
 			{
 				MUON_ERROR("Cannot add \"%s\" as %s: already added as %s!"
 					, name, meta->name().cStr(), it->second.meta()->name().cStr());
@@ -173,15 +173,15 @@ namespace muon
 
 			// Use MetaDatabase pointer instead of given one
 			MetaData* dbMeta = MUON_META_NAME(meta->name().cStr());
-			_members->insert( {name, MetaMember(dbMeta, name, _size)} );
-			_size += meta->size();
+			m_members->insert( {name, MetaMember(dbMeta, name, m_size)} );
+			m_size += meta->size();
 
 			return this;
 		}
 
 		MetaMember MetaData::getAttribute(const char* name) const
 		{
-			for(auto pair : *_members)
+			for(auto pair : *m_members)
 			{
 				if(pair.second.name() == name)
 				{
@@ -193,7 +193,7 @@ namespace muon
 
 		MetaMember MetaData::getAttribute(u32 offset) const
 		{
-			for(auto pair : *_members)
+			for(auto pair : *m_members)
 			{
 				if(pair.second.offset() == offset)
 				{

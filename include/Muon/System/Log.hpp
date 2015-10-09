@@ -171,7 +171,7 @@ namespace muon
 			*/
 			template<typename Tref> MUON_INLINE Log& operator<<(const Tref& obj)
 			{
-				if (_level >= getLevel())
+				if (m_level >= getLevel())
 				{
 					displayTag();
 					auto& logImpl = getLogImpl();
@@ -201,15 +201,15 @@ namespace muon
 
 			/*
 			* @brief Change the stored LogLevel of the Log instance
-			* If the 'level' parameter is left as defined (_LOG_USERDEFINED),
+			* If the 'level' parameter is left as defined (LOG_INTERNAL),
 			* the default behavior is to use the last level set.
 			* @param level New level required to print
 			*/
 			virtual Log& operator()(LogLevel level = LOG_INTERNAL);
 
 		protected:
-			String _tag;
-			LogLevel _level;
+			String m_tag;
+			LogLevel m_level;
 
 		private:
 			static std::vector<ILogImpl*>& getLogImpl();
@@ -217,12 +217,12 @@ namespace muon
 			static bool addLogImpl(muon::system::ILogImpl*);
 
 			void displayTag();
-			bool _tagDisplayed;
+			bool m_tagDisplayed;
 		};
 
 		template<> MUON_INLINE Log& Log::operator<<(const char* str)
 		{
-			if (_level >= getLevel())
+			if (m_level >= getLevel())
 			{
 				displayTag();
 				auto& logImpl = getLogImpl();

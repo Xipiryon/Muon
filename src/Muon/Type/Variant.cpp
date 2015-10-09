@@ -30,25 +30,25 @@
 namespace muon
 {
 	Variant::Variant(meta::MetaData* m, void* d)
-		: _meta(m)
-		, _data(d)
+		: m_meta(m)
+		, m_data(d)
 	{
 	}
 
 	Variant::Variant(const Variant& rhs)
-		: Variant(rhs._meta, rhs._data)
+		: Variant(rhs.m_meta, rhs.m_data)
 	{
 	}
 
 	Variant::Variant()
-		: _meta(MUON_META(void))
-		, _data(NULL)
+		: m_meta(MUON_META(void))
+		, m_data(NULL)
 	{
 	}
 
 	meta::MetaData* Variant::getMeta() const
 	{
-		return _meta;
+		return m_meta;
 	}
 
 	Variant& Variant::operator=(const Variant& rhs)
@@ -58,19 +58,19 @@ namespace muon
 			return *this;
 		}
 
-		MUON_ASSERT(rhs._meta, "Cannot copy an NULL MetaData!");
+		MUON_ASSERT(rhs.m_meta, "Cannot copy an NULL MetaData!");
 		// Meta are different, erase the stored one and replace by the new
-		if (_meta != rhs._meta)
+		if (m_meta != rhs.m_meta)
 		{
-			::free(_data);
-			_meta = rhs._meta;
-			_data = ::malloc(_meta->size());
-			::memcpy(_data, rhs._data, _meta->size());
+			::free(m_data);
+			m_meta = rhs.m_meta;
+			m_data = ::malloc(m_meta->size());
+			::memcpy(m_data, rhs.m_data, m_meta->size());
 		}
 		else
 		{
 			// They are the same, just copy the value
-			::memcpy(_data, rhs._data, _meta->size());
+			::memcpy(m_data, rhs.m_data, m_meta->size());
 		}
 		return *this;
 	}

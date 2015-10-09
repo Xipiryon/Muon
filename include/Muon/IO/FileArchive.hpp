@@ -90,8 +90,8 @@ namespace muon
 		private:
 			const static u32 BUFFER_SIZE = 1024;
 
-			std::fstream *_file;
-			String _filename;
+			std::fstream *m_file;
+			String m_filename;
 		};
 	}
 }

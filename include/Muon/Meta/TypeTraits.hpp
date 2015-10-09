@@ -33,39 +33,36 @@
 #define _MUON_TRAITS_NAME_ATTRIB(Type) MUON_STR(Type)
 
 #if defined(MUON_PLATFORM_WINDOWS) || defined(MUON_PLATFORM_HTML)
-//Windows don't have user defined litteral string yet
-namespace priv
+
+MUON_INLINE muon::u64 priv_meta_hash(const char* m_str)
 {
-	MUON_INLINE muon::u64 _wmeta_hash(const char* _str)
+	// www.cse.yorku.ca/~oz/hash.html
+	muon::u64 v = 5381;
+	if (m_str)
 	{
-		// www.cse.yorku.ca/~oz/hash.html
-		muon::u64 v = 5381;
-		if (_str)
+		char* str = (char*)m_str;
+		int c;
+		while ((c = *str++) != 0)
 		{
-			char* str = (char*)_str;
-			int c;
-			while ((c = *str++) != 0)
-			{
-				v = ((v << 5) + v) + c;
-			}
+			v = ((v << 5) + v) + c;
 		}
-		return v;
 	}
+	return v;
 }
 
-#	define _MUON_TRAITS_ID_ATTRIB(Type) priv::_wmeta_hash(_MUON_TRAITS_NAME_ATTRIB(Type))
+#	define _MUON_TRAITS_ID_ATTRIB(Type) priv_meta_hash(_MUON_TRAITS_NAME_ATTRIB(Type))
 
 #else
-MUON_CONSTEXPR muon::u64 _meta_const_hash(const char* str)
+MUON_CONSTEXPR muon::u64 priv_meta_const_hash(const char* str)
 {
-	return *str ? static_cast<muon::u64>(*str) + 33 * _meta_const_hash(str + 1) : 5381;
+	return *str ? static_cast<muon::u64>(*str) + 33 * priv_meta_const_hash(str + 1) : 5381;
 }
 
-MUON_CONSTEXPR muon::u64 operator "" _meta_hash(const char* str, muon::u64)
+MUON_CONSTEXPR muon::u64 operator "" priv_meta_hash(const char* str, muon::u64)
 {
-	return _meta_const_hash(str);
+	return priv_meta_const_hash(str);
 }
-#	define _MUON_TRAITS_ID_ATTRIB(Type) #Type ## _meta_hash
+#	define _MUON_TRAITS_ID_ATTRIB(Type) #Type ## priv_meta_hash
 #endif
 
 #define _MUON_TRAITS_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return _MUON_TRAITS_NAME_ATTRIB(Type); }

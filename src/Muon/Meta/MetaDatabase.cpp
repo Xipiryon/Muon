@@ -34,38 +34,38 @@ namespace muon
 	namespace meta
 	{
 		MetaDatabase::MetaDatabase()
-			: _metadb(MUON_CNEW(MapMetaType))
+			: m_metadb(MUON_CNEW(MapMetaType))
 		{
 			registerInternal();
 		}
 
 		MetaDatabase::~MetaDatabase()
 		{
-			MUON_CDELETE(_metadb);
+			MUON_CDELETE(m_metadb);
 		}
 
 		MetaData* MetaDatabase::createMeta(const String& name)
 		{
-			auto it = _metadb->find(name);
-			if (it != _metadb->end())
+			auto it = m_metadb->find(name);
+			if (it != m_metadb->end())
 			{
 				return &(it->second);
 			}
 
-			//(*_metadb)[name] = MetaData();
-			_metadb->insert(std::make_pair(name, MetaData()));
-			MetaData* metadb = &(*_metadb)[name];
-			metadb->_name = name;
-			metadb->_id = TYPE_ID_CUSTOM_MASK | (TYPE_ID_BASE_MASK & name.hash());
-			metadb->_size = 0;
+			//(*m_metadb)[name] = MetaData();
+			m_metadb->insert(std::make_pair(name, MetaData()));
+			MetaData* metadb = &(*m_metadb)[name];
+			metadb->m_name = name;
+			metadb->m_id = TYPE_ID_CUSTOM_MASK | (TYPE_ID_BASE_MASK & name.hash());
+			metadb->m_size = 0;
 
 			return metadb;
 		}
 
 		MetaData* MetaDatabase::getMeta(const String& name)
 		{
-			auto it = _metadb->find(name);
-			if (it != _metadb->end())
+			auto it = m_metadb->find(name);
+			if (it != m_metadb->end())
 			{
 				return &(it->second);
 			}

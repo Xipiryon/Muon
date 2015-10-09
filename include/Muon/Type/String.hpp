@@ -222,9 +222,9 @@ namespace muon
 		u64 hash() const;
 
 	private:
-		u32 _charcount;
-		u32 _memsize;
-		char* _str;
+		u32 m_charcount;
+		u32 m_memsize;
+		char* m_str;
 	};
 }
 

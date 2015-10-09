@@ -36,12 +36,12 @@ namespace muon
 		////////////////////////////
 		void Time::start()
 		{
-			_start = clock();
+			m_start = clock();
 		}
 
 		f32 Time::now()
 		{
-			return ((f32)clock() - _start) / CLOCKS_PER_SEC;
+			return ((f32)clock() - m_start) / CLOCKS_PER_SEC;
 		}
 
 		////////////////////////////
@@ -49,30 +49,30 @@ namespace muon
 		////////////////////////////
 		void Timer::start(f32 delay)
 		{
-			_delay = delay <= 0.f ? 0.f : delay;
+			m_delay = delay <= 0.f ? 0.f : delay;
 			restart();
 		}
 
 		void Timer::restart()
 		{
-			_start = clock();
-			_elapsed = false;
+			m_start = clock();
+			m_elapsed = false;
 		}
 
 		f32 Timer::timeLeft(bool normalized)
 		{
-			f32 current = _delay - (((f32)clock() - _start) / CLOCKS_PER_SEC);
+			f32 current = m_delay - (((f32)clock() - m_start) / CLOCKS_PER_SEC);
 			if (normalized)
 			{
-				return current / _delay;
+				return current / m_delay;
 			}
 			return (current <= 0.f ? 0.f : current);
 		}
 
 		bool Timer::isElapsed()
 		{
-			_elapsed = (timeLeft(false) <= 0.f);
-			return _elapsed;
+			m_elapsed = (timeLeft(false) <= 0.f);
+			return m_elapsed;
 		}
 	}
 }

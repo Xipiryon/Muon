@@ -37,56 +37,56 @@ namespace muon
 	{
 		FileArchive::FileArchive()
 			: IStream()
-			, _file(new std::fstream())
-			, _filename("")
+			, m_file(new std::fstream())
+			, m_filename("")
 		{
 		}
 
 		FileArchive::FileArchive(const String& filename)
 			: IStream()
-			, _file(new std::fstream())
-			, _filename(filename)
+			, m_file(new std::fstream())
+			, m_filename(filename)
 		{
 			open(filename);
 		}
 
 		FileArchive::~FileArchive()
 		{
-			if (_file != NULL)
+			if (m_file != NULL)
 			{
-				_file->close();
-				delete _file;
-				_file = NULL;
+				m_file->close();
+				delete m_file;
+				m_file = NULL;
 			}
 		}
 
 		bool FileArchive::open(const String& filename)
 		{
-			MUON_ASSERT(!_file->is_open(), "[ARCHIVE] FileArchive already open at \"%s\"\n", _filename.cStr());
+			MUON_ASSERT(!m_file->is_open(), "[ARCHIVE] FileArchive already open at \"%s\"\n", m_filename.cStr());
 
-			if (!_file->is_open())
+			if (!m_file->is_open())
 			{
-				_filename = filename;
+				m_filename = filename;
 
 				//Try open file
-				_file->open(_filename.cStr()
+				m_file->open(m_filename.cStr()
 							, std::ios_base::in
 							| std::ios_base::out
 							| std::ios_base::binary);
 
 				//If not, create the file
-				if (!_file->is_open())
+				if (!m_file->is_open())
 				{
-					_file->close();
-					_file->open(_filename.cStr()
+					m_file->close();
+					m_file->open(m_filename.cStr()
 								, std::ios_base::in
 								| std::ios_base::out
 								| std::ios_base::binary
 								| std::ios_base::trunc);
 
-					if (!_file->is_open())
+					if (!m_file->is_open())
 					{
-						system::Log("[FileArchive]", LOG_ERROR) << "Could not load \"" << _filename << "\" archive" << endl;
+						system::Log("[FileArchive]", LOG_ERROR) << "Could not load \"" << m_filename << "\" archive" << endl;
 						return false;
 					}
 					return true;
@@ -98,85 +98,85 @@ namespace muon
 
 		bool FileArchive::isOpen() const
 		{
-			return (_file != NULL && _file->is_open());
+			return (m_file != NULL && m_file->is_open());
 		}
 
 		void FileArchive::close()
 		{
-			_file->close();
+			m_file->close();
 		}
 
 		// WRITE
 		// ****************************
 		FileArchive& FileArchive::operator<<(const char* pod)
 		{
-			_file->write(pod, ::strlen(pod));
+			m_file->write(pod, ::strlen(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(u64 pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(u32 pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(u16 pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(u8 pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(i64 pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(i32 pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(i16 pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(i8 pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(f64 pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(f32 pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator<<(bool pod)
 		{
-			_file->write((char*)&pod, sizeof(pod));
+			m_file->write((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
@@ -184,67 +184,67 @@ namespace muon
 		// ****************************
 		FileArchive& FileArchive::operator>>(u64& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator>>(u32& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator>>(u16& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator>>(u8& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator>>(i64& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator>>(i32& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator>>(i16& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator>>(i8& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator>>(f64& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator>>(f32& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 
 		FileArchive& FileArchive::operator>>(bool& pod)
 		{
-			_file->read((char*)&pod, sizeof(pod));
+			m_file->read((char*)&pod, sizeof(pod));
 			return *this;
 		}
 	}
