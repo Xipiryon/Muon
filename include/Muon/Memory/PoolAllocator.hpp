@@ -54,7 +54,7 @@ namespace muon
 		public:
 
 			template<typename T>
-			static T* allocate(u32 count, const AllocatorInfo& info = {})
+			static T* allocate(u32 count)
 			{
 				const u32 memBlock = count*sizeof(T);
 				MUON_ASSERT_BREAK(memBlock <= POOLALLOCATOR_SIZE
@@ -103,7 +103,7 @@ namespace muon
 			}
 
 			template<typename T, typename... Args>
-			static T* construct(u32 count, T* ptr, const AllocatorInfo& info, Args... args)
+			static T* construct(u32 count, T* ptr, Args... args)
 			{
 				for (u32 c = 0; c < count; ++c)
 				{
@@ -113,13 +113,16 @@ namespace muon
 			}
 
 			template<typename T>
-			static void destroy(T* ptr, const AllocatorInfo& info = {})
+			static void destroy(u32 count, T* ptr)
 			{
-				//TODO
+				for (u32 c = 0; c < count; ++c)
+				{
+					(ptr + c)->~T();
+				}
 			}
 
 			template<typename T>
-			static void deallocate(u32 count, T* ptr, const AllocatorInfo& info = {})
+			static void deallocate(u32 count, T* ptr)
 			{
 				//TODO
 			}

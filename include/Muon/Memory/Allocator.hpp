@@ -44,29 +44,17 @@ namespace muon
 		* @brief
 		*
 		*/
-		struct MUON_API AllocatorInfo
-		{
-			const char* file;
-			const char* function;
-			u32 line;
-		};
-#define _MUON_ALLOCINFO {__FILE__, __FUNCTION__, __LINE__}
-
-		/*!
-		* @brief
-		*
-		*/
 		class DefaultAllocator : public helper::NonInstantiable
 		{
 		public:
 			template<typename T>
-			static T* allocate(u32 count, const AllocatorInfo& info)
+			static T* allocate(u32 count)
 			{
 				return (T*)::malloc(sizeof(T) * count);
 			}
 
 			template<typename T, typename... Args>
-			static T* construct(u32 count, T* ptr, const AllocatorInfo& info, Args... args)
+			static T* construct(u32 count, T* ptr, Args... args)
 			{
 				for(u32 c = 0; c < count; ++c)
 				{
@@ -76,14 +64,18 @@ namespace muon
 			}
 
 			template<typename T>
-			static void destroy(T* ptr, const AllocatorInfo& info)
+			static void destroy(u32 count, T* ptr)
 			{
-				ptr->~T();
+				for(u32 c = 0; c < count; ++c)
+				{
+					(ptr + c)->~T();
+				}
 			}
 
 			template<typename T>
-			static void deallocate(u32 count, T* ptr, const AllocatorInfo& info)
+			static void deallocate(u32 count, T* ptr)
 			{
+				MUON_UNUSED(count);
 				::free((void*)ptr);
 			}
 		};
@@ -95,7 +87,7 @@ namespace muon
 * Allocate memory for given Class instance
 * @param Class Class or Struct to be allocated
 */
-#define MUON_NEW(Class) ::muon::memory::DefaultAllocator::allocate<Class>(1, _MUON_ALLOCINFO)
+#define MUON_NEW(Class) ::muon::memory::DefaultAllocator::allocate<Class>(1)
 
 /*!
 * @def MUON_CNEW(Class, ...)
@@ -105,9 +97,9 @@ namespace muon
 * @param ... Variadic parameters to be forwarded to the constructor
 */
 #if defined(MUON_PLATFORM_WINDOWS)
-#	define MUON_CNEW(Class, ...) ::muon::memory::DefaultAllocator::construct(1, MUON_NEW(Class), _MUON_ALLOCINFO, __VA_ARGS__ )
+#	define MUON_CNEW(Class, ...) ::muon::memory::DefaultAllocator::construct(1, MUON_NEW(Class), __VA_ARGS__ )
 #else
-#	define MUON_CNEW(Class, args...) ::muon::memory::DefaultAllocator::construct(1, MUON_NEW(Class), _MUON_ALLOCINFO, ##args )
+#	define MUON_CNEW(Class, args...) ::muon::memory::DefaultAllocator::construct(1, MUON_NEW(Class), ##args )
 #endif //MUON_PLATFORM_WINDOWS
 
 /*!
@@ -116,7 +108,7 @@ namespace muon
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be freed from memory
 */
-#define MUON_DELETE(Pointer) ::muon::memory::DefaultAllocator::deallocate(1, Pointer, _MUON_ALLOCINFO)
+#define MUON_DELETE(Pointer) ::muon::memory::DefaultAllocator::deallocate(1, Pointer)
 
 /*!
 * @def MUON_CDELETE(Pointer)
@@ -124,6 +116,6 @@ namespace muon
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be destructed and freed from memory
 */
-#define MUON_CDELETE(Pointer) ::muon::memory::DefaultAllocator::destroy(Pointer, _MUON_ALLOCINFO); MUON_DELETE(Pointer)
+#define MUON_CDELETE(Pointer) ::muon::memory::DefaultAllocator::destroy(1, Pointer); MUON_DELETE(Pointer)
 
 #endif

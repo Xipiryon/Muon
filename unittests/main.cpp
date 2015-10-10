@@ -130,10 +130,10 @@ int main(int argc, char** argv)
 	MUON_TITLE(" ** Checking muon::memory::PoolAllocator ** ");
 	pUTO = muon::memory::PoolAllocator::allocate<UnitTestObject>(1);
 	MUON_CHECK(pUTO, "Could not allocate with PoolAllocator!");
-	pointer = muon::memory::PoolAllocator::construct(1, pUTO, {});
+	pointer = muon::memory::PoolAllocator::construct(1, pUTO);
 	MUON_CHECK(pointer == pUTO, "PoolAllocator::construct returned a different address: %p != %p", pointer, pUTO);
 	MUON_CHECK(pUTO->value == UnitTestObject::ConstructedValue, "UnitTestObject not correctly constructed: %d != %d", pUTO->value, UnitTestObject::ConstructedValue);
-	muon::memory::PoolAllocator::destroy(pUTO, {});
+	muon::memory::PoolAllocator::destroy(1, pUTO);
 	MUON_CHECK(pUTO->value == UnitTestObject::DestructedValue, "UnitTestObject not correctly destroyed: %d != %d", pUTO->value, UnitTestObject::DestructedValue);
 
 	// END UNIT TEST
