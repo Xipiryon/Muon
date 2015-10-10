@@ -25,6 +25,9 @@ MuonRoot = os.getcwd()
 
 solution "Muon"
 
+	if _OPTIONS["unittests"] then
+		startproject "UnitTests"
+	end
 	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL" }
 
 	if not os.is("windows") then
