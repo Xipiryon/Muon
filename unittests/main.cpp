@@ -122,7 +122,7 @@ int main(int argc, char** argv)
 
 	// ***************
 	// BEGIN UNIT TEST
-	void* pointer = NULL;
+	muon::RawPointer pointer = NULL;
 	UnitTestObject* pUTO = NULL;
 
 	// Check that PoolAllocator correctly allocate, construct, destruct and free memory
@@ -135,6 +135,12 @@ int main(int argc, char** argv)
 	MUON_CHECK(pUTO->value == UnitTestObject::ConstructedValue, "UnitTestObject not correctly constructed: %d != %d", pUTO->value, UnitTestObject::ConstructedValue);
 	muon::memory::PoolAllocator::destroy(1, pUTO);
 	MUON_CHECK(pUTO->value == UnitTestObject::DestructedValue, "UnitTestObject not correctly destroyed: %d != %d", pUTO->value, UnitTestObject::DestructedValue);
+	muon::memory::PoolAllocator::deallocate(1, pUTO);
+	{
+		UnitTestObject* newUTO = muon::memory::PoolAllocator::allocate<UnitTestObject>(1);
+		MUON_CHECK(newUTO == pUTO, "Allocated object is not using previously freed space!");
+		muon::memory::PoolAllocator::deallocate(1, newUTO);
+	}
 
 	// END UNIT TEST
 	// ***************

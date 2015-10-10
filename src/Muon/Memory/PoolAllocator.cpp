@@ -36,22 +36,51 @@ namespace muon
 		{
 		}
 
-		PoolAllocator::MemBlock::MemBlock(const MemBlock& block)
-			: data(block.data)
+		PoolAllocator::FreeBlock::FreeBlock(u32* startIndex, u32 freeSize)
+			: start(startIndex)
+			, size(freeSize)
 		{
 		}
 
-		PoolAllocator::MemBlock::~MemBlock()
+		void PoolAllocator::mergeFreeBlock(u32 poolId, PoolAllocator::FreeBlock block)
 		{
-			::free(data);
+			auto itDeque = priv::s_poolFree.find(poolId);
+			if (itDeque == priv::s_poolFree.end())
+			{
+				MUON_ERROR_BREAK("Trying to free memory from a pool that doesn't exist!");
+			}
+			auto& freeDeque = itDeque->second;
+
+			// If we either find a free block that begin where we end, or end where we begin, update it
+			bool add = true;
+			for (auto& it : freeDeque)
+			{
+				if ((it.start + it.size) == block.start)
+				{
+					it.size += block.size;
+					add = false;
+					break;
+				}
+
+				if (it.start == (block.start + block.size))
+				{
+					it.start = block.start;
+					it.size += block.size;
+					add = false;
+					break;
+				}
+			}
+
+			if(add)
+			{
+				freeDeque.push_back(block);
+			}
 		}
 
-		PoolAllocator::FreeBlock::FreeBlock(u32* poolIndex)
-			: index(poolIndex)
+		namespace priv
 		{
+			std::deque<PoolAllocator::MemBlock> s_poolMem;
+			std::map<u32, std::deque<PoolAllocator::FreeBlock>> s_poolFree;
 		}
-
-		PoolAllocator::MemBlockList* PoolAllocator::s_pool = NULL;
-		PoolAllocator::MapFreeBlockList* PoolAllocator::s_free = NULL;
 	}
 }
