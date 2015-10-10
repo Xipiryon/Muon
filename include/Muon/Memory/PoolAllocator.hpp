@@ -68,14 +68,14 @@ namespace muon
 				while (!mem)
 				{
 					// Allocate a whole new pool, create a new FreeList
-					if (poolId == m_pool->size())
+					if (poolId == s_pool->size())
 					{
-						m_pool->push_back(MemBlock(POOLALLOCATOR_SIZE));
-						(*m_free)[poolId].push_back(FreeBlock(m_pool->back().data));
+						s_pool->push_back(MemBlock(POOLALLOCATOR_SIZE));
+						(*s_free)[poolId].push_back(FreeBlock(s_pool->back().data));
 					}
 
 					// Search a free block big enough
-					std::deque<FreeBlock>& freeDeque = (*m_free)[poolId];
+					std::deque<FreeBlock>& freeDeque = (*s_free)[poolId];
 					while (!mem && freeId < freeDeque.size())
 					{
 						// We've got a free list in this pool
@@ -147,19 +147,19 @@ namespace muon
 			typedef std::deque<MemBlock> MemBlockList;
 			typedef std::map<u32, std::deque<FreeBlock>> MapFreeBlockList;
 
-			static MemBlockList* m_pool;
-			static MapFreeBlockList* m_free;
+			static MemBlockList* s_pool;
+			static MapFreeBlockList* s_free;
 
 			static void initPool()
 			{
-				if (m_pool == NULL)
+				if (s_pool == NULL)
 				{
-					m_pool = MUON_CNEW(MemBlockList);
+					s_pool = MUON_CNEW(MemBlockList);
 				}
 
-				if (m_free == NULL)
+				if (s_free == NULL)
 				{
-					m_free = MUON_CNEW(MapFreeBlockList);
+					s_free = MUON_CNEW(MapFreeBlockList);
 				}
 			}
 
