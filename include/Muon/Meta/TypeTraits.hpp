@@ -34,39 +34,45 @@
 
 #if defined(MUON_PLATFORM_WINDOWS) || defined(MUON_PLATFORM_HTML)
 
-MUON_INLINE muon::u64 priv_meta_hash(const char* m_str)
+namespace priv
 {
-	// www.cse.yorku.ca/~oz/hash.html
-	muon::u64 v = 5381;
-	if (m_str)
+	MUON_INLINE muon::u64 _meta_hash(const char* m_str)
 	{
-		char* str = (char*)m_str;
-		int c;
-		while ((c = *str++) != 0)
+		// www.cse.yorku.ca/~oz/hash.html
+		muon::u64 v = 5381;
+		if (m_str)
 		{
-			v = ((v << 5) + v) + c;
+			char* str = (char*)m_str;
+			int c;
+			while ((c = *str++) != 0)
+			{
+				v = ((v << 5) + v) + c;
+			}
 		}
+		return v;
 	}
-	return v;
 }
-
-#	define _MUON_TRAITS_ID_ATTRIB(Type) priv_meta_hash(_MUON_TRAITS_NAME_ATTRIB(Type))
+#	define _MUON_TRAITS_ID_ATTRIB(Type) _meta_hash(_MUON_TRAITS_NAME_ATTRIB(Type))
 
 #else
-MUON_CONSTEXPR muon::u64 priv_meta_const_hash(const char* str)
+namespace priv
 {
-	return *str ? static_cast<muon::u64>(*str) + 33 * priv_meta_const_hash(str + 1) : 5381;
-}
+	MUON_CONSTEXPR muon::u64 _meta_const_hash(const char* str)
+	{
+		return *str ? static_cast<muon::u64>(*str) + 33 * _meta_const_hash(str + 1) : 5381;
+	}
 
-MUON_CONSTEXPR muon::u64 operator "" priv_meta_hash(const char* str, muon::u64)
-{
-	return priv_meta_const_hash(str);
+	MUON_CONSTEXPR muon::u64 operator "" _meta_hash(const char* str, muon::u64)
+	{
+		return _meta_const_hash(str);
+	}
+#	define _MUON_TRAITS_ID_ATTRIB(Type) #Type ## _meta_hash
 }
-#	define _MUON_TRAITS_ID_ATTRIB(Type) #Type ## priv_meta_hash
 #endif
 
+
 #define _MUON_TRAITS_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return _MUON_TRAITS_NAME_ATTRIB(Type); }
-#define _MUON_TRAITS_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u64 id() {return ::muon::meta::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
+#define _MUON_TRAITS_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u64 id() {using namespace priv; return ::muon::meta::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
 #define _MUON_TRAITS_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u32 size() { return sizeof(Type); }
 
 #define _MUON_TRAITS_FUNCTION(Type)  _MUON_TRAITS_NAME(Type) _MUON_TRAITS_ID(::Type) _MUON_TRAITS_SIZE(::Type)
@@ -107,23 +113,23 @@ namespace muon
 
 		template<> struct TypeTraits<bool>
 		{
-			_MUON_TRAITS_NAME(bool)
-			_MUON_TRAITS_ID(bool)
-			_MUON_TRAITS_SIZE(bool)
+			_MUON_TRAITS_NAME(bool);
+			_MUON_TRAITS_ID(bool);
+			_MUON_TRAITS_SIZE(bool);
 		};
 
 		template<> struct TypeTraits<const char*>
 		{
-			_MUON_TRAITS_NAME(const char*)
-				_MUON_TRAITS_ID(const char*)
-				_MUON_TRAITS_SIZE(const char*)
+			_MUON_TRAITS_NAME(const char*);
+				_MUON_TRAITS_ID(const char*);
+				_MUON_TRAITS_SIZE(const char*);
 		};
 
 		template<> struct TypeTraits<char*>
 		{
-			_MUON_TRAITS_NAME(char*)
-				_MUON_TRAITS_ID(char*)
-				_MUON_TRAITS_SIZE(char*)
+			_MUON_TRAITS_NAME(char*);
+			_MUON_TRAITS_ID(char*);
+			_MUON_TRAITS_SIZE(char*);
 		};
 
 		// Template Functions to remove qualifier around a Template
