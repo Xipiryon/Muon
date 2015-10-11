@@ -28,12 +28,11 @@
 #ifndef INCLUDE_MUON_TYPETRAITS_HPP
 #define INCLUDE_MUON_TYPETRAITS_HPP
 
-#include "Muon/Core/Constant.hpp"
-
-#define _MUON_TRAITS_NAME_ATTRIB(Type) MUON_STR(Type)
+#include <type_traits>
+#include "Muon/Meta/TypeInfo.hpp"
+#include "Muon/Memory/Allocator.hpp"
 
 #if defined(MUON_PLATFORM_WINDOWS) || defined(MUON_PLATFORM_HTML)
-
 namespace priv
 {
 	MUON_INLINE muon::u64 _meta_hash(const char* m_str)
@@ -51,9 +50,8 @@ namespace priv
 		}
 		return v;
 	}
+#	define _MUON_TRAITS_ID_ATTRIB(Type) ::priv::_meta_hash(MUON_STR(Type))
 }
-#	define _MUON_TRAITS_ID_ATTRIB(Type) _meta_hash(_MUON_TRAITS_NAME_ATTRIB(Type))
-
 #else
 namespace priv
 {
@@ -70,14 +68,17 @@ namespace priv
 }
 #endif
 
+#define _MUON_TRAITS_AUTOREGISTER(Type)
 
-#define _MUON_TRAITS_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return _MUON_TRAITS_NAME_ATTRIB(Type); }
+#define _MUON_TRAITS_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return MUON_STR(Type); }
 #define _MUON_TRAITS_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u64 id() {using namespace priv; return ::muon::meta::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
 #define _MUON_TRAITS_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u32 size() { return sizeof(Type); }
+#define _MUON_TRAITS_DESTROY(Type) static MUON_INLINE MUON_CONSTEXPR void destroy(Type* ptr) { MUON_CDELETE(ptr); }
+#define _MUON_TRAITS_CREATE(Type) static MUON_INLINE MUON_CONSTEXPR Type* create() { return MUON_CNEW(Type); }
 
-#define _MUON_TRAITS_FUNCTION(Type)  _MUON_TRAITS_NAME(Type) _MUON_TRAITS_ID(::Type) _MUON_TRAITS_SIZE(::Type)
-#define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits < ::Type > { _MUON_TRAITS_FUNCTION(Type) };
-#define MUON_TRAITS(Type) namespace muon { namespace meta { _MUON_TRAITS_STRUCT(Type) } }
+#define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_NAME(Type) _MUON_TRAITS_ID(Type) _MUON_TRAITS_SIZE(Type) _MUON_TRAITS_CREATE(Type) _MUON_TRAITS_DESTROY(Type);
+#define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
+#define MUON_TRAITS(Type) namespace muon { namespace meta { _MUON_TRAITS_STRUCT(::Type) } } _MUON_TRAITS_AUTOREGISTER(Type)
 
 namespace muon
 {
@@ -97,39 +98,40 @@ namespace muon
 
 		template<> struct TypeTraits<void>
 		{
-			static MUON_INLINE const char* name()
+			static MUON_INLINE MUON_CONSTEXPR const char* name()
 			{
 				return "void";
 			}
-			static MUON_INLINE ::muon::u64 id()
+			static MUON_INLINE MUON_CONSTEXPR::muon::u64 id()
 			{
 				return MetaConstant::TYPE_ID_INVALID;
 			}
-			static MUON_INLINE ::muon::u32 size()
+			static MUON_INLINE MUON_CONSTEXPR::muon::u32 size()
 			{
 				return 0;
+			}
+			static MUON_INLINE MUON_CONSTEXPR void* create()
+			{
+				return NULL;
+			}
+			static MUON_INLINE MUON_CONSTEXPR void destroy(void*)
+			{
 			}
 		};
 
 		template<> struct TypeTraits<bool>
 		{
-			_MUON_TRAITS_NAME(bool);
-			_MUON_TRAITS_ID(bool);
-			_MUON_TRAITS_SIZE(bool);
+			_MUON_TRAITS_FUNCTIONS_DECL(bool);
 		};
 
 		template<> struct TypeTraits<const char*>
 		{
-			_MUON_TRAITS_NAME(const char*);
-				_MUON_TRAITS_ID(const char*);
-				_MUON_TRAITS_SIZE(const char*);
+			_MUON_TRAITS_FUNCTIONS_DECL(const char*);
 		};
 
 		template<> struct TypeTraits<char*>
 		{
-			_MUON_TRAITS_NAME(char*);
-			_MUON_TRAITS_ID(char*);
-			_MUON_TRAITS_SIZE(char*);
+			_MUON_TRAITS_FUNCTIONS_DECL(char*);
 		};
 
 		// Template Functions to remove qualifier around a Template
@@ -184,20 +186,20 @@ namespace muon
 	}
 }
 
-MUON_TRAITS(muon::u8)
-MUON_TRAITS(muon::u16)
-MUON_TRAITS(muon::u32)
-MUON_TRAITS(muon::u64)
+MUON_TRAITS(muon::u8);
+MUON_TRAITS(muon::u16);
+MUON_TRAITS(muon::u32);
+MUON_TRAITS(muon::u64);
 
-MUON_TRAITS(muon::i8)
-MUON_TRAITS(muon::i16)
-MUON_TRAITS(muon::i32)
-MUON_TRAITS(muon::i64)
+MUON_TRAITS(muon::i8);
+MUON_TRAITS(muon::i16);
+MUON_TRAITS(muon::i32);
+MUON_TRAITS(muon::i64);
 
-MUON_TRAITS(muon::f32)
-MUON_TRAITS(muon::f64)
+MUON_TRAITS(muon::f32);
+MUON_TRAITS(muon::f64);
 
-MUON_TRAITS(muon::RawPointer)
+MUON_TRAITS(muon::RawPointer);
 
 #endif
 

@@ -98,6 +98,10 @@ namespace muon
 		class MUON_API MetaData
 		{
 			friend class MetaDatabase;
+			typedef std::unordered_map<String, meta::MetaMember> MetaMemberMap;
+			typedef std::unordered_map<String, meta::MetaFunction> MetaMethodMap;
+			typedef void*(*MetaCreateFunc)();
+			typedef void(*MetaDestroyFunc)(void*);
 		public:
 			MetaData();
 			MetaData(const MetaData&);
@@ -108,6 +112,8 @@ namespace muon
 				: m_name(TypeTraits<T>::name())
 				, m_id(TypeTraits<T>::id())
 				, m_size(TypeTraits<T>::size())
+				, m_create((MetaCreateFunc)&TypeTraits<T>::create)
+				, m_destroy((MetaDestroyFunc)&TypeTraits<T>::destroy)
 			{
 				init();
 			}
@@ -143,9 +149,9 @@ namespace muon
 			String m_name;
 			u64 m_id;
 			u32 m_size;
+			MetaCreateFunc m_create;
+			MetaDestroyFunc m_destroy;
 
-			typedef std::unordered_map<String, meta::MetaMember> MetaMemberMap;
-			typedef std::unordered_map<String, meta::MetaFunction> MetaMethodMap;
 			MetaMemberMap* m_members;
 			MetaMethodMap* m_methods;
 		};

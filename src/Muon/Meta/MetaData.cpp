@@ -95,21 +95,15 @@ namespace muon
 		}
 
 		MetaData::MetaData()
-			: m_name("#Unregistered#")
-			, m_id(TYPE_ID_INVALID)
-			, m_size(0)
+			: MetaData(muon::meta::TypeTraits<void>())
 		{
 			init();
 		}
 
 		MetaData::MetaData(const MetaData& o)
-			: m_name(o.m_name)
-			, m_id(o.m_id)
-			, m_size(o.m_size)
 		{
 			init();
-			m_members->operator=(*o.m_members);
-			m_methods->operator=(*o.m_methods);
+			*this = o;
 		}
 
 		MetaData& MetaData::operator=(const MetaData& o)
@@ -119,6 +113,8 @@ namespace muon
 				m_name = o.m_name;
 				m_id = o.m_id;
 				m_size = o.m_size;
+				m_create = o.m_create;
+				m_destroy = o.m_destroy;
 				m_members->operator=(*o.m_members);
 				m_methods->operator=(*o.m_methods);
 			}
