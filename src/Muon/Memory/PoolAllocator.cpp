@@ -39,8 +39,8 @@ namespace muon
 			}
 
 			PoolFreeBlock::PoolFreeBlock(u32* startIndex, u32 freeSize)
-				: start(startIndex)
-				, size(freeSize)
+				: size(freeSize)
+				, start(startIndex)
 			{
 			}
 

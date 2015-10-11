@@ -51,7 +51,7 @@ namespace muon
 
 			struct MUON_API PoolMemBlock
 			{
-				PoolMemBlock(u32 size);
+				explicit PoolMemBlock(u32 size);
 
 				u32* data = NULL;
 			};
@@ -158,6 +158,7 @@ namespace muon
 						if (uPtr + memSize > end)
 						{
 							const u32 memLeft = (u32)((u64)end - (u64)uPtr);
+							MUON_UNUSED(memLeft);	// Remove warnings if MUON_ERROR_BREAK is not compiled
 							MUON_ERROR_BREAK("Trying to deallocate too much memory (%u bytes, Pool size: %u bytes)", memSize, memLeft);
 						}
 
