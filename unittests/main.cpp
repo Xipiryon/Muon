@@ -159,6 +159,26 @@ int main(int argc, char** argv)
 		}
 	}
 
+	// Check the MetaData system, and register all the type we need
+	{
+		UnitTestObject uto;
+		muon::meta::MetaData* data = MUON_META(UnitTestObject);
+		muon::meta::MetaData* dataName = MUON_META_NAME("UnitTestObject");
+		muon::meta::MetaData* dataObject = MUON_META_OBJECT(uto);
+
+		muon::u32 eCount = errorCount;
+		MUON_CHECK(data, "MUON_META returned a null MetaData!");
+		MUON_CHECK(dataName, "MUON_META_NAME returned a null MetaData!");
+		MUON_CHECK(dataObject, "MUON_META_OBJECT returned a null MetaData!");
+		// Skip following test if there is errors from last steps
+		if(eCount == errorCount)
+		{
+			MUON_CHECK(data->id() == muon::meta::TypeTraits<UnitTestObject>::id(), "ID retrieved from MUON_META and TypeTraits does not match! (%lu != %lu)", data->id(), muon::meta::TypeTraits<UnitTestObject>::id());
+			MUON_CHECK(data->id() == dataName->id(), "ID retrieved from MUON_META and MUON_META_NAME does not match! (%lu != %lu)", data->id(), dataName->id());
+			MUON_CHECK(data->id() == dataObject->id(), "ID retrieved from MUON_META and MUON_META_OBJECT does not match! (%lu != %lu)", data->id(), dataObject->id());
+		}
+	}
+
 	// END UNIT TEST
 	// ***************
 
