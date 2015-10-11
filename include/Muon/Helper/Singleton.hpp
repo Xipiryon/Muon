@@ -83,6 +83,14 @@ namespace muon
 				return *s_instance;
 			}
 
+			/*!
+			* @brief Return true if the singleton is instantiated, false otherwhise
+			*/
+			static bool isInstantiated()
+			{
+				return s_instance != NULL;
+			}
+
 		protected:
 
 			Singleton()
