@@ -45,6 +45,29 @@ namespace muon
 {
 	namespace memory
 	{
+
+		namespace priv
+		{
+
+			struct MUON_API PoolMemBlock
+			{
+				PoolMemBlock(u32 size);
+
+				u32* data = NULL;
+			};
+
+			struct MUON_API PoolFreeBlock
+			{
+				PoolFreeBlock(u32* startIndex, u32 freeSize);
+
+				u32 size = POOLALLOCATOR_SIZE;
+				u32* start = NULL;
+			};
+
+			extern MUON_API std::deque<PoolMemBlock> s_poolMem;
+			extern MUON_API std::map<u32, std::deque<PoolFreeBlock>> s_poolFree;
+		}
+
 		/*!
 		* @brief
 		*
@@ -52,21 +75,6 @@ namespace muon
 		class MUON_API PoolAllocator : public helper::NonInstantiable
 		{
 		public:
-
-			struct MUON_API MemBlock
-			{
-				MemBlock(u32 size);
-
-				u32* data = NULL;
-			};
-
-			struct MUON_API FreeBlock
-			{
-				FreeBlock(u32* startIndex, u32 freeSize);
-
-				u32 size = POOLALLOCATOR_SIZE;
-				u32* start = NULL;
-			};
 
 			template<typename T>
 			static T* allocate(u32 count)
@@ -83,8 +91,8 @@ namespace muon
 					// Allocate a whole new pool, create a new FreeList
 					if (poolId == priv::s_poolMem.size())
 					{
-						priv::s_poolMem.push_back(MemBlock(POOLALLOCATOR_SIZE));
-						priv::s_poolFree[poolId].push_back(FreeBlock(priv::s_poolMem.back().data, POOLALLOCATOR_SIZE));
+						priv::s_poolMem.push_back(priv::PoolMemBlock(POOLALLOCATOR_SIZE));
+						priv::s_poolFree[poolId].push_back(priv::PoolFreeBlock(priv::s_poolMem.back().data, POOLALLOCATOR_SIZE));
 					}
 
 					// Search a free block big enough
@@ -92,7 +100,7 @@ namespace muon
 					while (!mem && freeId < freeDeque.size())
 					{
 						// We've got a free list in this pool
-						FreeBlock& freeBlock = freeDeque[freeId];
+						priv::PoolFreeBlock& freeBlock = freeDeque[freeId];
 						if (memBlock <= freeBlock.size)
 						{
 							mem = (T*)freeBlock.start;
@@ -102,7 +110,7 @@ namespace muon
 								freeBlock.size -= memBlock;
 								freeBlock.start += memBlock;
 							}
-							// Just remove it 
+							// Just remove it
 							else
 							{
 								freeDeque.erase(freeDeque.begin() + freeId);
@@ -140,7 +148,7 @@ namespace muon
 				bool assert = true;
 				for (u32 poolId = 0; poolId < priv::s_poolMem.size(); ++poolId)
 				{
-					MemBlock pool = priv::s_poolMem.at(poolId);
+					priv::PoolMemBlock pool = priv::s_poolMem.at(poolId);
 					u32* start = pool.data;
 					u32* end = pool.data + POOLALLOCATOR_SIZE;
 					u32* uPtr = (u32*)ptr;
@@ -149,12 +157,12 @@ namespace muon
 						u32 memSize = sizeof(T)*count;
 						if (uPtr + memSize > end)
 						{
-							const u32 memLeft = ((u32)end) - ((u32)uPtr);
+							const u32 memLeft = (u32)((u64)end - (u64)uPtr);
 							MUON_ERROR_BREAK("Trying to deallocate too much memory (%u bytes, Pool size: %u bytes)", memSize, memLeft);
 						}
 
 						// Merge free blocks and stop the function (so we don't hit the MUON_ERROR)
-						mergeFreeBlock(poolId, FreeBlock(start, memSize));
+						mergeFreeBlock(poolId, priv::PoolFreeBlock(start, memSize));
 						assert = false;
 						break;
 					}
@@ -168,14 +176,8 @@ namespace muon
 
 		private:
 
-			static void mergeFreeBlock(u32 poolId, FreeBlock freeBlock);
+			static void mergeFreeBlock(u32 poolId, priv::PoolFreeBlock freeBlock);
 		};
-
-		namespace priv
-		{
-			extern MUON_API std::deque<PoolAllocator::MemBlock> s_poolMem;
-			extern MUON_API std::map<u32, std::deque<PoolAllocator::FreeBlock>> s_poolFree;
-		}
 	}
 }
 

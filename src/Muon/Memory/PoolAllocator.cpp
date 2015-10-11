@@ -31,18 +31,25 @@ namespace muon
 {
 	namespace memory
 	{
-		PoolAllocator::MemBlock::MemBlock(u32 size)
-			: data((u32*)::malloc(size))
+		namespace priv
 		{
+			PoolMemBlock::PoolMemBlock(u32 size)
+				: data((u32*)::malloc(size))
+			{
+			}
+
+			PoolFreeBlock::PoolFreeBlock(u32* startIndex, u32 freeSize)
+				: start(startIndex)
+				, size(freeSize)
+			{
+			}
+
+
+			std::deque<PoolMemBlock> s_poolMem;
+			std::map<u32, std::deque<PoolFreeBlock>> s_poolFree;
 		}
 
-		PoolAllocator::FreeBlock::FreeBlock(u32* startIndex, u32 freeSize)
-			: start(startIndex)
-			, size(freeSize)
-		{
-		}
-
-		void PoolAllocator::mergeFreeBlock(u32 poolId, PoolAllocator::FreeBlock block)
+		void PoolAllocator::mergeFreeBlock(u32 poolId, priv::PoolFreeBlock block)
 		{
 			auto itDeque = priv::s_poolFree.find(poolId);
 			if (itDeque == priv::s_poolFree.end())
@@ -75,12 +82,6 @@ namespace muon
 			{
 				freeDeque.push_back(block);
 			}
-		}
-
-		namespace priv
-		{
-			std::deque<PoolAllocator::MemBlock> s_poolMem;
-			std::map<u32, std::deque<PoolAllocator::FreeBlock>> s_poolFree;
 		}
 	}
 }
