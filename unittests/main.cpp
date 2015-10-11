@@ -127,23 +127,25 @@ int main(int argc, char** argv)
 	// ***************
 	// BEGIN UNIT TEST
 	muon::RawPointer pointer = NULL;
-	UnitTestObject* pUTO = NULL;
 
 	// Check that PoolAllocator correctly allocate, construct, destruct and free memory
 	// Check also that for allocated object A and B, if A is freed, then next will be allocated at A last place
-	MUON_TITLE(" ** Checking muon::memory::PoolAllocator ** ");
-	pUTO = muon::memory::PoolAllocator::allocate<UnitTestObject>(1);
-	MUON_CHECK(pUTO, "Could not allocate with PoolAllocator!");
-	pointer = muon::memory::PoolAllocator::construct(1, pUTO);
-	MUON_CHECK(pointer == pUTO, "PoolAllocator::construct returned a different address: %p != %p", pointer, pUTO);
-	MUON_CHECK(pUTO->value == UnitTestObject::ConstructedValue, "UnitTestObject not correctly constructed: %d != %d", pUTO->value, UnitTestObject::ConstructedValue);
-	muon::memory::PoolAllocator::destroy(1, pUTO);
-	MUON_CHECK(UnitTestObject::destroyed == true, "UnitTestObject not correctly destroyed: %d != %d", pUTO->value, UnitTestObject::DestructedValue);
-	muon::memory::PoolAllocator::deallocate(1, pUTO);
 	{
-		UnitTestObject* newUTO = muon::memory::PoolAllocator::allocate<UnitTestObject>(1);
-		MUON_CHECK(newUTO == pUTO, "Allocated object is not using previously freed space!");
-		muon::memory::PoolAllocator::deallocate(1, newUTO);
+		UnitTestObject* pUTO = NULL;
+		MUON_TITLE(" ** Checking muon::memory::PoolAllocator ** ");
+		pUTO = muon::memory::PoolAllocator::allocate<UnitTestObject>(1);
+		MUON_CHECK(pUTO, "Could not allocate with PoolAllocator!");
+		pointer = muon::memory::PoolAllocator::construct(1, pUTO);
+		MUON_CHECK(pointer == pUTO, "PoolAllocator::construct returned a different address: %p != %p", pointer, pUTO);
+		MUON_CHECK(pUTO->value == UnitTestObject::ConstructedValue, "UnitTestObject not correctly constructed: %d != %d", pUTO->value, UnitTestObject::ConstructedValue);
+		muon::memory::PoolAllocator::destroy(1, pUTO);
+		MUON_CHECK(UnitTestObject::destroyed == true, "UnitTestObject not correctly destroyed: %d != %d", pUTO->value, UnitTestObject::DestructedValue);
+		muon::memory::PoolAllocator::deallocate(1, pUTO);
+		{
+			UnitTestObject* newUTO = muon::memory::PoolAllocator::allocate<UnitTestObject>(1);
+			MUON_CHECK(newUTO == pUTO, "Allocated object is not using previously freed space!");
+			muon::memory::PoolAllocator::deallocate(1, newUTO);
+		}
 	}
 
 	// END UNIT TEST
