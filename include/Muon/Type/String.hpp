@@ -283,6 +283,7 @@ MUON_API muon::String operator+(const char* str, const muon::String& other);
 MUON_API muon::system::ILogImpl& operator<<(muon::system::ILogImpl& log, const muon::String& str);
 
 MUON_TRAITS(muon::String)
+MUON_META_USEPOINTER(muon::String);
 
 namespace std
 {

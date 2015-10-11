@@ -54,8 +54,8 @@ namespace muon
 	}
 }
 
-#define MUON_USEPOINTER(Class) namespace muon { namespace meta { template<> struct UsePointer<Class> { static const bool value = true; }; } }
-#define MUON_USEREFERENCE(Class) namespace muon { namespace meta { template<> struct UseReference<Class> { static const bool value = true; }; } }
+#define MUON_META_USEPOINTER(Class) namespace muon { namespace meta { template<> struct UsePointer<Class> { static const bool value = true; }; } }
+#define MUON_META_USEREFERENCE(Class) namespace muon { namespace meta { template<> struct UseReference<Class> { static const bool value = true; }; } }
 
 #endif
 
