@@ -28,6 +28,7 @@
 #ifndef INCLUDE_MUON_ALLOCATOR_HPP
 #define INCLUDE_MUON_ALLOCATOR_HPP
 
+#include <new>
 #include <stdlib.h>
 #include "Muon/Core/Typedef.hpp"
 #include "Muon/System/Assert.hpp"
