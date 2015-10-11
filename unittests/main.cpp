@@ -36,6 +36,7 @@
 #include <Muon/System/Log.hpp>
 #include <Muon/Meta/MetaDatabase.hpp>
 #include <Muon/Memory/PoolAllocator.hpp>
+#include <Muon/Type/Variant.hpp>
 
 class LogFile : public muon::system::ILogImpl
 {
@@ -179,10 +180,39 @@ int main(int argc, char** argv)
 		}
 	}
 
+	// Check that variant can correctly alternate between types without memory losses
+	{
+		muon::Variant v;
+		v = 45;
+		muon::u32 r = v.get<muon::u32>();
+		MUON_CHECK(r == 45, "Variant stored POD does not match! %d != %d", r, 45);
+		// Create a object destroyed after affectations
+		// It should still match as memcopied in Variant
+		{
+			UnitTestObject uto;
+			uto.value = 1024;
+			v = uto;
+		}
+		r = v.get<UnitTestObject>().value;
+		MUON_CHECK(r == 1024, "Variant memcopied class does not match! %d != %d", r, 1024);
+		// Do the same with a non memcopiable object
+		{
+			muon::String s;
+			s = "Hello World!";
+			v = s;
+		}
+		{
+			muon::String s = v.get<muon::String>();
+			MUON_CHECK(s == "Hello World!", "Variant non-memcopyable class does not match! %s != %s", s.cStr(), "Hello World!");
+		}
+
+	}
+
 	// END UNIT TEST
 	// ***************
 
 	mainLog(errorCount == 0 ? muon::LOG_INFO : muon::LOG_ERROR) << "Error Count: " << errorCount << muon::endl;
+
 	muon::system::Log::close();
 #ifdef MUON_PLATFORM_WINDOWS
 	::system("PAUSE");
