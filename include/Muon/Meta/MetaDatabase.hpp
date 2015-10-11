@@ -73,8 +73,11 @@ namespace muon
 			String name = TypeTraits<T>::name();
 			if (m_metadb->find(name) == m_metadb->end())
 			{
-				//(*m_metadb)[name] = MetaData(TypeTraits<T>());
 				m_metadb->insert(std::make_pair(name, TypeTraits<T>()));
+			}
+			else
+			{
+				MUON_ERROR("\"%s\" has already been registered", name.cStr());
 			}
 			return &(*m_metadb)[name];
 		}
@@ -83,6 +86,23 @@ namespace muon
 		MetaData* MetaDatabase::getMeta()
 		{
 			return getMeta(TypeTraits<T>::name());
+		}
+
+		namespace priv
+		{
+			template<typename T>
+			struct MetaRegistrar
+			{
+				static MetaRegistrar s_instance;
+				MetaRegistrar()
+				{
+					if(!::muon::helper::Singleton<MetaDatabase>::isInstantiated())
+					{
+						::muon::meta::MetaDatabase::instantiate();
+					}
+					::muon::meta::MetaDatabase::get().registerMeta<T>();
+				}
+			};
 		}
 	}
 }
@@ -94,7 +114,7 @@ namespace muon
 #define MUON_META_REGISTER(Type) ::muon::meta::MetaDatabase::get().registerMeta<Type>()
 #define MUON_META_CREATE(TypeName) ::muon::meta::MetaDatabase::get().createMeta(TypeName);
 
-#define MUON_TRAITS_META_REGISTER(Type)
+#define MUON_TRAITS_META_REGISTER(Type) MUON_TRAITS(Type) namespace muon { namespace meta { namespace priv { template<> MetaRegistrar<Type> MetaRegistrar<Type>::s_instance; } } } 
 
 #endif
 

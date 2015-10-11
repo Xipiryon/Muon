@@ -77,6 +77,10 @@ public:
 		std::ofstream m_file;
 };
 
+struct SimpleObject
+{
+};
+
 struct UnitTestObject
 {
 	static bool destroyed;
@@ -98,6 +102,15 @@ struct UnitTestObject
 };
 bool UnitTestObject::destroyed = false;
 
+namespace test
+{
+	struct TestObject {};
+}
+
+MUON_TRAITS_META_REGISTER(UnitTestObject);
+MUON_TRAITS_META_REGISTER(SimpleObject);
+MUON_TRAITS_META_REGISTER(test::TestObject);
+
 int main(int argc, char** argv)
 {
 	LogFile logFile;
@@ -106,8 +119,6 @@ int main(int argc, char** argv)
 
 	muon::system::Log::open("unit_test.log");
 	muon::system::Log mainLog("Main", muon::LOG_INFO);
-
-	muon::meta::MetaDatabase::instantiate();
 
 	mainLog() << "Number of arguments: " << argc << muon::endl;
 	for (muon::i32 i = 0; i < argc; ++i)
