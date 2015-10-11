@@ -94,5 +94,7 @@ namespace muon
 #define MUON_META_REGISTER(Type) ::muon::meta::MetaDatabase::get().registerMeta<Type>()
 #define MUON_META_CREATE(TypeName) ::muon::meta::MetaDatabase::get().createMeta(TypeName);
 
+#define MUON_TRAITS_META_REGISTER(Type)
+
 #endif
 
