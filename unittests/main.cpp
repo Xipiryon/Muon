@@ -115,9 +115,9 @@ int main(int argc, char** argv)
 
 #define MUON_TITLE(msg) mainLog() << msg << muon::endl
 #if defined(MUON_PLATFORM_WINDOWS)
-#	define MUON_CHECK(cond, err, ...) MUON_ASSERT(cond, "\t-> " err, __VA_ARGS__); if(!(cond)) {++errorCount;}
+#	define MUON_CHECK(cond, err, ...) if(!(cond)) {++errorCount; MUON_ERROR("\t-> " err, __VA_ARGS__);}
 #else
-#	define MUON_CHECK(cond, err, args...) MUON_ASSERT(cond, "\t-> " err, ##args); if(!(cond)) {++errorCount;}
+#	define MUON_CHECK(cond, err, args...) if(!(cond)) {++errorCount; MUON_ERROR("\t-> " err, ##args);}
 #endif
 
 	// ***************
