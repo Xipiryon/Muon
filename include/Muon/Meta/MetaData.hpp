@@ -143,6 +143,9 @@ namespace muon
 			MetaFunction getMethod(const char* name) const;
 			MetaFunction getMethod(u32 offset) const;
 
+			void* create();
+			void destroy(void* data);
+
 		private:
 			void init();
 

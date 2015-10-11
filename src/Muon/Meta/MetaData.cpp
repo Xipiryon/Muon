@@ -208,5 +208,15 @@ namespace muon
 		{
 			return MetaFunction();
 		}
+
+		void* MetaData::create()
+		{
+			return m_create();
+		}
+
+		void MetaData::destroy(void* data)
+		{
+			m_destroy(data);
+		}
 	}
 }
