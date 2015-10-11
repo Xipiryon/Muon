@@ -79,6 +79,7 @@ public:
 
 struct UnitTestObject
 {
+	static bool destroyed;
 	static const muon::u32 ConstructedValue = 64;
 	static const muon::u32 DestructedValue = 42;
 	muon::u32 value;
@@ -86,13 +87,16 @@ struct UnitTestObject
 	UnitTestObject()
 	{
 		value = ConstructedValue;
+		destroyed = false;
 	}
 
 	~UnitTestObject()
 	{
 		value = DestructedValue;
+		destroyed = true;
 	}
 };
+bool UnitTestObject::destroyed = false;
 
 int main(int argc, char** argv)
 {
@@ -134,7 +138,7 @@ int main(int argc, char** argv)
 	MUON_CHECK(pointer == pUTO, "PoolAllocator::construct returned a different address: %p != %p", pointer, pUTO);
 	MUON_CHECK(pUTO->value == UnitTestObject::ConstructedValue, "UnitTestObject not correctly constructed: %d != %d", pUTO->value, UnitTestObject::ConstructedValue);
 	muon::memory::PoolAllocator::destroy(1, pUTO);
-	MUON_CHECK(pUTO->value == UnitTestObject::DestructedValue, "UnitTestObject not correctly destroyed: %d != %d", pUTO->value, UnitTestObject::DestructedValue);
+	MUON_CHECK(UnitTestObject::destroyed == true, "UnitTestObject not correctly destroyed: %d != %d", pUTO->value, UnitTestObject::DestructedValue);
 	muon::memory::PoolAllocator::deallocate(1, pUTO);
 	{
 		UnitTestObject* newUTO = muon::memory::PoolAllocator::allocate<UnitTestObject>(1);
