@@ -49,11 +49,8 @@ namespace muon
 
 		meta::MetaData* getMeta() const;
 
-		template<typename T> Variant& set(const typename std::enable_if<meta::MemCopyable<T>::value, T>::type& rhs);
-		template<typename T> Variant& set(const typename std::enable_if<!meta::MemCopyable<T>::value, T>::type& rhs);
-
+		template<typename T> Variant& set(const T& rhs);
 		template<typename T> Variant& operator=(const T& rhs);
-
 		template<typename T> T& get();
 		template<typename T> const T& get() const;
 
@@ -87,14 +84,14 @@ namespace muon
 	}
 
 	template<typename T>
-	Variant& Variant::set(const typename std::enable_if<meta::MemCopyable<T>::value, T>::type& rhs)
+	Variant& Variant::set(const T& rhs)
 	{
 		meta::MetaData* m = MUON_META(T);
 		MUON_ASSERT(m, "Cannot copy an NULL MetaData!");
 		if (m == NULL)
 		{
 			// Resetting our Variant
-			::free(m_data);
+			m_meta->destroy(m_data);
 			m_meta = MUON_META(void);
 			return *this;
 		}
@@ -102,43 +99,19 @@ namespace muon
 		// Meta are different, erase the stored one and replace by the new
 		if (m_meta != MUON_META(T))
 		{
-			::free(m_data);
+			m_meta->destroy(m_data);
 			m_meta = m;
-			m_data = ::malloc(m_meta->size());
+		}
+
+		m_data = m_meta->create();
+		if(muon::meta::MemCopyable<T>::value)
+		{
 			::memcpy(m_data, &rhs, m_meta->size());
 		}
 		else
 		{
-			// They are the same, just copy the value
-			::memcpy(m_data, &rhs, m_meta->size());
+			(*(T*)m_data) = rhs;
 		}
-
-		return *this;
-	}
-
-	template<typename T>
-	Variant& Variant::set(const typename std::enable_if<!meta::MemCopyable<T>::value, T>::type& rhs)
-	{
-		meta::MetaData* m = MUON_META(T);
-		MUON_ASSERT(m, "Cannot copy an NULL MetaData!");
-		if (m == NULL)
-		{
-			// Resetting our Variant
-			::free(m_data);
-			m_meta = MUON_META(void);
-			return *this;
-		}
-
-		// As we are non copyable, erase and re-allocate in any cases
-		if (m_data)
-		{
-			memory::PoolAllocator::destroy<T>((T*)m_data);
-			memory::PoolAllocator::deallocate<T>(1, (T*)m_data);
-		}
-		m_meta = m;
-		// Allocate memory
-		m_data = memory::PoolAllocator::allocate<T>(1);
-		new (m_data)T(rhs);
 
 		return *this;
 	}
