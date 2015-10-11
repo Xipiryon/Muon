@@ -50,7 +50,7 @@ namespace muon
 		meta::MetaData* getMeta() const;
 
 		template<typename T> Variant& set(const typename std::enable_if<meta::MemCopyable<T>::value, T>::type& rhs);
-		template<typename T> Variant& set(const typename std::enable_if<meta::NonMemCopyable<T>::value, T>::type& rhs);
+		template<typename T> Variant& set(const typename std::enable_if<!meta::MemCopyable<T>::value, T>::type& rhs);
 
 		template<typename T> Variant& operator=(const T& rhs);
 
@@ -117,7 +117,7 @@ namespace muon
 	}
 
 	template<typename T>
-	Variant& Variant::set(const typename std::enable_if<meta::NonMemCopyable<T>::value, T>::type& rhs)
+	Variant& Variant::set(const typename std::enable_if<!meta::MemCopyable<T>::value, T>::type& rhs)
 	{
 		meta::MetaData* m = MUON_META(T);
 		MUON_ASSERT(m, "Cannot copy an NULL MetaData!");

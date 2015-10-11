@@ -51,12 +51,6 @@ namespace muon
 		{
 			static const bool value = (!UsePointer<T>::value && !UseReference<T>::value);
 		};
-
-		template<typename T>
-		struct NonMemCopyable
-		{
-			static const bool value = !MemCopyable<T>::value;
-		};
 	}
 }
 
