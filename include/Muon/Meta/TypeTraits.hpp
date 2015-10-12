@@ -76,7 +76,7 @@ namespace priv
 
 #define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_NAME(Type) _MUON_TRAITS_ID(Type) _MUON_TRAITS_SIZE(Type) _MUON_TRAITS_CREATE(Type) _MUON_TRAITS_DESTROY(Type);
 #define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
-#define MUON_TRAITS(Type) namespace muon { namespace meta { _MUON_TRAITS_STRUCT(Type) } }
+#define MUON_TRAITS(Type) static_assert(!s_namespaceMuon, "MUON_TRAITS must be placed outside any muon namespace"); namespace muon { namespace meta { _MUON_TRAITS_STRUCT(Type) } }
 
 namespace muon
 {

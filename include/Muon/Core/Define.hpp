@@ -36,8 +36,9 @@
 //				NAMESPACE
 //		--------------------------
 
+enum { s_namespaceMuon = false };
 //! Library main namespace
-namespace muon {}
+namespace muon { enum { s_namespaceMuon = true }; }
 
 //		--------------------------
 //				EXPORT
