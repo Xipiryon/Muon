@@ -37,7 +37,6 @@ namespace muon
 	{
 		void assertMessage(const char* file, const char* func, u32 line, const char* format, ...)
 		{
-#ifdef MUON_DEBUG
 			// Reserve twice the length of format
 			i32 size = (strlen(format) + 1) * 2;
 			i32 finalSize = 0;
@@ -64,7 +63,6 @@ namespace muon
 			log() << "[" << func << ":" << line << "]" << muon::endl;
 			log() << buffer << muon::endl;
 			free(buffer);
-#endif
 		}
 	}
 }
