@@ -1,10 +1,12 @@
 Muon
 ====================
 
+Muon is a C++ framework designed to be used as a layer between the Standard Library and some missing feature I'm using in other projects.
+
 [![Build Status](http://ci.louis-schnellbach.com/buildStatus/icon?job=Muon/master)](http://ci.louis-schnellbach.com/job/Muon/branch/master/)
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/88rhc1uem65bebd6/branch/master?svg=true)](https://ci.appveyor.com/project/Xleek/muon/branch/master)
 
-Muon is a C++ framework designed to be used as a layer between the Standard Library and some missing feature I'm using in other projects.
+[![CppCheck](http://ci.louis-schnellbach.com/job/Muon/branch/master/cppcheckResult/graph)](http://ci.louis-schnellbach.com/job/Muon/branch/master/cppcheckResult)
 
 How to compile
 ====================
