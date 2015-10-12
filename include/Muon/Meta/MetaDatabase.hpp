@@ -91,7 +91,7 @@ namespace muon
 		namespace priv
 		{
 			template<typename T>
-			struct MUON_API MetaRegistrar
+			struct MetaRegistrar
 			{
 				static MetaRegistrar s_instance;
 				MetaRegistrar()
