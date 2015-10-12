@@ -121,11 +121,6 @@ int main(int argc, char** argv)
 	muon::system::Log::open("unit_test.log");
 	muon::system::Log mainLog("Main", muon::LOG_INFO);
 
-	if(!muon::meta::MetaDatabase::isInstantiated())
-	{
-		muon::meta::MetaDatabase::instantiate();
-	}
-
 	mainLog() << "Number of arguments: " << argc << muon::endl;
 	for (muon::i32 i = 0; i < argc; ++i)
 	{
@@ -167,6 +162,7 @@ int main(int argc, char** argv)
 
 	// Check the MetaData system, and register all the type we need
 	{
+		MUON_CHECK(muon::meta::MetaDatabase::isInstantiated(), "MetaDatabase is not already instantiated!");
 		UnitTestObject uto;
 		muon::meta::MetaData* data = MUON_META(UnitTestObject);
 		muon::meta::MetaData* dataName = MUON_META_NAME("UnitTestObject");
