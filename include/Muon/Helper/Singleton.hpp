@@ -68,7 +68,7 @@ namespace muon
 			*/
 			static T& instantiate()
 			{
-				MUON_ASSERT_BREAK(!s_instance, "Singleton instance already created!");
+				MUON_ASSERT(!s_instance, "Singleton instance already created!");
 				static T gInstance;
 				s_instance = &gInstance;
 				return get();
