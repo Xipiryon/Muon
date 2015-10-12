@@ -91,7 +91,7 @@ namespace muon
 		namespace priv
 		{
 			template<typename T>
-			struct MetaRegistrar
+			struct MUON_API MetaRegistrar
 			{
 				static MetaRegistrar s_instance;
 				MetaRegistrar()
@@ -114,7 +114,7 @@ namespace muon
 #define MUON_META_REGISTER(Type) ::muon::meta::MetaDatabase::get().registerMeta<Type>()
 #define MUON_META_CREATE(TypeName) ::muon::meta::MetaDatabase::get().createMeta(TypeName);
 
-#define MUON_TRAITS_META_REGISTER(Type) MUON_TRAITS(Type) namespace muon { namespace meta { namespace priv { template<> MetaRegistrar<Type> MetaRegistrar<Type>::s_instance; } } } 
+#define MUON_TRAITS_META_REGISTER(Type) MUON_TRAITS(Type) namespace muon { namespace meta { namespace priv { template<> MetaRegistrar<Type> MetaRegistrar<Type>::s_instance; } } }
 
 #endif
 
