@@ -130,6 +130,10 @@ namespace muon { enum { s_namespaceMuon = true }; }
 #define MUON_STR(T) _MUON_STR(T)
 // Append second argument to first (tokenize both)
 #define MUON_GLUE(L, R) _MUON_GLUE(L, R)
+// Append the line number to the first argument
+#define MUON_GLUE_LINE(L) MUON_GLUE(L, __LINE__)
+// Append the compiler count value to the first argument
+#define MUON_GLUE_COUNTER(L) MUON_GLUE(L, __COUNTER__)
 
 //		--------------------------
 //				ASSEMBLY
