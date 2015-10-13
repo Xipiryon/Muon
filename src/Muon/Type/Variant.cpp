@@ -50,4 +50,33 @@ namespace muon
 	{
 		return m_meta;
 	}
+
+	Variant& Variant::operator=(const Variant& rhs)
+	{
+		if (this == &rhs)
+		{
+			return *this;
+		}
+
+		MUON_ASSERT(rhs.m_meta, "Cannot copy an NULL MetaData!");
+		// Meta are different, erase the stored one and replace by the new
+		if (m_meta != rhs.m_meta)
+		{
+			::free(m_data);
+			m_meta = rhs.m_meta;
+			m_data = ::malloc(m_meta->size());
+			::memcpy(m_data, rhs.m_data, m_meta->size());
+		}
+		else
+		{
+			// They are the same, just copy the value
+			::memcpy(m_data, rhs.m_data, m_meta->size());
+		}
+		return *this;
+	}
+
+	Variant& Variant::set(const Variant& rhs)
+	{
+		return this->operator=(rhs);
+	}
 }

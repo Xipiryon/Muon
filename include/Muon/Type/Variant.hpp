@@ -44,6 +44,9 @@ namespace muon
 		Variant(const Variant& rhs);
 		Variant();
 
+		Variant& operator=(const Variant& rhs);
+		Variant& set(const Variant& rhs);
+
 		meta::MetaData* getMeta() const;
 
 		template<typename T> Variant& set(const T& rhs);
