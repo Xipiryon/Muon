@@ -177,7 +177,7 @@ namespace muon
 		template<typename T>
 		MetaData* MetaData::addAttribute(const char* name)
 		{
-			MetaData meta = TypeTraits<T>();
+			MetaData meta = traits::TypeTraits<T>();
 			return addAttribute(name, &meta);
 		}
 	}
