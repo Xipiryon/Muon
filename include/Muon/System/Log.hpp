@@ -31,7 +31,7 @@
 #include <vector>
 #include "Muon/IO/IStream.hpp"
 #include "Muon/System/ILogImpl.hpp"
-#include "Muon/Type/String.hpp"
+#include "Muon/String.hpp"
 
 namespace muon
 {

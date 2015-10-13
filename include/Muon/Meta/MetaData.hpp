@@ -31,7 +31,7 @@
 #include <unordered_map>
 #include "Muon/System/Assert.hpp"
 #include "Muon/Meta/TypeTraits.hpp"
-#include "Muon/Type/String.hpp"
+#include "Muon/String.hpp"
 
 /*!
 * @file MetaData.hpp
@@ -43,7 +43,6 @@ namespace muon
 	{
 		class MetaData;
 		class MetaDatabase;
-		class Variant;
 
 		/*!
 		* @brief

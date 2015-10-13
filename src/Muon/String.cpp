@@ -31,7 +31,7 @@
 #include "Muon/IO/IStream.hpp"
 #include "Muon/System/Log.hpp"
 #include "Muon/System/Assert.hpp"
-#include "Muon/Type/String.hpp"
+#include "Muon/String.hpp"
 
 namespace muon
 {

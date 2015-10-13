@@ -31,7 +31,7 @@
 //#include <cstring>
 //#include <cstdarg>
 
-#include "Muon/Type/String.hpp"
+#include "Muon/String.hpp"
 #include "Muon/System/Log.hpp"
 
 namespace

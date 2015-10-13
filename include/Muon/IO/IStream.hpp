@@ -30,7 +30,7 @@
 
 #include "Muon/Core/Typedef.hpp"
 #include "Muon/IO/ISerializable.hpp"
-#include "Muon/Type/String.hpp"
+#include "Muon/String.hpp"
 
 namespace muon
 {

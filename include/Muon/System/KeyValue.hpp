@@ -28,7 +28,7 @@
 #ifndef INCLUDE_MUON_KEYVALUE_HPP
 #define INCLUDE_MUON_KEYVALUE_HPP
 
-#include "Muon/Type/String.hpp"
+#include "Muon/String.hpp"
 
 namespace muon
 {

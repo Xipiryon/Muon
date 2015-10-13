@@ -28,8 +28,8 @@
 #include "Muon/Meta/MetaDatabase.hpp"
 #include "Muon/System/Log.hpp"
 #include "Muon/System/Time.hpp"
-#include "Muon/Type/String.hpp"
-#include "Muon/Type/Variant.hpp"
+#include "Muon/String.hpp"
+#include "Muon/Variant.hpp"
 
 namespace muon
 {

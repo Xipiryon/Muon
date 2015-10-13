@@ -25,7 +25,7 @@
 *
 *************************************************************************/
 
-#include "Muon/Type/Variant.hpp"
+#include "Muon/Variant.hpp"
 
 namespace muon
 {
