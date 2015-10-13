@@ -31,7 +31,7 @@
 #include <functional>
 #include <ostream>
 #include "Muon/Core/Constant.hpp"
-#include "Muon/Meta/TypeTraits.hpp"
+#include "Muon/Traits/TypeTraits.hpp"
 #include "Muon/IO/ISerializable.hpp"
 #include "Muon/System/ILogImpl.hpp"
 

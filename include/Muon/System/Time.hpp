@@ -30,7 +30,7 @@
 
 #include <ctime>
 #include "Muon/Core/Typedef.hpp"
-#include "Muon/Meta/TypeTraits.hpp"
+#include "Muon/Traits/TypeTraits.hpp"
 
 namespace muon
 {

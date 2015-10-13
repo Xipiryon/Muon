@@ -58,20 +58,33 @@ namespace muon
 			return *this;
 		}
 
-		MUON_ASSERT(rhs.m_meta, "Cannot copy an NULL MetaData!");
-		// Meta are different, erase the stored one and replace by the new
-		if (m_meta != rhs.m_meta)
+		meta::MetaData* meta = rhs.getMeta();
+		MUON_ASSERT(meta, "Cannot copy an NULL MetaData!");
+		if (meta == NULL)
 		{
-			::free(m_data);
-			m_meta = rhs.m_meta;
-			m_data = ::malloc(m_meta->size());
-			::memcpy(m_data, rhs.m_data, m_meta->size());
+			// Resetting our Variant
+			m_meta->destroy(m_data);
+			m_meta = MUON_META(void);
+			return *this;
+		}
+
+		// Meta are different, erase the stored one and replace by the new
+		if (m_meta != meta)
+		{
+			m_meta->destroy(m_data);
+			m_meta = meta;
+		}
+
+		m_data = m_meta->create();
+		if ((m_meta->flags() & traits::USE_POINTER_FLAG) || (m_meta->flags() & traits::USE_REFERENCE_FLAG))
+		{
+			m_meta->copy(m_data, rhs.m_data);
 		}
 		else
 		{
-			// They are the same, just copy the value
-			::memcpy(m_data, rhs.m_data, m_meta->size());
+			::memcpy(m_data, &rhs, m_meta->size());
 		}
+
 		return *this;
 	}
 

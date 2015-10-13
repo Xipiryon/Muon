@@ -36,7 +36,7 @@
 #include <Muon/System/Log.hpp>
 #include <Muon/Meta/MetaDatabase.hpp>
 #include <Muon/Memory/PoolAllocator.hpp>
-#include <Muon/Type/Variant.hpp>
+#include <Muon/Variant.hpp>
 
 class LogFile : public muon::system::ILogImpl
 {
@@ -175,7 +175,7 @@ int main(int argc, char** argv)
 		// Skip following test if there is errors from last steps
 		if(eCount == errorCount)
 		{
-			MUON_CHECK(data->id() == muon::meta::TypeTraits<UnitTestObject>::id(), "ID retrieved from MUON_META and TypeTraits does not match! (%lu != %lu)", data->id(), muon::meta::TypeTraits<UnitTestObject>::id());
+			MUON_CHECK(data->id() == muon::traits::TypeTraits<UnitTestObject>::id(), "ID retrieved from MUON_META and TypeTraits does not match! (%lu != %lu)", data->id(), muon::traits::TypeTraits<UnitTestObject>::id());
 			MUON_CHECK(data->id() == dataName->id(), "ID retrieved from MUON_META and MUON_META_NAME does not match! (%lu != %lu)", data->id(), dataName->id());
 			MUON_CHECK(data->id() == dataObject->id(), "ID retrieved from MUON_META and MUON_META_OBJECT does not match! (%lu != %lu)", data->id(), dataObject->id());
 		}
@@ -205,6 +205,12 @@ int main(int argc, char** argv)
 		{
 			muon::String s = v.get<muon::String>();
 			MUON_CHECK(s == "Hello World!", "Variant non-memcopyable class does not match! %s != %s", s.cStr(), "Hello World!");
+		}
+		// Assure that a Variant copy of a non-memcopyable object is not the same
+		{
+			muon::Variant v2;
+			v2 = v;
+			MUON_CHECK(v.get<void*>() != v2.get<void*>(), "Copied Variant with non-memcopyable object have the same address!");
 		}
 
 	}

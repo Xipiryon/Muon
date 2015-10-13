@@ -95,7 +95,7 @@ namespace muon
 		}
 
 		MetaData::MetaData()
-			: MetaData(muon::meta::TypeTraits<void>())
+			: MetaData(muon::traits::TypeTraits<void>())
 		{
 			init();
 		}
@@ -113,6 +113,7 @@ namespace muon
 				m_name = o.m_name;
 				m_id = o.m_id;
 				m_size = o.m_size;
+				m_flags = o.m_flags;
 				m_create = o.m_create;
 				m_destroy = o.m_destroy;
 				m_members->operator=(*o.m_members);
@@ -142,9 +143,9 @@ namespace muon
 			return m_size;
 		}
 
-		bool MetaData::isCustom() const
+		u32 MetaData::flags() const
 		{
-			return (m_id & TYPE_ID_CUSTOM_MASK) == TYPE_ID_CUSTOM_MASK;
+			return m_flags;
 		}
 
 		u32 MetaData::getAttributeCount() const
@@ -184,7 +185,7 @@ namespace muon
 					return pair.second;
 				}
 			}
-			return MetaMember(MUON_META(void), TYPE_NAME_UNREGISTERED, 0);
+			return MetaMember(MUON_META(void), traits::TYPE_NAME_UNREGISTERED, 0);
 		}
 
 		MetaMember MetaData::getAttribute(u32 offset) const
@@ -196,7 +197,7 @@ namespace muon
 					return pair.second;
 				}
 			}
-			return MetaMember(MUON_META(void), TYPE_NAME_UNREGISTERED, 0);
+			return MetaMember(MUON_META(void), traits::TYPE_NAME_UNREGISTERED, 0);
 		}
 
 		MetaFunction MetaData::getMethod(const char* name) const
@@ -212,6 +213,11 @@ namespace muon
 		void* MetaData::create()
 		{
 			return m_create();
+		}
+
+		void MetaData::copy(void* data, void* value)
+		{
+			m_copy(data, value);
 		}
 
 		void MetaData::destroy(void* data)

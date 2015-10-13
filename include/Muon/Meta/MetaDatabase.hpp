@@ -70,10 +70,10 @@ namespace muon
 		template<typename T>
 		MetaData* MetaDatabase::registerMeta()
 		{
-			String name = TypeTraits<T>::name();
+			String name = traits::TypeTraits<T>::name();
 			if (m_metadb->find(name) == m_metadb->end())
 			{
-				m_metadb->insert(std::make_pair(name, TypeTraits<T>()));
+				(*m_metadb)[name] = MetaData(traits::TypeTraits<T>());
 			}
 			else
 			{
@@ -85,7 +85,7 @@ namespace muon
 		template<typename T>
 		MetaData* MetaDatabase::getMeta()
 		{
-			return getMeta(TypeTraits<T>::name());
+			return getMeta(traits::TypeTraits<T>::name());
 		}
 
 		namespace priv
@@ -106,8 +106,8 @@ namespace muon
 	}
 }
 
-#define MUON_META(Type) ::muon::meta::MetaDatabase::get().getMeta<typename ::muon::meta::RawType<Type>::type >()
-#define MUON_META_OBJECT(Object) MUON_META(::muon::meta::RawType<decltype(Object)>::type)
+#define MUON_META(Type) ::muon::meta::MetaDatabase::get().getMeta<typename ::muon::traits::RawType<Type>::type >()
+#define MUON_META_OBJECT(Object) MUON_META(::muon::traits::RawType<decltype(Object)>::type)
 #define MUON_META_NAME(Name) ::muon::meta::MetaDatabase::get().getMeta(Name)
 
 #define MUON_META_REGISTER(Type) ::muon::meta::MetaDatabase::get().registerMeta<Type>()

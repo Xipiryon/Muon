@@ -52,12 +52,12 @@ namespace muon
 				return &(it->second);
 			}
 
-			//(*m_metadb)[name] = MetaData();
-			m_metadb->insert(std::make_pair(name, MetaData()));
+			(*m_metadb)[name] = MetaData();
 			MetaData* metadb = &(*m_metadb)[name];
 			metadb->m_name = name;
-			metadb->m_id = TYPE_ID_CUSTOM_MASK | (TYPE_ID_BASE_MASK & name.hash());
+			metadb->m_id = traits::TYPE_ID_CUSTOM_MASK | (traits::TYPE_ID_BASE_MASK & name.hash());
 			metadb->m_size = 0;
+			metadb->m_flags = traits::IS_CUSTOM_FLAG;
 
 			return metadb;
 		}

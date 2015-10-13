@@ -32,7 +32,7 @@
 #include "Muon/System/Assert.hpp"
 #include "Muon/Memory/PoolAllocator.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
-#include "Muon/Meta/TypeInfo.hpp"
+#include "Muon/Traits/TypeInfo.hpp"
 
 namespace muon
 {
@@ -86,9 +86,9 @@ namespace muon
 	template<typename T>
 	Variant& Variant::set(const T& rhs)
 	{
-		meta::MetaData* m = MUON_META(T);
-		MUON_ASSERT(m, "Cannot copy an NULL MetaData!");
-		if (m == NULL)
+		meta::MetaData* meta = MUON_META(T);
+		MUON_ASSERT(meta, "Cannot copy an NULL MetaData!");
+		if (meta == NULL)
 		{
 			// Resetting our Variant
 			m_meta->destroy(m_data);
@@ -97,20 +97,20 @@ namespace muon
 		}
 
 		// Meta are different, erase the stored one and replace by the new
-		if (m_meta != MUON_META(T))
+		if (m_meta != meta)
 		{
 			m_meta->destroy(m_data);
-			m_meta = m;
+			m_meta = meta;
 		}
 
 		m_data = m_meta->create();
-		if(muon::meta::MemCopyable<T>::value)
+		if(traits::UsePointer<T>::value || traits::UseReference<T>::value)
 		{
-			::memcpy(m_data, &rhs, m_meta->size());
+			(*(T*)m_data) = rhs;
 		}
 		else
 		{
-			(*(T*)m_data) = rhs;
+			::memcpy(m_data, &rhs, m_meta->size());
 		}
 
 		return *this;

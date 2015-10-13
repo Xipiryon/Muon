@@ -29,13 +29,13 @@
 #define INCLUDE_MUON_TYPETRAITS_HPP
 
 #include <type_traits>
-#include "Muon/Meta/TypeInfo.hpp"
+#include "Muon/Traits/TypeInfo.hpp"
 #include "Muon/Memory/Allocator.hpp"
 
 #if defined(MUON_PLATFORM_WINDOWS) || defined(MUON_PLATFORM_HTML)
 namespace priv
 {
-	MUON_INLINE muon::u64 _meta_hash(const char* m_str)
+	MUON_INLINE muon::u64 _traits_hash(const char* m_str)
 	{
 		// www.cse.yorku.ca/~oz/hash.html
 		muon::u64 v = 5381;
@@ -50,39 +50,40 @@ namespace priv
 		}
 		return v;
 	}
-#	define _MUON_TRAITS_ID_ATTRIB(Type) ::priv::_meta_hash(MUON_STR(Type))
+#	define _MUON_TRAITS_ID_ATTRIB(Type) ::priv::_traits_hash(MUON_STR(Type))
 }
 #else
 namespace priv
 {
-	MUON_CONSTEXPR muon::u64 _meta_const_hash(const char* str)
+	MUON_CONSTEXPR muon::u64 _traits_const_hash(const char* str)
 	{
-		return *str ? static_cast<muon::u64>(*str) + 33 * _meta_const_hash(str + 1) : 5381;
+		return *str ? static_cast<muon::u64>(*str) + 33 * _traits_const_hash(str + 1) : 5381;
 	}
 
-	MUON_CONSTEXPR muon::u64 operator "" _meta_hash(const char* str, muon::u64)
+	MUON_CONSTEXPR muon::u64 operator "" _traits_hash(const char* str, muon::u64)
 	{
-		return _meta_const_hash(str);
+		return _traits_const_hash(str);
 	}
-#	define _MUON_TRAITS_ID_ATTRIB(Type) #Type ## _meta_hash
+#	define _MUON_TRAITS_ID_ATTRIB(Type) #Type ## _traits_hash
 }
 #endif
 
 #define _MUON_TRAITS_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return MUON_STR(Type); }
-#define _MUON_TRAITS_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u64 id() {using namespace ::priv; return ::muon::meta::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
+#define _MUON_TRAITS_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u64 id() {using namespace ::priv; return ::muon::traits::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
 #define _MUON_TRAITS_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u32 size() { return sizeof(Type); }
-#define _MUON_TRAITS_DESTROY(Type) static MUON_INLINE void destroy(Type* ptr) { MUON_CDELETE(ptr); }
 #define _MUON_TRAITS_CREATE(Type) static MUON_INLINE Type* create() { return MUON_CNEW(Type); }
+#define _MUON_TRAITS_COPY(Type) static MUON_INLINE void copy(Type* ptr, Type* val) { *ptr = *val; }
+#define _MUON_TRAITS_DESTROY(Type) static MUON_INLINE void destroy(Type* ptr) { MUON_CDELETE(ptr); }
 
-#define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_NAME(Type) _MUON_TRAITS_ID(Type) _MUON_TRAITS_SIZE(Type) _MUON_TRAITS_CREATE(Type) _MUON_TRAITS_DESTROY(Type);
+#define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_NAME(Type) _MUON_TRAITS_ID(Type) _MUON_TRAITS_SIZE(Type) _MUON_TRAITS_CREATE(Type) _MUON_TRAITS_COPY(Type) _MUON_TRAITS_DESTROY(Type);
 #define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
-#define MUON_TRAITS(Type) static_assert(!s_namespaceMuon, "MUON_TRAITS must be placed outside any muon namespace"); namespace muon { namespace meta { _MUON_TRAITS_STRUCT(Type) } }
+#define MUON_TRAITS(Type) static_assert(!s_namespaceMuon, "MUON_TRAITS must be placed outside any muon namespace"); namespace muon { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
 
 namespace muon
 {
-	namespace meta
+	namespace traits
 	{
-		enum MetaConstant : u64
+		enum TypeIDMask : u64
 		{
 			TYPE_ID_INVALID 	= 0x0FFFFFFFFFFFFFFF,
 			TYPE_ID_BASE_MASK	= 0x0FFFFFFFFFFFFFFF,
@@ -102,7 +103,7 @@ namespace muon
 			}
 			static MUON_INLINE MUON_CONSTEXPR::muon::u64 id()
 			{
-				return MetaConstant::TYPE_ID_INVALID;
+				return TYPE_ID_INVALID;
 			}
 			static MUON_INLINE MUON_CONSTEXPR::muon::u32 size()
 			{
@@ -111,6 +112,9 @@ namespace muon
 			static MUON_INLINE void* create()
 			{
 				return NULL;
+			}
+			static MUON_INLINE void copy(void*, void*)
+			{
 			}
 			static MUON_INLINE void destroy(void*)
 			{

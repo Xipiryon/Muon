@@ -30,7 +30,7 @@
 
 #include <unordered_map>
 #include "Muon/System/Assert.hpp"
-#include "Muon/Meta/TypeTraits.hpp"
+#include "Muon/Traits/TypeTraits.hpp"
 #include "Muon/String.hpp"
 
 /*!
@@ -100,6 +100,7 @@ namespace muon
 			typedef std::unordered_map<String, meta::MetaMember> MetaMemberMap;
 			typedef std::unordered_map<String, meta::MetaFunction> MetaMethodMap;
 			typedef void*(*MetaCreateFunc)();
+			typedef void(*MetaCopyFunc)(void*, void*);
 			typedef void(*MetaDestroyFunc)(void*);
 		public:
 			MetaData();
@@ -107,23 +108,28 @@ namespace muon
 			MetaData& operator=(const MetaData&);
 
 			template<typename T>
-			MetaData(const TypeTraits<T>&)
-				: m_name(TypeTraits<T>::name())
-				, m_id(TypeTraits<T>::id())
-				, m_size(TypeTraits<T>::size())
-				, m_create((MetaCreateFunc)&TypeTraits<T>::create)
-				, m_destroy((MetaDestroyFunc)&TypeTraits<T>::destroy)
+			MetaData(traits::TypeTraits<T> traits)
+				: m_name(traits.name())
+				, m_id(traits.id())
+				, m_size(traits.size())
+				, m_create((MetaCreateFunc)&traits.create)
+				, m_copy((MetaCopyFunc)&traits.copy)
+				, m_destroy((MetaDestroyFunc)&traits.destroy)
 			{
+				m_flags = (traits::UsePointer<T>::flag
+						  | traits::UseReference<T>::flag
+						  );
 				init();
 			}
 
 			~MetaData();
 
+
 			// Accessor
 			const String& name() const;
 			u64 id() const;
 			u32 size() const;
-			bool isCustom() const;
+			u32 flags() const;
 
 			// Attribute & Methods
 			u32 getAttributeCount() const;
@@ -143,6 +149,7 @@ namespace muon
 			MetaFunction getMethod(u32 offset) const;
 
 			void* create();
+			void copy(void* data, void* value);
 			void destroy(void* data);
 
 		private:
@@ -151,7 +158,9 @@ namespace muon
 			String m_name;
 			u64 m_id;
 			u32 m_size;
+			u32 m_flags;
 			MetaCreateFunc m_create;
+			MetaCopyFunc m_copy;
 			MetaDestroyFunc m_destroy;
 
 			MetaMemberMap* m_members;
