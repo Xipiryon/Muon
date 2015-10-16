@@ -30,9 +30,11 @@ solution "Muon"
 	end
 	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL" }
 
-	if not os.is("windows") then
+	if os.is("windows") then
+		implibdir "bin"
+	else
 		buildoptions { "--std=c++11" }
-		linkoptions { "-Wl,-rpath,"..MuonRoot.."/bin/lib/" }
+		linkoptions { "-Wl,-rpath,bin" }
 	end
 
 	-- If option exists, then override G_Install
@@ -44,12 +46,12 @@ solution "Muon"
 	end
 
 	includedirs {
-		MuonRoot.."/include",
+		"include",
 		G_Install.Header,
 	}
 
 	libdirs {
-		MuonRoot.."/bin/lib",
+		"bin",
 		G_Install.Lib
 	}
 
@@ -79,11 +81,7 @@ solution "Muon"
 project "Muon"
 
 	language "C++"
-	targetdir(MuonRoot.."/bin/lib")
-
-	if os.is("windows") then
-		postbuildcommands { string.gsub("copy "..MuonRoot.."/bin/lib/*.dll "..MuonRoot.."/bin/", "/", "\\") }
-	end
+	targetdir "bin"
 
 	files {
        MuonRoot.."/src/**.cpp",
@@ -140,7 +138,7 @@ newaction {
 		print("** Installing Header files in: "..G_Install.Header.." **")
 
 		local incDir = MuonRoot.."/include/"
-		local libDir = MuonRoot.."/bin/lib/"
+		local libDir = MuonRoot.."/bin/"
 
 		-- HEADER
 		-- Create required folders
@@ -176,6 +174,7 @@ newaction {
 			exts[1] = ".lib"
 		else
 			exts[0] = ".so"
+			exts[1] = ".a"
 		end
 
 		-- Copy files
