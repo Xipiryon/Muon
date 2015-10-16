@@ -47,6 +47,8 @@ namespace muon
 		Variant& operator=(const Variant& rhs);
 		Variant& set(const Variant& rhs);
 
+		Variant& reset();
+
 		meta::MetaData* getMeta() const;
 
 		template<typename T> Variant& set(const T& rhs);
@@ -90,10 +92,7 @@ namespace muon
 		MUON_ASSERT(meta, "Cannot copy an NULL MetaData!");
 		if (meta == NULL)
 		{
-			// Resetting our Variant
-			m_meta->destroy(m_data);
-			m_meta = MUON_META(void);
-			return *this;
+			return reset();
 		}
 
 		// Meta are different, erase the stored one and replace by the new

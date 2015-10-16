@@ -62,10 +62,7 @@ namespace muon
 		MUON_ASSERT(meta, "Cannot copy an NULL MetaData!");
 		if (meta == NULL)
 		{
-			// Resetting our Variant
-			m_meta->destroy(m_data);
-			m_meta = MUON_META(void);
-			return *this;
+			return reset();
 		}
 
 		// Meta are different, erase the stored one and replace by the new
@@ -91,5 +88,13 @@ namespace muon
 	Variant& Variant::set(const Variant& rhs)
 	{
 		return this->operator=(rhs);
+	}
+
+	Variant& Variant::reset()
+	{
+		m_meta->destroy(m_data);
+		m_meta = MUON_META(void);
+		m_data = NULL;
+		return *this;
 	}
 }
