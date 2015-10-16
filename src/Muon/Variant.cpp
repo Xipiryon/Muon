@@ -79,7 +79,7 @@ namespace muon
 		}
 		else
 		{
-			::memcpy(m_data, &rhs.m_data, m_meta->size());
+			::memcpy(m_data, rhs.m_data, m_meta->size());
 		}
 
 		return *this;
