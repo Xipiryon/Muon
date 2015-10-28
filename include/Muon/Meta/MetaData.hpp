@@ -100,7 +100,7 @@ namespace muon
 			typedef std::unordered_map<String, meta::MetaMember> MetaMemberMap;
 			typedef std::unordered_map<String, meta::MetaFunction> MetaMethodMap;
 			typedef void*(*MetaCreateFunc)();
-			typedef void(*MetaCopyFunc)(void*, void*);
+			typedef void(*MetaCopyFunc)(void*, const void*);
 			typedef void(*MetaDestroyFunc)(void*);
 		public:
 			MetaData();
@@ -149,7 +149,7 @@ namespace muon
 			MetaFunction getMethod(u32 offset) const;
 
 			void* create();
-			void copy(void* data, void* value);
+			void copy(void* data, const void* value);
 			void destroy(void* data);
 
 		private:

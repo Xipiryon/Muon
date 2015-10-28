@@ -116,6 +116,7 @@ namespace muon
 				m_flags = o.m_flags;
 				m_create = o.m_create;
 				m_destroy = o.m_destroy;
+				m_copy = o.m_copy;
 				m_members->operator=(*o.m_members);
 				m_methods->operator=(*o.m_methods);
 			}
@@ -215,7 +216,7 @@ namespace muon
 			return m_create();
 		}
 
-		void MetaData::copy(void* data, void* value)
+		void MetaData::copy(void* data, const void* value)
 		{
 			m_copy(data, value);
 		}
