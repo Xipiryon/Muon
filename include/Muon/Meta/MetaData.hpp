@@ -80,7 +80,7 @@ namespace muon
 			~MetaMember();
 
 			MetaMember& operator=(const MetaMember& o);
-			const String& name() const;
+			const char* name() const;
 			u32 offset() const;
 			MetaData* meta() const;
 
@@ -126,7 +126,7 @@ namespace muon
 
 
 			// Accessor
-			const String& name() const;
+			const char* name() const;
 			u64 id() const;
 			u32 size() const;
 			u32 flags() const;

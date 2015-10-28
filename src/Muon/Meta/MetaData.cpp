@@ -70,9 +70,9 @@ namespace muon
 			return *this;
 		}
 
-		const String& MetaMember::name() const
+		const char* MetaMember::name() const
 		{
-			return m_name;
+			return m_name.cStr();
 		}
 
 		u32 MetaMember::offset() const
@@ -128,9 +128,9 @@ namespace muon
 			MUON_CDELETE(m_methods);
 		}
 
-		const String& MetaData::name() const
+		const char* MetaData::name() const
 		{
-			return m_name;
+			return m_name.cStr();
 		}
 
 		u64 MetaData::id() const
@@ -164,12 +164,12 @@ namespace muon
 			if(it != m_members->end())
 			{
 				MUON_ERROR("Cannot add \"%s\" as %s: already added as %s!"
-					, name, meta->name().cStr(), it->second.meta()->name().cStr());
+					, name, meta->name(), it->second.meta()->name());
 				return it->second.meta();
 			}
 
 			// Use MetaDatabase pointer instead of given one
-			MetaData* dbMeta = MUON_META_NAME(meta->name().cStr());
+			MetaData* dbMeta = MUON_META_NAME(meta->name());
 			m_members->insert( {name, MetaMember(dbMeta, name, m_size)} );
 			m_size += meta->size();
 
