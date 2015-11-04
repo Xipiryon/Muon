@@ -162,6 +162,7 @@ int main(int argc, char** argv)
 
 	// Check the MetaData system, and register all the type we need
 	{
+		MUON_TITLE(" ** Checking muon::meta::MetaDatabase ** ");
 		MUON_CHECK(muon::meta::MetaDatabase::isInstantiated(), "MetaDatabase is not already instantiated!");
 		UnitTestObject uto;
 		muon::meta::MetaData* data = MUON_META(UnitTestObject);
@@ -183,6 +184,7 @@ int main(int argc, char** argv)
 
 	// Check that variant can correctly alternate between types without memory losses
 	{
+		MUON_TITLE(" ** Checking muon::Variant ** ");
 		muon::Variant v;
 		v = 45;
 		muon::u32 r = v.get<muon::u32>();
@@ -222,7 +224,7 @@ int main(int argc, char** argv)
 	mainLog(errorCount == 0 ? muon::LOG_INFO : muon::LOG_ERROR) << "Error Count: " << errorCount << muon::endl;
 
 	muon::system::Log::close();
-#ifdef MUON_PLATFORM_WINDOWS
+#if defined(MUON_PLATFORM_WINDOWS) && defined(MUON_DEBUG)
 	::system("PAUSE");
 #endif
 	return -((muon::i32)errorCount);
