@@ -17,11 +17,42 @@ end
 if not G_Install.Header then G_Install.Header = G_Install.Root.."include" end
 if not G_Install.Lib then G_Install.Lib = G_Install.Root.."lib" end
 
-MuonRoot = os.getcwd()
+ProjectRoot = os.getcwd()
 
+if SolutionRoot == nil then
+	SolutionRoot = ProjectRoot
+end
 ------------------------------
 -- Solution
 ------------------------------
+
+function prepareConfiguration()
+	includedirs {
+		ProjectRoot.."include",
+		G_Install.Header,
+	}
+
+	libdirs {
+		ProjectRoot.."bin",
+		G_Install.Lib
+	}
+
+	filter "Debug*"
+		targetsuffix "-d"
+        flags   { "Symbols" }
+		defines { "MUON_DEBUG"}
+
+	filter "Release*"
+		optimize "Speed"
+		flags   { "LinkTimeOptimization", "NoRTTI" }
+		defines { "MUON_RELEASE" }
+
+    filter  "*Lib"
+        kind "StaticLib"
+
+    filter  "*DLL"
+        kind "SharedLib"
+end
 
 solution "Muon"
 
@@ -45,73 +76,18 @@ solution "Muon"
 		print("Install directory has been overwritten to '"..G_Install.Root.."'")
 	end
 
-	includedirs {
-		"include",
-		G_Install.Header,
-	}
-
-	libdirs {
-		"bin",
-		G_Install.Lib
-	}
-
-	filter "Debug*"
-		targetsuffix "-d"
-        flags   { "Symbols" }
-		defines { "MUON_DEBUG"}
-
-	filter "Release*"
-		optimize "Speed"
-		flags   { "LinkTimeOptimization", "NoRTTI" }
-		defines { "MUON_RELEASE" }
-
-    filter  "*Lib"
-        kind "StaticLib"
-
-    filter  "*DLL"
-        kind "SharedLib"
+	prepareConfiguration()
 
 ------------------------------
 -- Project
 ------------------------------
 
--- Library
--------------------------------------------
-
-project "Muon"
-
-	language "C++"
-	targetdir "bin"
-
-	files {
-       MuonRoot.."/src/**.cpp",
-       MuonRoot.."/include/**.hpp",
-    }
-
-	filter  "*DLL"
-		defines { "MUON_EXPORTS" }
-
-
--- Unit Tests
--------------------------------------------
+include("project_lib")
 
 if _OPTIONS["unittests"] then
-
-	project "UnitTests"
-		language "C++"
-		targetname "UnitTests"
-		targetdir "bin"
-		kind "ConsoleApp"
-
-		files	{
-			MuonRoot.."/unittests/main.cpp"
-		}
-
-		filter "Debug*"
-			links	{ "Muon-d" }
-		filter "Release*"
-			links { "Muon" }
+	include("project_unittests")
 end
+
 ------------------------------
 -- Options
 ------------------------------
@@ -137,8 +113,8 @@ newaction {
 	execute = function ()
 		print("** Installing Header files in: "..G_Install.Header.." **")
 
-		local incDir = MuonRoot.."/include/"
-		local libDir = MuonRoot.."/bin/"
+		local incDir = ProjectRoot.."/include/"
+		local libDir = ProjectRoot.."/bin/"
 
 		-- HEADER
 		-- Create required folders
