@@ -5,7 +5,7 @@
 project "Muon"
 
 	language "C++"
-	targetdir (SolutionRoot.."bin")
+	targetdir (SolutionRoot.."/bin")
 
 	files {
        ProjectRoot.."/src/**.cpp",

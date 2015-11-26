@@ -5,7 +5,7 @@
 project "UnitTests"
 	language "C++"
 	targetname "UnitTests"
-	targetdir (SolutionRoot.."bin")
+	targetdir (SolutionRoot.."/bin")
 	kind "ConsoleApp"
 
 	files	{
