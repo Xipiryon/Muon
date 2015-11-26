@@ -82,10 +82,10 @@ solution "Muon"
 -- Project
 ------------------------------
 
-include("project_lib")
+include("project_Lib")
 
 if _OPTIONS["unittests"] then
-	include("project_unittests")
+	include("project_UnitTests")
 end
 
 ------------------------------
