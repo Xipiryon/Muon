@@ -3,9 +3,10 @@
 -------------------------------------------
 
 project "Muon"
+	local ProjectRoot = os.getcwd()
 
 	language "C++"
-	targetdir (SolutionRoot.."/bin")
+	targetdir (SolutionRoot.."/bin/lib")
 
 	files {
        ProjectRoot.."/src/**.cpp",

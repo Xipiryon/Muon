@@ -17,10 +17,8 @@ end
 if not G_Install.Header then G_Install.Header = G_Install.Root.."include" end
 if not G_Install.Lib then G_Install.Lib = G_Install.Root.."lib" end
 
-ProjectRoot = os.getcwd()
-
 if SolutionRoot == nil then
-	SolutionRoot = ProjectRoot
+	SolutionRoot = os.getcwd()
 end
 ------------------------------
 -- Solution
@@ -49,12 +47,12 @@ solution "Muon"
 	end
 
 	includedirs {
-		ProjectRoot.."include",
+		SolutionRoot.."/include",
 		G_Install.Header,
 	}
 
 	libdirs {
-		ProjectRoot.."bin",
+		SolutionRoot.."/bin/lib",
 		G_Install.Lib
 	}
 
@@ -109,8 +107,8 @@ newaction {
 	execute = function ()
 		print("** Installing Header files in: "..G_Install.Header.." **")
 
-		local incDir = ProjectRoot.."/include/"
-		local libDir = ProjectRoot.."/bin/"
+		local incDir = SolutionRoot.."/include/"
+		local libDir = SolutionRoot.."/bin/"
 
 		-- HEADER
 		-- Create required folders
