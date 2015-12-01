@@ -32,10 +32,10 @@ solution "Muon"
 	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL" }
 
 	if os.is("windows") then
-		implibdir "bin"
+		implibdir "bin/lib"
 	else
 		buildoptions { "--std=c++11" }
-		linkoptions { "-Wl,-rpath,bin" }
+		linkoptions { "-Wl,-rpath,bin/lib" }
 	end
 
 	-- If option exists, then override G_Install
