@@ -108,7 +108,7 @@ newaction {
 		print("** Installing Header files in: "..G_Install.Header.." **")
 
 		local incDir = SolutionRoot.."/include/"
-		local libDir = SolutionRoot.."/bin/"
+		local libDir = SolutionRoot.."/bin/lib/"
 
 		-- HEADER
 		-- Create required folders
