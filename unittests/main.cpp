@@ -230,8 +230,6 @@ int main(int argc, char** argv)
 			MUON_CHECK(v.getMeta()->id() == v2.getMeta()->id(), "Copied Variant with non-memcopyable object have not the same type id! %d != %d", v.getMeta()->id(), v2.getMeta()->id());
 			MUON_CHECK(&(v.get<muon::String>()) != &(v2.get<muon::String>()), "Copied Variant with non-memcopyable object have the same address!");
 		}
-
-		MUON_CHECK(false, "Test Case");
 	}
 
 	// END UNIT TEST
