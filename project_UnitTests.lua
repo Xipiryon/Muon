@@ -16,7 +16,9 @@ project "UnitTests"
 	end
 
 	files	{
-		ProjectRoot.."/unittests/main.cpp"
+		ProjectRoot.."/unittests/main.cpp",
+		ProjectRoot.."/unittests/tinyxml2.cpp",
+		ProjectRoot.."/unittests/tinyxml2.h"
 	}
 
 	filter "Debug*"
