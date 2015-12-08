@@ -36,7 +36,10 @@
 #include <Muon/System/Log.hpp>
 #include <Muon/Meta/MetaDatabase.hpp>
 #include <Muon/Memory/PoolAllocator.hpp>
+#include <Muon/System/Time.hpp>
 #include <Muon/Variant.hpp>
+
+#include "tinyxml2.h"
 
 class LogFile : public muon::system::ILogImpl
 {
@@ -127,24 +130,36 @@ int main(int argc, char** argv)
 		mainLog() << "\t: " << argv[i] << muon::endl;
 	}
 
+	// Required variables
+	muon::system::Time clockTest;
+	muon::String title;
 	muon::u32 errorCount = 0;
+	muon::u32 totalTests = 0;
+	tinyxml2::XMLDocument xmlDoc;
+	tinyxml2::XMLElement* xmlRoot = xmlDoc.NewElement("testsuite");
 
-#define MUON_TITLE(msg) mainLog() << msg << muon::endl
+#define MUON_TITLE(msg) do { mainLog() << msg << muon::endl; title = msg; } while(false);
+#define MUON_NODE_BEGIN(cond)	++totalTests; tinyxml2::XMLElement* xmlNode = xmlDoc.NewElement("testcase"); \
+									xmlNode->SetAttribute("name", #cond); \
+									xmlNode->SetAttribute("classname", title.cStr()); \
+									xmlNode->SetAttribute("time", clockTest.now()*1000);
+#define MUON_NODE_ERR(err)		++errorCount; tinyxml2::XMLElement* xmlErr = xmlDoc.NewElement("failure"); xmlErr->SetText(err); xmlNode->InsertEndChild(xmlErr);
+#define MUON_NODE_END			xmlRoot->InsertEndChild(xmlNode); clockTest.start();
 #if defined(MUON_PLATFORM_WINDOWS)
-#	define MUON_CHECK(cond, err, ...) if(!(cond)) {++errorCount; MUON_ERROR("\t-> " err, __VA_ARGS__);}
+#	define MUON_CHECK(cond, err, ...)  do { MUON_NODE_BEGIN(cond) if(!(cond)) { MUON_NODE_ERR(err); MUON_ERROR("\t-> " err, __VA_ARGS__);} MUON_NODE_END } while(false);
 #else
-#	define MUON_CHECK(cond, err, args...) if(!(cond)) {++errorCount; MUON_ERROR("\t-> " err, ##args);}
+#	define MUON_CHECK(cond, err, args...) do { MUON_NODE_BEGIN(cond) if(!(cond)) { MUON_NODE_ERR(err); MUON_ERROR("\t-> " err, ##args);} MUON_NODE_END } while(false);
 #endif
 
 	// ***************
 	// BEGIN UNIT TEST
 	muon::RawPointer pointer = NULL;
-
+	clockTest.start();
 	// Check that PoolAllocator correctly allocate, construct, destruct and free memory
 	// Check also that for allocated object A and B, if A is freed, then next will be allocated at A last place
 	{
 		UnitTestObject* pUTO = NULL;
-		MUON_TITLE(" ** Checking muon::memory::PoolAllocator ** ");
+		MUON_TITLE("muon::memory::PoolAllocator");
 		pUTO = muon::memory::PoolAllocator::allocate<UnitTestObject>(1);
 		MUON_CHECK(pUTO, "Could not allocate with PoolAllocator!");
 		pointer = muon::memory::PoolAllocator::construct(1, pUTO);
@@ -162,7 +177,7 @@ int main(int argc, char** argv)
 
 	// Check the MetaData system, and register all the type we need
 	{
-		MUON_TITLE(" ** Checking muon::meta::MetaDatabase ** ");
+		MUON_TITLE("muon::meta::MetaDatabase");
 		MUON_CHECK(muon::meta::MetaDatabase::isInstantiated(), "MetaDatabase is not already instantiated!");
 		UnitTestObject uto;
 		muon::meta::MetaData* data = MUON_META(UnitTestObject);
@@ -184,7 +199,7 @@ int main(int argc, char** argv)
 
 	// Check that variant can correctly alternate between types without memory losses
 	{
-		MUON_TITLE(" ** Checking muon::Variant ** ");
+		MUON_TITLE("muon::Variant");
 		muon::Variant v;
 		v = 45;
 		muon::u32 r = v.get<muon::u32>();
@@ -216,12 +231,16 @@ int main(int argc, char** argv)
 			MUON_CHECK(&(v.get<muon::String>()) != &(v2.get<muon::String>()), "Copied Variant with non-memcopyable object have the same address!");
 		}
 
+		MUON_CHECK(false, "Test Case");
 	}
 
 	// END UNIT TEST
 	// ***************
-
 	mainLog(errorCount == 0 ? muon::LOG_INFO : muon::LOG_ERROR) << "Error Count: " << errorCount << muon::endl;
+
+	xmlRoot->SetAttribute("tests", totalTests);
+	xmlDoc.InsertFirstChild(xmlRoot);
+	xmlDoc.SaveFile("unittests.xml");
 
 	muon::system::Log::close();
 #if defined(MUON_PLATFORM_WINDOWS) && defined(MUON_DEBUG)
