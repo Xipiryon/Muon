@@ -3,11 +3,6 @@ Muon
 
 Muon is a C++ framework designed to be used as a layer between the Standard Library and some missing feature I'm using in other projects.
 
-[![Build Status](http://ci.louis-schnellbach.com/buildStatus/icon?job=Muon)](http://ci.louis-schnellbach.com/job/Muon/)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/88rhc1uem65bebd6/branch/master?svg=true)](https://ci.appveyor.com/project/Xleek/muon/branch/master)
-
-[![CppCheck](http://ci.louis-schnellbach.com/job/Muon/cppcheckResult/graph)](http://ci.louis-schnellbach.com/job/Muon/cppcheckResult)
-[![Valgrind](http://ci.louis-schnellbach.com/job/Muon/valgrindResult/graph)](http://ci.louis-schnellbach.com/job/Muon/valgrindResult/)
 
 How to compile
 ====================
@@ -39,7 +34,7 @@ If you've pulled a new version of the project, it is recommanded to regenerate t
 Note
 ====================
 
-* The `premake5 install` command will install header and libraries (.dll, .lib, .so, ...) files 
+* The `premake5 install` command will install header and libraries (.dll, .lib, .so, ...) files
 	* On Windows, they're installed under the C:\Premake folder
 	* On Unix, they're installed under the /usr/local/ folder _(and may require the use of `sudo` )_
 
