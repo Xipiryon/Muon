@@ -230,6 +230,56 @@ int main(int argc, char** argv)
 			MUON_CHECK(v.getMeta()->id() == v2.getMeta()->id(), "Copied Variant with non-memcopyable object have not the same type id! %d != %d", v.getMeta()->id(), v2.getMeta()->id());
 			MUON_CHECK(&(v.get<muon::String>()) != &(v2.get<muon::String>()), "Copied Variant with non-memcopyable object have the same address!");
 		}
+
+		// Check that String are correctly used
+		{
+			MUON_TITLE("muon::String");
+
+			muon::String str(5, 'H');
+			MUON_CHECK(str == "HHHHH", "String(size, char) constructor failed! (%s)", str.cStr());
+			str = "Hello";
+			MUON_CHECK(str == "Hello", "Assignment operator failed! (%s)", str.cStr());
+			str += ' ';
+			MUON_CHECK(str == "Hello ", "Appending char failed (%s)", str.cStr());
+
+			muon::String tmp_str("World");
+			MUON_CHECK(tmp_str == "World", "Creating String with const char* failed (%s)", tmp_str.cStr());
+
+			str += tmp_str;
+			MUON_CHECK(str == "Hello World", "Appending another String failed (%s)", str.cStr());
+
+			muon::u32 index = str.find("or");
+			MUON_CHECK(index == 7, "Find existing text in string didn't returned correct index (%s | %d)", str.cStr(), index);
+			index = str.find("ez");
+			MUON_CHECK(index == muon::INVALID_INDEX, "Find non-existing text in String didn't returned INVALID_INDEX  (%s | %d)", str.cStr(), index);
+
+			muon::String new_str = str.replace("World", "Banana");
+			MUON_CHECK(new_str == "Hello Banana", "Replace function failed (%s)", new_str.cStr());
+
+			str.resize(5);
+			MUON_CHECK(str == "Hello", "Resize to with lower bound failed (%s)", str.cStr());
+			str.resize(15);
+			MUON_CHECK(str == "Hello", "Resize to with higher bound failed (%s)", str.cStr());
+
+			str.clear();
+			MUON_CHECK(str.empty(), "Clear failed (%s)", str.cStr());
+
+			int i = 64;
+			str << i;
+			MUON_CHECK(str == "64", "Using operator<< with integer value failed (%s)", str.cStr());
+			str.clear();
+			float f = 42.24;
+			str << f;
+			MUON_CHECK(str == "42.24", "Using operator<< with floating value failed (%s)", str.cStr());
+			str.clear();
+			bool b = false;
+			str << b;
+			MUON_CHECK(str == "false", "Using operator<< with boolean value failed (%s)", str.cStr());
+
+			str.clear();
+			str << i << " " << f << " " << true;
+			MUON_CHECK(str == "64 42.24 true", "Chaining operator<< with different value failed (%s)", str.cStr());
+		}
 	}
 
 	// END UNIT TEST
@@ -244,5 +294,5 @@ int main(int argc, char** argv)
 #if defined(MUON_PLATFORM_WINDOWS) && defined(MUON_DEBUG)
 	::system("PAUSE");
 #endif
-	return -((muon::i32)errorCount);
+	return 0;
 }
