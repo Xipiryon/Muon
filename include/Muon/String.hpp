@@ -40,12 +40,28 @@
 */
 namespace muon
 {
-	/*! 
+	/*!
+	* @brief
+	* @param value
+	* @param buffer
+	* @param base
+	*/
+	void itoa(u64 value, char* buffer, u32 base = 10);
+
+	/*!
+	* @brief
+	* @param value
+	* @param buffer
+	* @param decimal
+	*/
+	void ftoa(f64 value, char* buffer, u32 decimal = -1);
+
+	/*!
 	* @brief Store and manipulate array of characters
 	*
 	* Every String instances have their internal representation null-terminated,
 	* so you don't have to worry about it.
-	* @see String.hpp 
+	* @see String.hpp
 	*/
 	class MUON_API String
 	{
@@ -70,7 +86,7 @@ namespace muon
 		/*!
 		* @brief Preallocate a new String with a default character
 		* @param size The size (in character number) of the new String
-		* @param c Default character. 
+		* @param c Default character.
 		* @note If default character is 0 ('\0'), the string will be considered as empty
 		*/
 		String(u32 size, char c);
@@ -221,7 +237,59 @@ namespace muon
 		*/
 		u64 hash() const;
 
+		//! Serialize a String parameter
+		String& operator<<(const String& value);
+		//! Serialize a const char* parameter
+		String& operator<<(const char* value);
+		//! Serialize an u64 parameter
+		String& operator<<(u64 value);
+		//! Serialize an u32 parameter
+		String& operator<<(u32 value);
+		//! Serialize an u16 parameter
+		String& operator<<(u16 value);
+		//! Serialize an u8 parameter
+		String& operator<<(u8 value);
+		//! Serialize an i64 parameter
+		String& operator<<(i64 value);
+		//! Serialize an i32 parameter
+		String& operator<<(i32 value);
+		//! Serialize an i16 parameter
+		String& operator<<(i16 value);
+		//! Serialize an i8 parameter
+		String& operator<<(i8 value);
+		//! Serialize a f64 parameter
+		String& operator<<(f64 value);
+		//! Serialize a f32 parameter
+		String& operator<<(f32 value);
+		//! Serialize a bool parameter
+		String& operator<<(bool value);
+
+		/*!
+		* @brief Construct a String from multiple parameters
+		*
+		*/
+		template<typename...Args>
+		static String join(Args...args)
+		{
+			String str;
+			str._join(args...);
+			return str;
+		}
+
 	private:
+		template<typename T>
+		void _join(T value)
+		{
+			*this << value;
+		}
+
+		template<typename T, typename...Args>
+		void _join(T value, Args...args)
+		{
+			*this << value;
+			_join(args...);
+		}
+
 		u32 m_charcount;
 		u32 m_memsize;
 		char* m_str;
@@ -231,7 +299,7 @@ namespace muon
 /*!
 * @brief Create a new String from a String instance and a single character
 * @param str Base String
-* @param other Single character to be appended 
+* @param other Single character to be appended
 * @return A new String
 * @code
 	String a = "hell";
@@ -242,7 +310,7 @@ namespace muon
 MUON_API muon::String operator+(const muon::String& str, const char other);
 
 /*!
-* @brief Create a new String from a String instance and a raw character array 
+* @brief Create a new String from a String instance and a raw character array
 * @param str Base String
 * @param other Raw array of characters to be appended
 * @return A new String
@@ -269,7 +337,7 @@ MUON_API muon::String operator+(const muon::String& str, const muon::String& oth
 
 /*!
 * @brief Create a new String from a raw character array and a String instance
-* @param str Base raw character array 
+* @param str Base raw character array
 * @param other String instance to be appended
 * @return A new String
 * @code

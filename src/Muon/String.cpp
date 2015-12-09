@@ -35,6 +35,17 @@
 
 namespace muon
 {
+
+	void itoa(u64 value, char* buffer, u32 base)
+	{
+		buffer[0] = 0;
+	}
+
+	void ftoa(f64 value, char* buffer, u32 decimal)
+	{
+		buffer[0] = 0;
+	}
+
 	String::String()
 		: m_str(NULL)
 		, m_charcount(0)
@@ -406,6 +417,83 @@ namespace muon
 			}
 		}
 		return v;
+	}
+
+	String& String::operator<<(const String& value)
+	{
+		*this += value;
+		return *this;
+	}
+
+	String& String::operator<<(const char* value)
+	{
+		*this += value;
+		return *this;
+	}
+
+	String& String::operator<<(u64 value)
+	{
+		char buffer[32];
+		itoa(value, buffer);
+		*this += buffer;
+		return *this;
+	}
+
+	String& String::operator<<(u32 value)
+	{
+		return *this << (u64)value;
+	}
+
+	String& String::operator<<(u16 value)
+	{
+		return *this << (u64)value;
+	}
+
+	String& String::operator<<(u8 value)
+	{
+		return *this << (u64)value;
+	}
+
+	String& String::operator<<(i64 value)
+	{
+		char buffer[32];
+		itoa(value, buffer);
+		*this += buffer;
+		return *this;
+	}
+
+	String& String::operator<<(i32 value)
+	{
+		return *this << (i64)value;
+	}
+
+	String& String::operator<<(i16 value)
+	{
+		return *this << (i64)value;
+	}
+
+	String& String::operator<<(i8 value)
+	{
+		return *this << (i64)value;
+	}
+
+	String& String::operator<<(f64 value)
+	{
+		char buffer[32];
+		ftoa(value, buffer, 10);
+		*this += buffer;
+		return *this;
+	}
+
+	String& String::operator<<(f32 value)
+	{
+		return *this << (f64)value;
+	}
+
+	String& String::operator<<(bool value)
+	{
+		*this += (value ? "true" : "false");
+		return *this;
 	}
 }
 
