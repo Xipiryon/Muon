@@ -264,9 +264,9 @@ int main(int argc, char** argv)
 			str.clear();
 			MUON_CHECK(str.empty(), "Clear failed (%s)", str.cStr());
 
-			int i = 64;
+			int i = -6424;
 			str << i;
-			MUON_CHECK(str == "64", "Using operator<< with integer value failed (%s)", str.cStr());
+			MUON_CHECK(str == "-6424", "Using operator<< with integer value failed (%s)", str.cStr());
 			str.clear();
 			float f = 42.24;
 			str << f;
@@ -277,8 +277,8 @@ int main(int argc, char** argv)
 			MUON_CHECK(str == "false", "Using operator<< with boolean value failed (%s)", str.cStr());
 
 			str.clear();
-			str << i << " " << f << " " << true;
-			MUON_CHECK(str == "64 42.24 true", "Chaining operator<< with different value failed (%s)", str.cStr());
+			str << 84765 << " " << f << " " << true;
+			MUON_CHECK(str == "84765 42.24 true", "Chaining operator<< with different value failed (%s)", str.cStr());
 		}
 	}
 

@@ -38,7 +38,54 @@ namespace muon
 
 	void itoa(u64 value, char* buffer, u32 base)
 	{
-		buffer[0] = 0;
+		u32 i = 0;
+		char c = 0;
+		while(value > 0)
+		{
+			c = '0' + (value % 10);
+			buffer[i++] = c;
+			value /= 10;
+		}
+
+		for (u32 b = 0; b <= (i >> 2); ++b)
+		{
+			u32 e = (i - b) - 1;
+			buffer[b] ^= buffer[e];
+			buffer[e] ^= buffer[b];
+			buffer[b] ^= buffer[e];
+		}
+
+		buffer[i] = 0;
+	}
+
+	void itoa(i64 value, char* buffer, u32 base)
+	{
+		bool neg = value < 0;
+		if(neg) value = -value;
+
+		u32 i = 0;
+		char c = 0;
+		while(value > 0)
+		{
+			c = '0' + (value % 10);
+			buffer[i++] = c;
+			value /= 10;
+		}
+
+		if(neg)
+		{
+			buffer[i++] = '-';
+		}
+
+		for (u32 b = 0; b <= (i >> 2); ++b)
+		{
+			u32 e = (i - b) - 1;
+			buffer[b] ^= buffer[e];
+			buffer[e] ^= buffer[b];
+			buffer[b] ^= buffer[e];
+		}
+
+		buffer[i] = 0;
 	}
 
 	void ftoa(f64 value, char* buffer, u32 decimal)

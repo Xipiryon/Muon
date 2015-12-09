@@ -52,6 +52,14 @@ namespace muon
 	* @brief
 	* @param value
 	* @param buffer
+	* @param base
+	*/
+	void itoa(i64 value, char* buffer, u32 base = 10);
+
+	/*!
+	* @brief
+	* @param value
+	* @param buffer
 	* @param decimal
 	*/
 	void ftoa(f64 value, char* buffer, u32 decimal = -1);
