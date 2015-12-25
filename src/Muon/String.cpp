@@ -25,8 +25,10 @@
 *
 *************************************************************************/
 
+#include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <cmath>
 
 #include "Muon/IO/IStream.hpp"
 #include "Muon/System/Log.hpp"
@@ -36,61 +38,68 @@
 namespace muon
 {
 
-	void itoa(u64 value, char* buffer, u32 base)
+	void itoa(u64 value, char* buffer)
 	{
-		u32 i = 0;
-		char c = 0;
-		while(value > 0)
+		if(value == 0)
 		{
-			c = '0' + (value % 10);
-			buffer[i++] = c;
-			value /= 10;
+			*(buffer++) = '0';
+			*buffer = 0;
+			return;
 		}
 
-		for (u32 b = 0; b <= (i >> 2); ++b)
+		u32 l = log10(value);
+		u32 p;
+		u32 d;
+		do
 		{
-			u32 e = (i - b) - 1;
-			buffer[b] ^= buffer[e];
-			buffer[e] ^= buffer[b];
-			buffer[b] ^= buffer[e];
-		}
+			p = pow(10, l--);
+			d = value / p;
+			*(buffer++) = '0' + d;
+			value %= p;
+		} while(p > 1);
 
-		buffer[i] = 0;
+		*buffer = 0;
 	}
 
-	void itoa(i64 value, char* buffer, u32 base)
+	void itoa(i64 value, char* buffer)
 	{
-		bool neg = value < 0;
-		if(neg) value = -value;
-
-		u32 i = 0;
-		char c = 0;
-		while(value > 0)
+		if(value < 0)
 		{
-			c = '0' + (value % 10);
-			buffer[i++] = c;
-			value /= 10;
+			value = -value;
+			*(buffer++) = '-';
 		}
-
-		if(neg)
-		{
-			buffer[i++] = '-';
-		}
-
-		for (u32 b = 0; b <= (i >> 2); ++b)
-		{
-			u32 e = (i - b) - 1;
-			buffer[b] ^= buffer[e];
-			buffer[e] ^= buffer[b];
-			buffer[b] ^= buffer[e];
-		}
-
-		buffer[i] = 0;
+		itoa((u64)value, buffer);
 	}
 
-	void ftoa(f64 value, char* buffer, u32 decimal)
+	void ftoa(f64 value, char* buffer)
 	{
-		buffer[0] = 0;
+		/*
+		f64 m = 10e-8;
+		itoa((i64)value, buffer);
+		value = (value < 0 ? -value : value);
+
+		f64 f[2] = {0.0};
+		value = modf(value, f);		// Retrieve only the fractional par
+		f[1] = modf(value*10, f);
+
+		if(f[1] <= m)
+		{
+			*buffer = 0;
+			return;
+		}
+
+		while(*(++buffer));
+		*(buffer++) = '.';
+
+		while (f[1] > m)// && decimal-- >= 0)
+		{
+			*(buffer++) = '0' + round(f[0]);
+			f[1] = modf(f[1]*10.0, f);
+			m *= 10;
+		}
+		*buffer = 0;
+		// */
+		sprintf(buffer, "%lf", value);
 	}
 
 	String::String()
@@ -527,7 +536,7 @@ namespace muon
 	String& String::operator<<(f64 value)
 	{
 		char buffer[32];
-		ftoa(value, buffer, 10);
+		ftoa(value, buffer);
 		*this += buffer;
 		return *this;
 	}

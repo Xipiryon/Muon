@@ -46,7 +46,7 @@ namespace muon
 	* @param buffer
 	* @param base
 	*/
-	void itoa(u64 value, char* buffer, u32 base = 10);
+	void itoa(u64 value, char* buffer);
 
 	/*!
 	* @brief
@@ -54,7 +54,7 @@ namespace muon
 	* @param buffer
 	* @param base
 	*/
-	void itoa(i64 value, char* buffer, u32 base = 10);
+	void itoa(i64 value, char* buffer);
 
 	/*!
 	* @brief
@@ -62,7 +62,7 @@ namespace muon
 	* @param buffer
 	* @param decimal
 	*/
-	void ftoa(f64 value, char* buffer, u32 decimal = -1);
+	void ftoa(f64 value, char* buffer);
 
 	/*!
 	* @brief Store and manipulate array of characters
