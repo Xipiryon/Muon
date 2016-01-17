@@ -47,14 +47,14 @@ namespace muon
 			return;
 		}
 
-		u32 l = log10(value);
-		u32 p;
-		u32 d;
+		u64 l = (u64)log10(value);
+		u64 p;
+		u64 d;
 		do
 		{
-			p = pow(10, l--);
+			p = (u64)pow(10, l--);
 			d = value / p;
-			*(buffer++) = '0' + d;
+			*(buffer++) = '0' + (char)d;
 			value %= p;
 		} while(p > 1);
 
