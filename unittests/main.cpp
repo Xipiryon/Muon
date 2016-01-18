@@ -268,11 +268,12 @@ int main(int argc, char** argv)
 			str << i;
 			MUON_CHECK(str == "-6424", "Using operator<< with integer value failed (%s)", str.cStr());
 			str.clear();
+
 			// Because of float and decimal approximation, this test could be
 			// considerer as "false positive"
-			float f = 42.852100;
+			float f = 42.8521003;
 			str << f;
-			MUON_CHECK(str == "42.852100", "Using operator<< with floating value failed (%s)", str.cStr());
+			MUON_CHECK(str == "42.8521003", "Using operator<< with floating value failed (%s)", str.cStr());
 
 			str.clear();
 			bool b = false;
@@ -280,8 +281,8 @@ int main(int argc, char** argv)
 			MUON_CHECK(str == "false", "Using operator<< with boolean value failed (%s)", str.cStr());
 
 			str.clear();
-			str << 84765 << " " << -42.852100 << " " << true;
-			MUON_CHECK(str == "84765 -42.852100 true", "Chaining operator<< with different value failed (%s)", str.cStr());
+			str << 84765 << " " << -0.420 << " " << true;
+			MUON_CHECK(str == "84765 -0.42 true", "Chaining operator<< with different value failed (%s)", str.cStr());
 		}
 	}
 

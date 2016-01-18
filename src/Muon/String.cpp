@@ -73,33 +73,39 @@ namespace muon
 
 	void ftoa(f64 value, char* buffer)
 	{
-		/*
+		char* buf = buffer;
+		std::cout << value << std::endl;
 		f64 m = 10e-8;
-		itoa((i64)value, buffer);
+		if(value < 0)
+		{
+			value = -value;
+			*(buffer++) = '-';
+		}
+		itoa((u64)value, buffer);
 		value = (value < 0 ? -value : value);
 
 		f64 f[2] = {0.0};
 		value = modf(value, f);		// Retrieve only the fractional par
 		f[1] = modf(value*10, f);
 
+		while(*(++buffer));
+		*(buffer++) = '.';
+
 		if(f[1] <= m)
 		{
+			*(buffer++) = '0';
 			*buffer = 0;
 			return;
 		}
 
-		while(*(++buffer));
-		*(buffer++) = '.';
-
-		while (f[1] > m)// && decimal-- >= 0)
+		while (f[1] > m)
 		{
 			*(buffer++) = '0' + round(f[0]);
 			f[1] = modf(f[1]*10.0, f);
 			m *= 10;
 		}
+		*(buffer++) = '0' + round(f[0]);
 		*buffer = 0;
-		// */
-		sprintf(buffer, "%lf", value);
 	}
 
 	String::String()
