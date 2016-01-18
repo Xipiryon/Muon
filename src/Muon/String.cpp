@@ -153,7 +153,7 @@ namespace muon
 			if (c != 0)
 			{
 				m_charcount = size;
-				::memcpy(m_str, &c, m_memsize);
+				::memset(m_str, c, m_memsize);
 				*(m_str + m_charcount) = 0;
 			}
 			else
