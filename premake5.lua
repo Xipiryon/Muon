@@ -33,8 +33,9 @@ solution "Muon"
 
 	if os.is("windows") then
 		implibdir "bin/lib"
+		buildoptions { "/GR-" }
 	else
-		buildoptions { "--std=c++11" }
+		buildoptions { "--std=c++11 -fno-rtti" }
 		linkoptions { "-Wl,-rpath,bin/lib" }
 	end
 
