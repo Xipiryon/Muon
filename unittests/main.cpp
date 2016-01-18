@@ -271,9 +271,9 @@ int main(int argc, char** argv)
 
 			// Because of float and decimal approximation, this test could be
 			// considerer as "false positive"
-			float f = 42.8521003;
+			float f = 42.85210037;
 			str << f;
-			MUON_CHECK(str == "42.8521003", "Using operator<< with floating value failed (%s)", str.cStr());
+			MUON_CHECK(str == "42.85210037", "Using operator<< with floating value failed (%s)", str.cStr());
 
 			str.clear();
 			bool b = false;

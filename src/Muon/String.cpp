@@ -74,7 +74,6 @@ namespace muon
 	void ftoa(f64 value, char* buffer)
 	{
 		char* buf = buffer;
-		std::cout << value << std::endl;
 		f64 m = 10e-8;
 		if(value < 0)
 		{
