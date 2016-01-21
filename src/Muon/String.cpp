@@ -181,31 +181,6 @@ namespace muon
 		return *(m_str + i);
 	}
 
-
-	bool String::operator==(const char* other) const
-	{
-		if (m_str == NULL || other == NULL)
-		{
-			return false;
-		}
-		return (strcmp(m_str, other) == 0);
-	}
-
-	bool String::operator!=(const char* other) const
-	{
-		return !(*this == other);
-	}
-
-	bool String::operator==(const String& other) const
-	{
-		return (*this == other.cStr());
-	}
-
-	bool String::operator!=(const String& other) const
-	{
-		return !(*this == other);
-	}
-
 	String& String::operator+=(const char* other)
 	{
 		if (other)
@@ -556,35 +531,75 @@ namespace muon
 		*this += (value ? "true" : "false");
 		return *this;
 	}
-}
 
-muon::String operator+(const muon::String& str, const char* other)
-{
-	muon::String s(str);
-	s += other;
-	return s;
-}
+	String operator+(const String& str, const char* other)
+	{
+		String s(str);
+		s += other;
+		return s;
+	}
 
-muon::String operator+(const muon::String& str, const muon::String& other)
-{
-	muon::String s(str);
-	s += other;
-	return s;
-}
+	String operator+(const String& str, const String& other)
+	{
+		String s(str);
+		s += other;
+		return s;
+	}
 
-muon::String operator+(const muon::String& str, const char c)
-{
-	muon::String s(str);
-	s += c;
-	return s;
-}
+	String operator+(const String& str, const char c)
+	{
+		String s(str);
+		s += c;
+		return s;
+	}
 
-muon::String operator+(const char* str, const muon::String& other)
-{
-	return muon::String(str) + other;
-}
+	String operator+(const char* str, const String& other)
+	{
+		return String(str) + other;
+	}
 
-muon::system::ILogImpl& operator<<(muon::system::ILogImpl& log, const muon::String& str)
-{
-	return (log << str.cStr());
+	bool operator==(const String& str, const String& other)
+	{
+		if (str.cStr() == NULL || other.cStr() == NULL)
+		{
+			return false;
+		}
+		return (strcmp(str.cStr(), other.cStr()) == 0);
+	}
+
+	bool operator!=(const String& str, const String& other)
+	{
+		return !(str == other);
+	}
+
+	bool operator!=(const String& str, const char* other)
+	{
+		return !(str == other);
+	}
+
+	bool operator<(const String& str, const String& other)
+	{
+		return (::strcmp(str.cStr(), other.cStr()) < 0);
+	}
+
+	bool operator<=(const String& str, const String& other)
+	{
+		return (str == other || str < other);
+	}
+
+	bool operator>(const String& str, const String& other)
+	{
+		return !(str < other);
+	}
+
+	bool operator>=(const String& str, const String& other)
+	{
+		return (str == other || str > other);
+	}
+
+	system::ILogImpl& operator<<(system::ILogImpl& log, const String& str)
+	{
+		return (log << str.cStr());
+	}
+
 }

@@ -129,11 +129,6 @@ namespace muon
 		*/
 		char& operator[](u32 i);
 
-		bool operator==(const char* other) const;
-		bool operator!=(const char* other) const;
-		bool operator==(const muon::String& other) const;
-		bool operator!=(const muon::String& other) const;
-
 		muon::String& operator+=(const char* other);
 		muon::String& operator+=(const muon::String& other);
 		muon::String& operator+=(const char c);
@@ -271,7 +266,8 @@ namespace muon
 
 		/*!
 		* @brief Construct a String from multiple parameters
-		*
+		* It requires that every argument overload at least String operator<<()
+		* @param Args every arguments
 		*/
 		template<typename...Args>
 		static String join(Args...args)
@@ -299,61 +295,70 @@ namespace muon
 		u32 m_memsize;
 		char* m_str;
 	};
+
+	/*!
+	* @brief Create a new String from a String instance and a single character
+	* @param str Base String
+	* @param other Single character to be appended
+	* @return A new String
+	* @code
+		String a = "hell";
+		char b = 'o';
+		String c = a + b; // "hello"
+	* @endcode
+	*/
+	MUON_API String operator+(const String& str, const char other);
+
+	/*!
+	* @brief Create a new String from a String instance and a raw character array
+	* @param str Base String
+	* @param other Raw array of characters to be appended
+	* @return A new String
+	* @code
+		String a = "he";
+		char b[] = "llo";
+		String c = a + b; // "hello"
+	* @endcode
+	*/
+	MUON_API String operator+(const String& str, const char* other);
+
+	/*!
+	* @brief Create a new String from two String instances
+	* @param str Base String
+	* @param other Other String instance
+	* @return A new String
+	* @code
+		String a = "he";
+		String b = "llo";
+		String c = a + b; // "hello"
+	* @endcode
+	*/
+	MUON_API String operator+(const String& str, const String& other);
+
+	/*!
+	* @brief Create a new String from a raw character array and a String instance
+	* @param str Base raw character array
+	* @param other String instance to be appended
+	* @return A new String
+	* @code
+		char a[] = "he";
+		String b = "llo";
+		String c = a + b; // "hello"
+	* @endcode
+	*/
+	MUON_API String operator+(const char* str, const String& other);
+
+
+	MUON_API bool operator==(const String& str, const String& other);
+	MUON_API bool operator!=(const String& str, const String& other);
+	MUON_API bool operator<(const String& str, const String& other);
+	MUON_API bool operator<=(const String& str, const String& other);
+	MUON_API bool operator>(const String& str, const String& other);
+	MUON_API bool operator>=(const String& str, const String& other);
+
+
+	MUON_API system::ILogImpl& operator<<(system::ILogImpl& log, const String& str);
 }
-
-/*!
-* @brief Create a new String from a String instance and a single character
-* @param str Base String
-* @param other Single character to be appended
-* @return A new String
-* @code
-	String a = "hell";
-	char b = 'o';
-	String c = a + b; // "hello"
-* @endcode
-*/
-MUON_API muon::String operator+(const muon::String& str, const char other);
-
-/*!
-* @brief Create a new String from a String instance and a raw character array
-* @param str Base String
-* @param other Raw array of characters to be appended
-* @return A new String
-* @code
-	String a = "he";
-	char b[] = "llo";
-	String c = a + b; // "hello"
-* @endcode
-*/
-MUON_API muon::String operator+(const muon::String& str, const char* other);
-
-/*!
-* @brief Create a new String from two String instances
-* @param str Base String
-* @param other Other String instance
-* @return A new String
-* @code
-	String a = "he";
-	String b = "llo";
-	String c = a + b; // "hello"
-* @endcode
-*/
-MUON_API muon::String operator+(const muon::String& str, const muon::String& other);
-
-/*!
-* @brief Create a new String from a raw character array and a String instance
-* @param str Base raw character array
-* @param other String instance to be appended
-* @return A new String
-* @code
-	char a[] = "he";
-	String b = "llo";
-	String c = a + b; // "hello"
-* @endcode
-*/
-MUON_API muon::String operator+(const char* str, const muon::String& other);
-
-MUON_API muon::system::ILogImpl& operator<<(muon::system::ILogImpl& log, const muon::String& str);
 
 MUON_TRAITS(muon::String)
 MUON_META_USEPOINTER(muon::String);

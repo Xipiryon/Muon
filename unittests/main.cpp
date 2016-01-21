@@ -283,6 +283,19 @@ int main(int argc, char** argv)
 			str.clear();
 			str << 84765 << " " << -0.420 << " " << true;
 			MUON_CHECK(str == "84765 -0.42 true", "Chaining operator<< with different value failed (%s)", str.cStr());
+
+			str.clear();
+			{
+				muon::String other = "abcdef";
+				str = "abcd";
+				MUON_CHECK(str < other, "String::operator< returned a wrong value (%s < %s)", str.cStr(), other.cStr());
+
+				str = "abcdefg";
+				MUON_CHECK(str > other, "String::operator> returned a wrong value (%s > %s)", str.cStr(), other.cStr());
+
+				str = "aBcdefgh";
+				MUON_CHECK(str < "abcdef", "String::operator< returned a wrong value (%s < %s)", str.cStr(), other.cStr());
+			}
 		}
 	}
 
