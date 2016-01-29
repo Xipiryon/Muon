@@ -99,11 +99,11 @@ namespace muon
 
 		while (f[1] > m)
 		{
-			*(buffer++) = '0' + round(f[0]);
+			*(buffer++) = '0' + (char)round(f[0]);
 			f[1] = modf(f[1]*10.0, f);
 			m *= 10;
 		}
-		*(buffer++) = '0' + round(f[0]);
+		*(buffer++) = '0' + (char)round(f[0]);
 		*buffer = 0;
 	}
 
