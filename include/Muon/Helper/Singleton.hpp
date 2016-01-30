@@ -28,6 +28,7 @@
 #ifndef INCLUDE_MUON_SINGLETON_HPP
 #define INCLUDE_MUON_SINGLETON_HPP
 
+#include "Muon/System/Assert.hpp"
 #include "Muon/Helper/NonCopyable.hpp"
 
 /*
