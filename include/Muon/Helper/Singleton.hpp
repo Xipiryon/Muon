@@ -67,18 +67,18 @@ namespace muon
 			* @brief Create the unique instance of the class T
 			* @return the unique instance of T
 			*/
-			static T& instantiate()
+			static T& createInstance()
 			{
 				MUON_ASSERT(!s_instance, "Singleton instance already created!");
 				static T gInstance;
 				s_instance = &gInstance;
-				return get();
+				return getInstance();
 			}
 
 			/*!
 			* @brief Return the unique instance of T
 			*/
-			static T& get()
+			static T& getInstance()
 			{
 				MUON_ASSERT_BREAK(s_instance, "Singleton instance has not been created!");
 				return *s_instance;
