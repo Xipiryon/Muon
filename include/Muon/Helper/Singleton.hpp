@@ -92,13 +92,6 @@ namespace muon
 				return s_instance != NULL;
 			}
 
-		protected:
-
-			Singleton()
-				: NonCopyable()
-			{
-			}
-
 		private:
 			static T* s_instance;
 		};

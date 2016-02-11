@@ -30,7 +30,8 @@
 
 #include <map>
 #include <deque>
-#include "Muon/Memory/Allocator.hpp"
+#include "Muon/Memory/RawAllocator.hpp"
+#include "Muon/System/Assert.hpp"
 
 #ifndef POOLALLOCATOR_SIZE
 #	define POOLALLOCATOR_SIZE 4096
@@ -72,7 +73,7 @@ namespace muon
 		* @brief
 		*
 		*/
-		class MUON_API PoolAllocator : public helper::NonInstantiable
+		class MUON_API PoolAllocator
 		{
 		public:
 
