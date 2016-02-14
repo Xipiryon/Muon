@@ -51,7 +51,7 @@ namespace muon
 			template<typename T>
 			T* allocate(u64 n, const void * = 0)
 			{
-				return (T*)::malloc(n * sizeof(T));
+				return (T*)::malloc((u32)n * sizeof(T));
 			}
 
 			template<typename T>
@@ -61,6 +61,12 @@ namespace muon
 				{
 					::free(p);
 				}
+			}
+
+			template<typename T>
+			void construct(T* p)
+			{
+				new ((T*) p) T();
 			}
 
 			template<typename T>
