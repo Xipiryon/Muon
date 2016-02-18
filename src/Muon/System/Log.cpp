@@ -253,11 +253,6 @@ namespace muon
 			return false;
 		}
 
-		bool Log::registerDefaultLogImpl()
-		{
-			return registerLogImpl(&m_defaultLogImpl);
-		}
-
 		bool Log::unregisterLogImpl(ILogImpl* logImpl)
 		{
 			auto& logImplList = privGetLogImpl();
@@ -270,6 +265,16 @@ namespace muon
 				}
 			}
 			return false;
+		}
+
+		bool Log::registerDefaultLogImpl()
+		{
+			return registerLogImpl(&m_defaultLogImpl);
+		}
+
+		bool Log::unregisterDefaultLogImpl()
+		{
+			return unregisterLogImpl(&m_defaultLogImpl);
 		}
 
 		void Log::clearLogImpl()

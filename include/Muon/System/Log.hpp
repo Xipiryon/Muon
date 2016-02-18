@@ -66,7 +66,7 @@ namespace muon
 	//! System classes are used to check, assert or log data
 	namespace system
 	{
-		/*! 
+		/*!
 		* @brief Create a Log instance to display message or informations
 		*
 		*/
@@ -101,10 +101,20 @@ namespace muon
 			* This method will register a Log implementation,
 			* which will be used to redirect output stream.
 			* @return true if the implementation has been added, false if already added or couldn't be added
-			* @note The Engine won't deep-copy the implementation. 
+			* @note The Engine won't deep-copy the implementation.
 			* Deleting it while still registered will likely cause the engine to crash.
 			*/
 			static bool registerLogImpl(ILogImpl* logImpl);
+
+			/*!
+			* @brief Clear a specific registered ILogImpl
+			* @param logImpl Pointer to the registered ILogImpl instance
+			* @return true if the implementation has been removed, false if already removed or not registered
+			* @note ILogImpl instances will not be deleted by the engine.
+			* You always should keep a pointer to your custom implementation,
+			* and deleting it after a call to unregisterLogImpl() or clearLogImpl().
+			*/
+			static bool unregisterLogImpl(ILogImpl* logImpl);
 
 			/*!
 			* @brief Register default ILogImpl
@@ -115,21 +125,18 @@ namespace muon
 			static bool registerDefaultLogImpl();
 
 			/*!
-			* @brief Clear a specific registered ILogImpl
-			* @param logImpl Pointer to the registered ILogImpl instance
-			* @return true if the implementation has been removed, false if already removed or not registered
-			* @note ILogImpl instances will not be deleted by the engine.
-			* You always should keep a pointer to your custom implementation, 
-			* and deleting it after a call to unregisterLogImpl() or clearLogImpl().
+			* @brief Unegister default ILogImpl
+			* If the default log impl was registered, remove it.
+			* @return true if the implementation has been removed, false otherwise
 			*/
-			static bool unregisterLogImpl(ILogImpl* logImpl);
+			static bool unregisterDefaultLogImpl();
 
 			/*!
 			* @brief Clear all ILogImpl registered
 			* If for any reason you have to clear every registered
 			* ILogImpl classes, then uses this method.
 			* @note ILogImpl instances will not be deleted by the engine.
-			* You always should keep a pointer to your custom implementation, 
+			* You always should keep a pointer to your custom implementation,
 			* and deleting it after a call to unregisterLogImpl() or clearLogImpl().
 			*/
 			static void clearLogImpl();
