@@ -249,10 +249,11 @@ namespace muon
 		{
 			m_str = (char*)::malloc(sizeof(char) * (size + 1));
 			MUON_ASSERT_BREAK(m_str != NULL, "resize() failed!");
-			::strncpy(m_str, cpy.m_str, cpy.m_charcount < size ? cpy.m_charcount : size);
+			u32 ncount = cpy.m_charcount < size ? cpy.m_charcount : size;
+			::strncpy(m_str, cpy.m_str, ncount);
 			*(m_str + size) = 0;
-			m_memsize = cpy.m_memsize;
-			m_charcount = cpy.m_charcount;
+			m_memsize = size;
+			m_charcount = ncount;
 		}
 	}
 
