@@ -91,39 +91,39 @@ namespace muon
 }
 
 /*!
-* @def MUON_NEW(Class)
+* @def MUON_MALLOC(Class)
 * Allocate memory for given Class instance
 * @param Class Class or Struct to be allocated
 */
-#define MUON_NEW(Class) (Class*)::malloc(sizeof(Class))
+#define MUON_MALLOC(Class) (Class*)::malloc(sizeof(Class))
 
 /*!
-* @def MUON_CNEW(Class, ...)
+* @def MUON_NEW(Class, ...)
 * Allocate memory for given Class instance, and
 * call the placement new constructor on it.
 * @param Class Class or Struct to be allocated and constructed
 * @param ... Variadic parameters to be forwarded to the constructor
 */
 #if defined(MUON_PLATFORM_WINDOWS)
-#	define MUON_CNEW(Class, ...) new (MUON_NEW(Class)) Class( __VA_ARGS__ )
+#	define MUON_NEW(Class, ...) new (MUON_MALLOC(Class)) Class( __VA_ARGS__ )
 #else
-#	define MUON_CNEW(Class, args...) new (MUON_NEW(Class)) Class(args)
+#	define MUON_NEW(Class, args...) new (MUON_MALLOC(Class)) Class(args)
 #endif //MUON_PLATFORM_WINDOWS
 
 /*!
-* @def MUON_DELETE(Pointer)
+* @def MUON_FREE(Pointer)
 * Free an object memory
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be freed from memory
 */
-#define MUON_DELETE(Pointer) ::free(Pointer)
+#define MUON_FREE(Pointer) ::free(Pointer)
 
 /*!
-* @def MUON_CDELETE(Pointer)
+* @def MUON_DELETE(Pointer)
 * Call the destructor on Pointer, and free the object
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be destructed and freed from memory
 */
-#define MUON_CDELETE(Pointer) (MUON_DELETE(Pointer), Pointer)
+#define MUON_DELETE(Pointer) (MUON_FREE(Pointer), Pointer)
 
 #endif

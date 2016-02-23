@@ -34,14 +34,14 @@ namespace muon
 	namespace meta
 	{
 		MetaDatabase::MetaDatabase()
-			: m_metadb(MUON_CNEW(MapMetaType))
+			: m_metadb(MUON_NEW(MapMetaType))
 		{
 			registerInternal();
 		}
 
 		MetaDatabase::~MetaDatabase()
 		{
-			MUON_CDELETE(m_metadb);
+			MUON_DELETE(m_metadb);
 		}
 
 		MetaData* MetaDatabase::createMeta(const String& name)

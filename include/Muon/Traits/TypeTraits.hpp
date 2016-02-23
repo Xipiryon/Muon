@@ -71,9 +71,9 @@ namespace priv
 #define _MUON_TRAITS_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return MUON_STR(Type); }
 #define _MUON_TRAITS_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u64 id() {using namespace ::priv; return ::muon::traits::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
 #define _MUON_TRAITS_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u32 size() { return sizeof(Type); }
-#define _MUON_TRAITS_CREATE(Type) static MUON_INLINE Type* create() { return MUON_CNEW(Type); }
+#define _MUON_TRAITS_CREATE(Type) static MUON_INLINE Type* create() { return MUON_NEW(Type); }
 #define _MUON_TRAITS_COPY(Type) static MUON_INLINE void copy(Type* ptr, Type* val) { *ptr = *val; }
-#define _MUON_TRAITS_DESTROY(Type) static MUON_INLINE void destroy(Type* ptr) { MUON_CDELETE(ptr); }
+#define _MUON_TRAITS_DESTROY(Type) static MUON_INLINE void destroy(Type* ptr) { MUON_DELETE(ptr); }
 
 #define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_NAME(Type) _MUON_TRAITS_ID(Type) _MUON_TRAITS_SIZE(Type) _MUON_TRAITS_CREATE(Type) _MUON_TRAITS_COPY(Type) _MUON_TRAITS_DESTROY(Type);
 #define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };

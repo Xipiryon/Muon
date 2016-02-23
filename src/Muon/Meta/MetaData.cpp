@@ -90,8 +90,8 @@ namespace muon
 		// *****************************
 		void MetaData::init()
 		{
-			m_members = MUON_CNEW(MetaMemberMap);
-			m_methods = MUON_CNEW(MetaMethodMap);
+			m_members = MUON_NEW(MetaMemberMap);
+			m_methods = MUON_NEW(MetaMethodMap);
 		}
 
 		MetaData::MetaData()
@@ -125,8 +125,8 @@ namespace muon
 
 		MetaData::~MetaData()
 		{
-			MUON_CDELETE(m_members);
-			MUON_CDELETE(m_methods);
+			MUON_DELETE(m_members);
+			MUON_DELETE(m_methods);
 		}
 
 		const char* MetaData::name() const

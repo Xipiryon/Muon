@@ -148,7 +148,7 @@ namespace
 		}
 
 		//Not existing: adding
-		KeyValueInfo* kvi = MUON_CNEW(KeyValueInfo, type);
+		KeyValueInfo* kvi = MUON_NEW(KeyValueInfo, type);
 		kvi->nameInfo = name;
 		switch (type)
 		{
