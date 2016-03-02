@@ -33,7 +33,7 @@
 /*
 * @file NonInstantiable.hpp
 */
-namespace muon
+namespace m
 {
 	namespace helper
 	{

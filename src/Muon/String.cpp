@@ -35,7 +35,7 @@
 #include "Muon/System/Assert.hpp"
 #include "Muon/String.hpp"
 
-namespace muon
+namespace m
 {
 
 	void itoa(u64 value, char* buffer)
@@ -185,7 +185,7 @@ namespace muon
 	{
 		if (other)
 		{
-			muon::u32 size = ::strlen(other);
+			m::u32 size = ::strlen(other);
 			//Realloc only if needed
 			if (m_charcount + size >= m_memsize)
 			{

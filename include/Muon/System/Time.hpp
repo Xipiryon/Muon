@@ -32,7 +32,7 @@
 #include "Muon/Core/Typedef.hpp"
 #include "Muon/Traits/TypeTraits.hpp"
 
-namespace muon
+namespace m
 {
 	namespace system
 	{
@@ -64,6 +64,6 @@ namespace muon
 	}
 }
 
-MUON_TRAITS(muon::system::Time)
-MUON_TRAITS(muon::system::Timer)
+MUON_TRAITS(m::system::Time)
+MUON_TRAITS(m::system::Timer)
 #endif

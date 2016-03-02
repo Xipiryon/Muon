@@ -30,7 +30,7 @@
 #include "Muon/Meta/MetaData.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
 
-namespace muon
+namespace m
 {
 	namespace meta
 	{
@@ -95,7 +95,7 @@ namespace muon
 		}
 
 		MetaData::MetaData()
-			: MetaData(muon::traits::TypeTraits<void>())
+			: MetaData(m::traits::TypeTraits<void>())
 		{
 			init();
 		}

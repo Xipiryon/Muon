@@ -35,7 +35,7 @@
 /*
 * @file Allocator.hpp
 */
-namespace muon
+namespace m
 {
 	namespace memory
 	{

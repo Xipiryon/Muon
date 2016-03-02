@@ -31,7 +31,7 @@
 #include "Muon/Core/Constant.hpp"
 #include "Muon/Core/Typedef.hpp"
 
-namespace muon
+namespace m
 {
 	namespace system
 	{
@@ -51,7 +51,7 @@ namespace muon
 
 #elif defined(MUON_PLATFORM_WINDOWS)
 
-#	define _MUON_ASSERT(format, ...) muon::system::assertMessage(__FILE__, __FUNCTION__, __LINE__, format, __VA_ARGS__)
+#	define _MUON_ASSERT(format, ...) m::system::assertMessage(__FILE__, __FUNCTION__, __LINE__, format, __VA_ARGS__)
 #	define MUON_ASSERT(cond, format, ...) do { if ((cond) == false) { _MUON_ASSERT(format, __VA_ARGS__); } } while(0)
 #	define MUON_ASSERT_BREAK(cond, format, ...) do { if ((cond) == false) { _MUON_ASSERT(format, __VA_ARGS__); MUON_ASM_BREAK;} } while(0)
 #	define MUON_ERROR(format, ...) do { _MUON_ASSERT(format, __VA_ARGS__); } while(0)
@@ -59,7 +59,7 @@ namespace muon
 
 #else
 
-#	define _MUON_ASSERT(format, args...) muon::system::assertMessage(__FILE__, __FUNCTION__, __LINE__, format, ##args)
+#	define _MUON_ASSERT(format, args...) m::system::assertMessage(__FILE__, __FUNCTION__, __LINE__, format, ##args)
 #	define MUON_ASSERT(cond, format, args...) do { if ((cond) == false) { _MUON_ASSERT(format, ##args); } } while(0)
 #	define MUON_ASSERT_BREAK(cond, format, args...) do { if ((cond) == false) { _MUON_ASSERT(format, ##args); MUON_ASM_BREAK;} } while(0)
 #	define MUON_ERROR(format, args...) do { _MUON_ASSERT(format, ##args); } while(0)

@@ -42,7 +42,7 @@ static_assert(POOLALLOCATOR_SIZE != 0, "POOLALLOCATOR_SIZE cannot be defined as 
 /*
 * @file PoolAllocator.hpp
 */
-namespace muon
+namespace m
 {
 	namespace memory
 	{
@@ -172,7 +172,7 @@ namespace muon
 
 				if (assert)
 				{
-					MUON_ERROR_BREAK("Object %p has not been allocated with muon::memory::PoolAllocator!", ptr);
+					MUON_ERROR_BREAK("Object %p has not been allocated with m::memory::PoolAllocator!", ptr);
 				}
 			}
 

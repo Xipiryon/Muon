@@ -36,7 +36,7 @@
 /*!
 * @file MetaData.hpp
 */
-namespace muon
+namespace m
 {
 	//! Meta classes are used mostly for reflection system
 	namespace meta

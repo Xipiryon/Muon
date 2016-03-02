@@ -31,7 +31,7 @@
 #include "Muon/String.hpp"
 #include "Muon/Variant.hpp"
 
-namespace muon
+namespace m
 {
 	namespace meta
 	{
@@ -61,8 +61,8 @@ namespace muon
 			registerMeta<system::Time>();
 			registerMeta<system::Timer>();
 
-			registerMeta<muon::String>();
-			registerMeta<muon::Variant>();
+			registerMeta<m::String>();
+			registerMeta<m::Variant>();
 		}
 	}
 }

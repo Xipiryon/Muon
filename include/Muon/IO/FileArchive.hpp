@@ -32,7 +32,7 @@
 
 #include "Muon/IO/IStream.hpp"
 
-namespace muon
+namespace m
 {
 	namespace io
 	{

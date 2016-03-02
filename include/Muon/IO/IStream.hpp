@@ -32,7 +32,7 @@
 #include "Muon/IO/ISerializable.hpp"
 #include "Muon/String.hpp"
 
-namespace muon
+namespace m
 {
 	namespace io
 	{

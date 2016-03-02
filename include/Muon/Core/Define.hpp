@@ -38,7 +38,7 @@
 
 enum { s_namespaceMuon = false };
 //! Library main namespace
-namespace muon { enum { s_namespaceMuon = true }; }
+namespace m { enum { s_namespaceMuon = true }; }
 
 //		--------------------------
 //				EXPORT

@@ -34,7 +34,7 @@
 * @file Constant.hpp
 */
 
-namespace muon
+namespace m
 {
 	/*!
 	* @brief PI constant as float

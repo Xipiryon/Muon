@@ -27,7 +27,7 @@
 
 #include "Muon/Memory/PoolAllocator.hpp"
 
-namespace muon
+namespace m
 {
 	namespace memory
 	{

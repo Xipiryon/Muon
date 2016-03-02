@@ -38,7 +38,7 @@
 /*!
 * @file String.hpp
 */
-namespace muon
+namespace m
 {
 	/*!
 	* @brief
@@ -129,9 +129,9 @@ namespace muon
 		*/
 		char& operator[](u32 i);
 
-		muon::String& operator+=(const char* other);
-		muon::String& operator+=(const muon::String& other);
-		muon::String& operator+=(const char c);
+		m::String& operator+=(const char* other);
+		m::String& operator+=(const m::String& other);
+		m::String& operator+=(const char c);
 
 		/*!
 		* @brief Return a raw character array
@@ -360,17 +360,17 @@ namespace muon
 	MUON_API system::ILogImpl& operator<<(system::ILogImpl& log, const String& str);
 }
 
-MUON_TRAITS(muon::String)
-MUON_META_USEPOINTER(muon::String);
+MUON_TRAITS(m::String)
+MUON_META_USEPOINTER(m::String);
 
 namespace std
 {
 	//Return address of first char
-	template<> struct hash<muon::String>
+	template<> struct hash<m::String>
 	{
-		muon::u32 operator()(const muon::String& str) const
+		m::u32 operator()(const m::String& str) const
 		{
-			return (muon::u32)str.hash();
+			return (m::u32)str.hash();
 		}
 	};
 }

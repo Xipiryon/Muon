@@ -31,7 +31,7 @@
 #include "Muon/System/Log.hpp"
 #include "Muon/System/Assert.hpp"
 
-namespace muon
+namespace m
 {
 	namespace system
 	{
@@ -59,9 +59,9 @@ namespace muon
 
 			//Output it
 			Log log("ASSERT", LOG_ERROR);
-			log() << file << muon::endl;
-			log() << "[" << func << ":" << line << "]" << muon::endl;
-			log() << buffer << muon::endl;
+			log() << file << m::endl;
+			log() << "[" << func << ":" << line << "]" << m::endl;
+			log() << buffer << m::endl;
 			free(buffer);
 		}
 	}

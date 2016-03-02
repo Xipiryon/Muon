@@ -27,6 +27,6 @@
 
 #include "Muon/Core/Constant.hpp"
 
-namespace muon
+namespace m
 {
 };

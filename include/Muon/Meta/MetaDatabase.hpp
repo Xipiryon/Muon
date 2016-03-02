@@ -34,7 +34,7 @@
 #include "Muon/Meta/MetaFactory.hpp"
 #include "Muon/Helper/Singleton.hpp"
 
-namespace muon
+namespace m
 {
 	namespace meta
 	{
@@ -95,25 +95,25 @@ namespace muon
 			{
 				MetaRegistrar()
 				{
-					if(!::muon::helper::Singleton<MetaDatabase>::isInstantiated())
+					if(!::m::helper::Singleton<MetaDatabase>::isInstantiated())
 					{
-						::muon::meta::MetaDatabase::createInstance();
+						::m::meta::MetaDatabase::createInstance();
 					}
-					::muon::meta::MetaDatabase::getInstance().registerMeta<T>();
+					::m::meta::MetaDatabase::getInstance().registerMeta<T>();
 				}
 			};
 		}
 	}
 }
 
-#define MUON_META(Type) ::muon::meta::MetaDatabase::getInstance().getMeta<typename ::muon::traits::RawType<Type>::type >()
-#define MUON_META_OBJECT(Object) MUON_META(::muon::traits::RawType<decltype(Object)>::type)
-#define MUON_META_NAME(Name) ::muon::meta::MetaDatabase::getInstance().getMeta(Name)
+#define MUON_META(Type) ::m::meta::MetaDatabase::getInstance().getMeta<typename ::m::traits::RawType<Type>::type >()
+#define MUON_META_OBJECT(Object) MUON_META(::m::traits::RawType<decltype(Object)>::type)
+#define MUON_META_NAME(Name) ::m::meta::MetaDatabase::getInstance().getMeta(Name)
 
-#define MUON_META_REGISTER(Type) ::muon::meta::MetaDatabase::getInstance().registerMeta<Type>()
-#define MUON_META_CREATE(TypeName) ::muon::meta::MetaDatabase::getInstance().createMeta(TypeName);
+#define MUON_META_REGISTER(Type) ::m::meta::MetaDatabase::getInstance().registerMeta<Type>()
+#define MUON_META_CREATE(TypeName) ::m::meta::MetaDatabase::getInstance().createMeta(TypeName);
 
-#define MUON_TRAITS_META_REGISTER(Type) MUON_TRAITS(Type) static struct MUON_GLUE_LINE(Registrar__) : muon::meta::priv::MetaRegistrar<Type> { MUON_GLUE_LINE(Registrar__)() : MetaRegistrar<Type>() {} } MUON_GLUE_COUNTER(s_instance);
+#define MUON_TRAITS_META_REGISTER(Type) MUON_TRAITS(Type) static struct MUON_GLUE_LINE(Registrar__) : m::meta::priv::MetaRegistrar<Type> { MUON_GLUE_LINE(Registrar__)() : MetaRegistrar<Type>() {} } MUON_GLUE_COUNTER(s_instance);
 
 #endif
 

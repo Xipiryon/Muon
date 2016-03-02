@@ -33,7 +33,7 @@
 /*!
 * @file ILogImpl.hpp
 */
-namespace muon
+namespace m
 {
 	/*!
 	* @file ILogImpl.hpp
@@ -101,9 +101,9 @@ namespace muon
 			* like this is used:
 			* @code{.cpp}
 				// This will call the function with LOG_INTERNAL
-				log() << "Hello" << muon::endl;
+				log() << "Hello" << m::endl;
 				// This will call the function with same parameter as for log call
-				log(LOG_DEBUG) << "World" << muon::endl;
+				log(LOG_DEBUG) << "World" << m::endl;
 			* @endcode
 			*/
 			virtual void operator()(LogLevel level);

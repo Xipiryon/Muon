@@ -27,7 +27,7 @@
 
 #include "Muon/Meta/MetaFactory.hpp"
 
-namespace muon
+namespace m
 {
 	namespace meta
 	{

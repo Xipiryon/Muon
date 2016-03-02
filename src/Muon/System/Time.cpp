@@ -27,7 +27,7 @@
 
 #include "Muon/System/Time.hpp"
 
-namespace muon
+namespace m
 {
 	namespace system
 	{

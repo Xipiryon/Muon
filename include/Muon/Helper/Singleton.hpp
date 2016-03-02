@@ -35,7 +35,7 @@
 /*
 * @file Sinleton.hpp
 */
-namespace muon
+namespace m
 {
 	namespace helper
 	{
@@ -48,9 +48,9 @@ namespace muon
 		* - There must be a first call to instantiate() before any get()
 		* - Class must both inherit from Singleton<T> and declare it as friend
 		* @code{cpp}
-			class A : public muon::modifier::Singleton<A>
+			class A : public m::modifier::Singleton<A>
 			{
-				friend class muon::modifier::Singleton<A>;
+				friend class m::modifier::Singleton<A>;
 				public:
 					// ...
 				private:

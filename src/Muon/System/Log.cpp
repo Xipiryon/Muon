@@ -37,7 +37,7 @@
 namespace
 {
 	// Code is in ILogImpl.cpp
-	class DefaultLogImpl : public muon::system::ILogImpl
+	class DefaultLogImpl : public m::system::ILogImpl
 	{
 	public:
 		DefaultLogImpl()
@@ -52,7 +52,7 @@ namespace
 			std::cout << std::endl; return *this;
 		}
 
-		virtual void operator()(muon::LogLevel level)
+		virtual void operator()(m::LogLevel level)
 		{
 			m_level = level;
 		}
@@ -61,43 +61,43 @@ namespace
 		{
 			std::cout << pod; return *this;
 		}
-		virtual ILogImpl& operator<<(muon::u64 pod)
+		virtual ILogImpl& operator<<(m::u64 pod)
 		{
 			std::cout << pod; return *this;
 		}
-		virtual ILogImpl& operator<<(muon::u32 pod)
+		virtual ILogImpl& operator<<(m::u32 pod)
 		{
 			std::cout << pod; return *this;
 		}
-		virtual ILogImpl& operator<<(muon::u16 pod)
+		virtual ILogImpl& operator<<(m::u16 pod)
 		{
 			std::cout << pod; return *this;
 		}
-		virtual ILogImpl& operator<<(muon::u8 pod)
+		virtual ILogImpl& operator<<(m::u8 pod)
 		{
 			std::cout << pod; return *this;
 		}
-		virtual ILogImpl& operator<<(muon::i64 pod)
+		virtual ILogImpl& operator<<(m::i64 pod)
 		{
 			std::cout << pod; return *this;
 		}
-		virtual ILogImpl& operator<<(muon::i32 pod)
+		virtual ILogImpl& operator<<(m::i32 pod)
 		{
 			std::cout << pod; return *this;
 		}
-		virtual ILogImpl& operator<<(muon::i16 pod)
+		virtual ILogImpl& operator<<(m::i16 pod)
 		{
 			std::cout << pod; return *this;
 		}
-		virtual ILogImpl& operator<<(muon::i8 pod)
+		virtual ILogImpl& operator<<(m::i8 pod)
 		{
 			std::cout << pod; return *this;
 		}
-		virtual ILogImpl& operator<<(muon::f64 pod)
+		virtual ILogImpl& operator<<(m::f64 pod)
 		{
 			std::cout << pod; return *this;
 		}
-		virtual ILogImpl& operator<<(muon::f32 pod)
+		virtual ILogImpl& operator<<(m::f32 pod)
 		{
 			std::cout << pod; return *this;
 		}
@@ -108,20 +108,20 @@ namespace
 	};
 	DefaultLogImpl m_defaultLogImpl;
 
-	std::vector<muon::system::ILogImpl*>& privGetLogImpl()
+	std::vector<m::system::ILogImpl*>& privGetLogImpl()
 	{
-		static std::vector<muon::system::ILogImpl*> m_logImpl;
+		static std::vector<m::system::ILogImpl*> m_logImpl;
 		return m_logImpl;
 	}
 	;
 #if defined(MUON_DEBUG)
-	muon::LogLevel m_logLevel = muon::LOG_DEBUG;
+	m::LogLevel m_logLevel = m::LOG_DEBUG;
 #else
-	muon::LogLevel m_logLevel = muon::LOG_INFO;
+	m::LogLevel m_logLevel = m::LOG_INFO;
 #endif
 
-	muon::String m_openFilename;
-	muon::String m_filename = "log_output";
+	m::String m_openFilename;
+	m::String m_filename = "log_output";
 	bool m_opened = false;
 
 	template<typename T> bool notInVector(std::vector<T>& v, T f)
@@ -137,7 +137,7 @@ namespace
 	}
 }
 
-namespace muon
+namespace m
 {
 	/*extern*/ Endl endl;
 
@@ -165,7 +165,7 @@ namespace muon
 			{
 				Log("ILogImpl", LOG_ERROR)
 						<< "Couldn't allocate ILogImpl!"
-						<< muon::endl;
+						<< m::endl;
 				return false;
 			}
 			return true;
@@ -306,7 +306,7 @@ namespace muon
 	}
 }
 
-std::ostream& operator<<(std::ostream& stream, const muon::Endl& endl)
+std::ostream& operator<<(std::ostream& stream, const m::Endl& endl)
 {
 	return (stream << std::endl);
 }

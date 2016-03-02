@@ -29,7 +29,7 @@
 #include "Muon/System/Log.hpp"
 #include "Muon/System/ILogImpl.hpp"
 
-namespace muon
+namespace m
 {
 	namespace system
 	{

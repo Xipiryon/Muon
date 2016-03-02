@@ -33,7 +33,7 @@
 /*
 * @file NonCopyable.hpp
 */
-namespace muon
+namespace m
 {
 	namespace helper
 	{

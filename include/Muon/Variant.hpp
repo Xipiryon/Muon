@@ -34,7 +34,7 @@
 #include "Muon/Meta/MetaDatabase.hpp"
 #include "Muon/Traits/TypeInfo.hpp"
 
-namespace muon
+namespace m
 {
 	class MUON_API Variant
 	{
@@ -116,6 +116,6 @@ namespace muon
 	}
 }
 
-MUON_TRAITS(muon::Variant)
+MUON_TRAITS(m::Variant)
 
 #endif

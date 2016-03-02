@@ -31,7 +31,7 @@
 #include "Muon/System/Log.hpp"
 #include "Muon/IO/FileArchive.hpp"
 
-namespace muon
+namespace m
 {
 	namespace io
 	{

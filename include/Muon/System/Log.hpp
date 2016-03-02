@@ -33,7 +33,7 @@
 #include "Muon/System/ILogImpl.hpp"
 #include "Muon/String.hpp"
 
-namespace muon
+namespace m
 {
 	struct Endl {};
 
@@ -43,9 +43,9 @@ namespace muon
 	* This static instance of the (internal) Endl structure is designed to
 	* be used by Log classes, and its behaviour is overriden in ILogImpl classes.
 	* The system::ILogImpl::endl function will be called (for each registered impls)
-	* when a muon::endl instance is given to the Log class.
+	* when a m::endl instance is given to the Log class.
 	* @code
-		struct CustomILogImpl : public muon::system::ILogImpl
+		struct CustomILogImpl : public m::system::ILogImpl
 		{
 			ILogImpl& endl()
 			{
@@ -57,7 +57,7 @@ namespace muon
 		// ...
 		// Skipping the registering and Log class instantiation part
 		// ...
-		log() << "Hello" << muon::endl;	// Will output "Hello\n"
+		log() << "Hello" << m::endl;	// Will output "Hello\n"
 	* @endcode
 	* @see system::ILogImpl
 	*/
@@ -220,8 +220,8 @@ namespace muon
 
 		private:
 			static std::vector<ILogImpl*>& getLogImpl();
-			static bool checkLogImpl(muon::system::ILogImpl*);
-			static bool addLogImpl(muon::system::ILogImpl*);
+			static bool checkLogImpl(m::system::ILogImpl*);
+			static bool addLogImpl(m::system::ILogImpl*);
 
 			void displayTag();
 			bool m_tagDisplayed;
@@ -258,8 +258,8 @@ namespace muon
 	}
 }
 
-MUON_TRAITS(muon::system::Log)
+MUON_TRAITS(m::system::Log)
 
-MUON_API std::ostream& operator<<(std::ostream& stream, const muon::Endl& endl);
+MUON_API std::ostream& operator<<(std::ostream& stream, const m::Endl& endl);
 
 #endif	//INCLUDE_MUON_LOG_HPP

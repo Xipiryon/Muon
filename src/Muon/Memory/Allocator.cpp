@@ -27,7 +27,7 @@
 
 #include "Muon/Memory/Allocator.hpp"
 
-namespace muon
+namespace m
 {
 	namespace memory
 	{

@@ -29,7 +29,7 @@
 #include "Muon/System/Log.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
 
-namespace muon
+namespace m
 {
 	namespace meta
 	{

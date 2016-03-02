@@ -30,7 +30,7 @@
 
 #include "Muon/Core/Constant.hpp"
 
-namespace muon
+namespace m
 {
 	namespace traits
 	{
@@ -64,7 +64,7 @@ namespace muon
 	}
 }
 
-#define _MUON_META_SETNAMESPACE(Decl) namespace muon { namespace traits { template<> struct Decl } }
+#define _MUON_META_SETNAMESPACE(Decl) namespace m { namespace traits { template<> struct Decl } }
 #define _MUON_META_SETATTRIB(Flag) static const bool value = true; static const u32 flag = Flag;
 #define _MUON_META_SETINFO(Class, Struct, Flag) _MUON_META_SETNAMESPACE(Struct<Class> { _MUON_META_SETATTRIB(Flag) };)
 #define MUON_META_USEPOINTER(Class) _MUON_META_SETINFO(Class, UsePointer, USE_POINTER_FLAG)

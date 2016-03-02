@@ -30,7 +30,7 @@
 
 #include "Muon/Meta/MetaData.hpp"
 
-namespace muon
+namespace m
 {
 	namespace meta
 	{

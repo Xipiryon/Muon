@@ -27,7 +27,7 @@
 
 #include "Muon/Variant.hpp"
 
-namespace muon
+namespace m
 {
 	Variant::Variant(meta::MetaData* m, void* d)
 		: m_meta(m)

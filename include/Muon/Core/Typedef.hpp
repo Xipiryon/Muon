@@ -31,7 +31,7 @@
 #include "Muon/Core/Define.hpp"
 #include <stdint.h>
 
-namespace muon
+namespace m
 {
 	//! 1 Byte unsigned integer
 	typedef uint8_t		u8;

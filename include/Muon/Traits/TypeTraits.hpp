@@ -35,10 +35,10 @@
 #if defined(MUON_PLATFORM_WINDOWS) || defined(MUON_PLATFORM_HTML)
 namespace priv
 {
-	MUON_INLINE muon::u64 _traits_hash(const char* m_str)
+	MUON_INLINE m::u64 _traits_hash(const char* m_str)
 	{
 		// www.cse.yorku.ca/~oz/hash.html
-		muon::u64 v = 5381;
+		m::u64 v = 5381;
 		if (m_str)
 		{
 			char* str = (char*)m_str;
@@ -55,12 +55,12 @@ namespace priv
 #else
 namespace priv
 {
-	MUON_CONSTEXPR muon::u64 _traits_const_hash(const char* str)
+	MUON_CONSTEXPR m::u64 _traits_const_hash(const char* str)
 	{
-		return *str ? static_cast<muon::u64>(*str) + 33 * _traits_const_hash(str + 1) : 5381;
+		return *str ? static_cast<m::u64>(*str) + 33 * _traits_const_hash(str + 1) : 5381;
 	}
 
-	MUON_CONSTEXPR muon::u64 operator "" _traits_hash(const char* str, muon::u64)
+	MUON_CONSTEXPR m::u64 operator "" _traits_hash(const char* str, m::u64)
 	{
 		return _traits_const_hash(str);
 	}
@@ -69,17 +69,17 @@ namespace priv
 #endif
 
 #define _MUON_TRAITS_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return MUON_STR(Type); }
-#define _MUON_TRAITS_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u64 id() {using namespace ::priv; return ::muon::traits::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
-#define _MUON_TRAITS_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::muon::u32 size() { return sizeof(Type); }
+#define _MUON_TRAITS_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u64 id() {using namespace ::priv; return ::m::traits::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
+#define _MUON_TRAITS_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u32 size() { return sizeof(Type); }
 #define _MUON_TRAITS_CREATE(Type) static MUON_INLINE Type* create() { return MUON_NEW(Type); }
 #define _MUON_TRAITS_COPY(Type) static MUON_INLINE void copy(Type* ptr, Type* val) { *ptr = *val; }
 #define _MUON_TRAITS_DESTROY(Type) static MUON_INLINE void destroy(Type* ptr) { MUON_DELETE(ptr); }
 
 #define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_NAME(Type) _MUON_TRAITS_ID(Type) _MUON_TRAITS_SIZE(Type) _MUON_TRAITS_CREATE(Type) _MUON_TRAITS_COPY(Type) _MUON_TRAITS_DESTROY(Type);
 #define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
-#define MUON_TRAITS(Type) static_assert(!s_namespaceMuon, "MUON_TRAITS must be placed outside any muon namespace"); namespace muon { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
+#define MUON_TRAITS(Type) static_assert(!s_namespaceMuon, "MUON_TRAITS must be placed outside any muon namespace"); namespace m { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
 
-namespace muon
+namespace m
 {
 	namespace traits
 	{
@@ -101,11 +101,11 @@ namespace muon
 			{
 				return "void";
 			}
-			static MUON_INLINE MUON_CONSTEXPR::muon::u64 id()
+			static MUON_INLINE MUON_CONSTEXPR::m::u64 id()
 			{
 				return TYPE_ID_INVALID;
 			}
-			static MUON_INLINE MUON_CONSTEXPR::muon::u32 size()
+			static MUON_INLINE MUON_CONSTEXPR::m::u32 size()
 			{
 				return 0;
 			}
@@ -188,20 +188,20 @@ namespace muon
 	}
 }
 
-MUON_TRAITS(muon::u8);
-MUON_TRAITS(muon::u16);
-MUON_TRAITS(muon::u32);
-MUON_TRAITS(muon::u64);
+MUON_TRAITS(m::u8);
+MUON_TRAITS(m::u16);
+MUON_TRAITS(m::u32);
+MUON_TRAITS(m::u64);
 
-MUON_TRAITS(muon::i8);
-MUON_TRAITS(muon::i16);
-MUON_TRAITS(muon::i32);
-MUON_TRAITS(muon::i64);
+MUON_TRAITS(m::i8);
+MUON_TRAITS(m::i16);
+MUON_TRAITS(m::i32);
+MUON_TRAITS(m::i64);
 
-MUON_TRAITS(muon::f32);
-MUON_TRAITS(muon::f64);
+MUON_TRAITS(m::f32);
+MUON_TRAITS(m::f64);
 
-MUON_TRAITS(muon::RawPointer);
+MUON_TRAITS(m::RawPointer);
 
 #endif
 

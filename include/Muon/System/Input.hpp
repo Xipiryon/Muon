@@ -30,7 +30,7 @@
 
 #include "Muon/Core/Typedef.hpp"
 
-namespace muon
+namespace m
 {
 	namespace system
 	{
