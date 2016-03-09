@@ -45,21 +45,21 @@ namespace m
 	* @param value
 	* @param buffer
 	*/
-	void itoa(u64 value, char* buffer);
+	void MUON_API itoa(u64 value, char* buffer);
 
 	/*!
 	* @brief
 	* @param value
 	* @param buffer
 	*/
-	void itoa(i64 value, char* buffer);
+	void MUON_API itoa(i64 value, char* buffer);
 
 	/*!
 	* @brief
 	* @param value
 	* @param buffer
 	*/
-	void ftoa(f64 value, char* buffer);
+	void MUON_API ftoa(f64 value, char* buffer);
 
 	/*!
 	* @brief Store and manipulate array of characters
