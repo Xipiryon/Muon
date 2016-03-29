@@ -311,5 +311,6 @@ int main(int argc, char** argv)
 #if defined(MUON_PLATFORM_WINDOWS) && defined(MUON_DEBUG)
 	::system("PAUSE");
 #endif
-	return 0;
+
+	return 100 - (m::i32)(errorCount / (m::f32)totalTests) * 100;
 }
