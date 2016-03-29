@@ -2,7 +2,19 @@ language: cpp
 sudo: false
 compiler:
   - gcc
+  - clang
 cache: apt
+
+branches:
+  only:
+    - master
+    - dev
+
+env:
+  - BUILD_CONFIG=debugdll
+  - BUILD_CONFIG=releasedll
+  - BUILD_CONFIG=debuglib
+  - BUILD_CONFIG=releaselib
 
 before_install:
   - chmod +x premake5
@@ -14,7 +26,7 @@ before_script:
   - ./premake5 gmake
 
 script:
-  - make config=releasedll
+  - make config=${BUILD_CONFIG}
 
 notifications:
   email: false
