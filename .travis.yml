@@ -9,11 +9,10 @@ branches:
   only:
     - master
     - dev
+	- travis
 
 env:
-  - BUILD_CONFIG=debugdll
   - BUILD_CONFIG=releasedll
-  - BUILD_CONFIG=debuglib
   - BUILD_CONFIG=releaselib
 
 before_install:
