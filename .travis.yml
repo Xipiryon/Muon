@@ -9,7 +9,7 @@ branches:
   only:
     - master
     - dev
-	- travis
+    - travis
 
 env:
   - BUILD_CONFIG=releasedll
