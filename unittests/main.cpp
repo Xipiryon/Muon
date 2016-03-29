@@ -44,41 +44,90 @@
 class LogFile : public m::system::ILogImpl
 {
 public:
-	LogFile() {}
-	virtual ~LogFile() {}
+	LogFile()
+	{
+	}
+	virtual ~LogFile()
+	{
+	}
 
-	virtual bool open(const m::String& filename) { m_file.open(filename.cStr()); return true;}
-	virtual bool close() { m_file.close(); return true;}
+	virtual bool open(const m::String& filename)
+	{
+		m_file.open(filename.cStr()); return true;
+	}
+	virtual bool close()
+	{
+		m_file.close(); return true;
+	}
 
-	virtual LogFile& endl() { m_file << "\n"; return *this;}
+	virtual LogFile& endl()
+	{
+		m_file << "\n"; return *this;
+	}
 
 	//! Behavior on const char* parameter
-	virtual LogFile& operator<<(const char* pod) { m_file << pod; return *this; }
+	virtual LogFile& operator<<(const char* pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on u64 parameter
-	virtual LogFile& operator<<(m::u64 pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(m::u64 pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on u32 parameter
-	virtual LogFile& operator<<(m::u32 pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(m::u32 pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on u16 parameter
-	virtual LogFile& operator<<(m::u16 pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(m::u16 pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on u8 parameter
-	virtual LogFile& operator<<(m::u8 pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(m::u8 pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on i64 parameter
-	virtual LogFile& operator<<(m::i64 pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(m::i64 pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on i32 parameter
-	virtual LogFile& operator<<(m::i32 pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(m::i32 pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on i16 parameter
-	virtual LogFile& operator<<(m::i16 pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(m::i16 pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on i8 parameter
-	virtual LogFile& operator<<(m::i8 pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(m::i8 pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on f64 parameter
-	virtual LogFile& operator<<(m::f64 pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(m::f64 pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on f32 parameter
-	virtual LogFile& operator<<(m::f32 pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(m::f32 pod)
+	{
+		m_file << pod; return *this;
+	}
 	//! Behavior on bool parameter
-	virtual LogFile& operator<<(bool pod) { m_file << pod; return *this;}
+	virtual LogFile& operator<<(bool pod)
+	{
+		m_file << pod; return *this;
+	}
 
-	protected:
-		std::ofstream m_file;
+protected:
+	std::ofstream m_file;
 };
 
 struct SimpleObject
@@ -108,7 +157,9 @@ bool UnitTestObject::destroyed = false;
 
 namespace test
 {
-	struct TestObject {};
+	struct TestObject
+	{
+	};
 }
 
 MUON_TRAITS_META_REGISTER(UnitTestObject);
@@ -189,7 +240,7 @@ int main(int argc, char** argv)
 		MUON_CHECK(dataName, "MUON_META_NAME returned a null MetaData!");
 		MUON_CHECK(dataObject, "MUON_META_OBJECT returned a null MetaData!");
 		// Skip following test if there is errors from last steps
-		if(eCount == errorCount)
+		if (eCount == errorCount)
 		{
 			MUON_CHECK(data->id() == m::traits::TypeTraits<UnitTestObject>::id(), "ID retrieved from MUON_META and TypeTraits does not match! (%lu != %lu)", data->id(), m::traits::TypeTraits<UnitTestObject>::id());
 			MUON_CHECK(data->id() == dataName->id(), "ID retrieved from MUON_META and MUON_META_NAME does not match! (%lu != %lu)", data->id(), dataName->id());
