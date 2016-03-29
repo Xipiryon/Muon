@@ -37,10 +37,9 @@
 
 namespace m
 {
-
 	void itoa(u64 value, char* buffer)
 	{
-		if(value == 0)
+		if (value == 0)
 		{
 			*(buffer++) = '0';
 			*buffer = 0;
@@ -56,14 +55,14 @@ namespace m
 			d = value / p;
 			*(buffer++) = '0' + (char)d;
 			value %= p;
-		} while(p > 1);
+		} while (p > 1);
 
 		*buffer = 0;
 	}
 
 	void itoa(i64 value, char* buffer)
 	{
-		if(value < 0)
+		if (value < 0)
 		{
 			value = -value;
 			*(buffer++) = '-';
@@ -75,7 +74,7 @@ namespace m
 	{
 		char* buf = buffer;
 		f64 m = 10e-8;
-		if(value < 0)
+		if (value < 0)
 		{
 			value = -value;
 			*(buffer++) = '-';
@@ -83,14 +82,14 @@ namespace m
 		itoa((u64)value, buffer);
 		value = (value < 0 ? -value : value);
 
-		f64 f[2] = {0.0};
+		f64 f[2] = { 0.0 };
 		value = modf(value, f);		// Retrieve only the fractional par
-		f[1] = modf(value*10, f);
+		f[1] = modf(value * 10, f);
 
-		while(*(++buffer));
+		while (*(++buffer));
 		*(buffer++) = '.';
 
-		if(f[1] <= m)
+		if (f[1] <= m)
 		{
 			*(buffer++) = '0';
 			*buffer = 0;
@@ -100,7 +99,7 @@ namespace m
 		while (f[1] > m)
 		{
 			*(buffer++) = '0' + (char)round(f[0]);
-			f[1] = modf(f[1]*10.0, f);
+			f[1] = modf(f[1] * 10.0, f);
 			m *= 10;
 		}
 		*(buffer++) = '0' + (char)round(f[0]);
@@ -251,7 +250,7 @@ namespace m
 			MUON_ASSERT_BREAK(m_str != NULL, "resize() failed!");
 			u32 ncount = cpy.m_charcount < size ? cpy.m_charcount : size;
 			::strncpy(m_str, cpy.m_str, ncount);
-			*(m_str + size) = 0;
+			*(m_str + ncount) = 0;
 			m_memsize = size;
 			m_charcount = ncount;
 		}
@@ -372,7 +371,7 @@ namespace m
 		while ((pos[0] = find(src, pos[1])) != INVALID_INDEX)
 		{
 			len = pos[0] - off;
-			if(len > 0)
+			if (len > 0)
 			{
 				s += substr(off, len);
 			}
@@ -381,7 +380,7 @@ namespace m
 			off = pos[0] + src_size;
 			pos[1] = pos[0] + 1;
 		}
-		if(off < size())
+		if (off < size())
 		{
 			s += substr(off);
 		}
@@ -602,5 +601,4 @@ namespace m
 	{
 		return (log << str.cStr());
 	}
-
 }
