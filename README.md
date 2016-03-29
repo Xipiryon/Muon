@@ -6,8 +6,7 @@ Muon is a C++ framework designed to be used as a layer between the Standard Libr
 [![Travis](https://travis-ci.org/Xipiryon/Muon.svg)](https://travis-ci.org/Xipiryon/Muon)
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/88rhc1uem65bebd6/branch/master?svg=true)](https://ci.appveyor.com/project/Xipiryon/muon/branch/master)
 
-[![CppCheck](http://ci.louis-schnellbach.com/job/Muon/branch/master/cppcheckResult/graph)](http://ci.louis-schnellbach.com/job/Muon/branch/master/cppcheckResult)
-[![Valgrind](http://ci.louis-schnellbach.com/job/Muon/branch/master/valgrindResult/graph)](http://ci.louis-schnellbach.com/job/Muon/branch/master/valgrindResult/)
+[![Coverity](https://scan.coverity.com/projects/8382/badge.svg)](https://scan.coverity.com/projects/xipiryon-muon)
 
 How to compile
 ====================
