@@ -2,7 +2,6 @@ language: cpp
 sudo: false
 compiler:
   - gcc
-  - clang
 cache: apt
 
 branches:
@@ -15,21 +14,11 @@ env:
    # COVERITY_SCAN_TOKEN
    - secure: "JLeOHEyxhpoF0GwGlM8PAzpv/0kr2Y9HXKMlokObt9wVGhIh3/5Ad/bbHn+wmStzv9PAPYjGjNIUreJnmnjyFafQvFcUg/fyKq6yHtfgOakRk3EIZKJf9mW7OyWXnEmyGAoY3Z+x5gOeVIC6P51hUvtDIX1JjnstTElDOIakTKSV3dQBQmZsYJvFuaK+zKwcUkYcmPmtI3Ph2P2uO7phihqLFEEjGFVTrgNu5XwUJllXjQhrgLsdVei+4Jh4cM8/sdk2iXsLKvC9b7s8XmV0+0HYGbv0bGJ7nrdfzIak1wAGDsFVTSN7ZUH/re99KmVbxjmjFuHyPvZAqo3ToEwm6OTaNWh3vYVshWGbo+MHgBHNB3Fm0ZlI3g4Y5L/wEAGqn2gOAIyil/1D1d/qZnVpTP3nKjvH10atKC73yIyjLIfYBf4jORgBCm0joFkK83e8c924dTYnVtubNYG19RqLfWDWC4EzzUJ8oxmVVPSsZIaD1joCKuiyUxhaCoO9+5uEPs5WB15Il4s3acJN9KXm8f4BGYWBEvvd1NToOHnbzLWIfba/S74nMdwXZDhzuKQHGuVfg6zTchSbydbd7EB2PTwTZTRXnBSWrpAgG0GcHM+k+azKOD3t1vwmmDyg1u1NX6OF+VNrSF27UU0uY99XMql5rMFh4qR9fOgEAwEzWwQ="
 
-  matrix:
-    - BUILD_CONFIG=releasedll
-    - BUILD_CONFIG=releaselib
-
 before_install:
   - chmod +x premake5
 
 install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
-
-before_script:
-  - ./premake5 gmake
-
-script:
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make config=${BUILD_CONFIG} ; fi
 
 notifications:
   email: false
