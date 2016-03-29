@@ -8,13 +8,13 @@ cache: apt
 branches:
   only:
     - master
-    - dev
     - coverity_scan
 
 env:
   global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN
-   - secure: "xSXTPaNoL0iStgoU2Fyeujvl+c1SJ/YkPYaxzc5a7IRyBn6cg6n2+zQ44q2B9jMtc/uZM18HijBNJNaSJee95IbM7JfS4WcNaDwQHJC2ZiJb8knfD83WBIIWraeOBhGCMk86/TUNZZZNcdSBdr2uqWW9+eCqT2PkNwybFMUofhqnWcDzoO3YjVCQJMHRIrE45SmyJQJ1zjJIYbhtUjtOTpQHLL3TsWcMHcgNpxgofgC2ncud1bTKNeqFz3nLTdOJjG1Ak3laRdrtLtedFhixVawQYcvoZjPVClOicMvktTmSr8mNMOKYlVmos/wPBHEiw1fhBNum6cttGQPKL8pkr0GUwiKBZniFLYqQ1auD05zPCWgo8cAYkzLKZ8xev3vGyQTzanU1Q6vl0YJmP74n2goDvL+rKes3qy+UR37PJ7OcA6cbL2HL4IdYXlw/94Ici7S5DmrPwm1Xz0Wb7NRj5iaMIuQLhdvBQiDyI5TXaIIYb0M7RJCIZ73BymMBY8otG5Y8PW7D8VUg47u77abTD/owx/Adsiw/CtWfOrcDw6IKMh3rME1NZHP/Dgqq/471RBVq4kliUgiqdpS1nfSKGYfMQhzsxgLoa9Pt8tL4B92ke6uvlCVS9TfqwRoK8fQDjjbt+do44Jon3gUfJL4/JubaDub8JnYXmD3AUW9HtLQ="
+   # COVERITY_SCAN_TOKEN
+   - secure: "JLeOHEyxhpoF0GwGlM8PAzpv/0kr2Y9HXKMlokObt9wVGhIh3/5Ad/bbHn+wmStzv9PAPYjGjNIUreJnmnjyFafQvFcUg/fyKq6yHtfgOakRk3EIZKJf9mW7OyWXnEmyGAoY3Z+x5gOeVIC6P51hUvtDIX1JjnstTElDOIakTKSV3dQBQmZsYJvFuaK+zKwcUkYcmPmtI3Ph2P2uO7phihqLFEEjGFVTrgNu5XwUJllXjQhrgLsdVei+4Jh4cM8/sdk2iXsLKvC9b7s8XmV0+0HYGbv0bGJ7nrdfzIak1wAGDsFVTSN7ZUH/re99KmVbxjmjFuHyPvZAqo3ToEwm6OTaNWh3vYVshWGbo+MHgBHNB3Fm0ZlI3g4Y5L/wEAGqn2gOAIyil/1D1d/qZnVpTP3nKjvH10atKC73yIyjLIfYBf4jORgBCm0joFkK83e8c924dTYnVtubNYG19RqLfWDWC4EzzUJ8oxmVVPSsZIaD1joCKuiyUxhaCoO9+5uEPs5WB15Il4s3acJN9KXm8f4BGYWBEvvd1NToOHnbzLWIfba/S74nMdwXZDhzuKQHGuVfg6zTchSbydbd7EB2PTwTZTRXnBSWrpAgG0GcHM+k+azKOD3t1vwmmDyg1u1NX6OF+VNrSF27UU0uY99XMql5rMFh4qR9fOgEAwEzWwQ="
+
   matrix:
     - BUILD_CONFIG=releasedll
     - BUILD_CONFIG=releaselib
@@ -29,7 +29,7 @@ before_script:
   - ./premake5 gmake
 
 script:
-  - make config=${BUILD_CONFIG}
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make config=${BUILD_CONFIG} ; fi
 
 notifications:
   email: false
@@ -48,5 +48,5 @@ addons:
       description: "Build submitted via Travis CI"
     notification_email: louis.schnellbach@gmail.com
     build_command_prepend: "chmod +x premake5; ./premake5 gmake"
-    build_command:   "make -j 4"
+    build_command:   "make config=releasedll"
     branch_pattern: coverity_scan
