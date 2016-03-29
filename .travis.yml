@@ -1,0 +1,28 @@
+language: cpp
+sudo: false
+compiler:
+  - gcc
+cache: apt
+
+before_install:
+  - chmod +x premake5
+
+install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+
+before_script:
+  - ./premake5 gmake
+
+script:
+  - make config=releasedll
+
+notifications:
+  email: false
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.8
+      - g++-4.8

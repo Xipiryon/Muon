@@ -3,8 +3,8 @@ Muon
 
 Muon is a C++ framework designed to be used as a layer between the Standard Library and some missing feature I'm using in other projects.
 
-[![Build Status](http://ci.louis-schnellbach.com/buildStatus/icon?job=Muon/master)](http://ci.louis-schnellbach.com/job/Muon/branch/master)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/88rhc1uem65bebd6/branch/master?svg=true)](https://ci.appveyor.com/project/Xleek/muon/branch/master)
+[![Travis](https://travis-ci.org/Xipiryon/Muon.svg)](https://travis-ci.org/Xipiryon/Muon)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/88rhc1uem65bebd6/branch/master?svg=true)](https://ci.appveyor.com/project/Xipiryon/muon/branch/master)
 
 [![CppCheck](http://ci.louis-schnellbach.com/job/Muon/branch/master/cppcheckResult/graph)](http://ci.louis-schnellbach.com/job/Muon/branch/master/cppcheckResult)
 [![Valgrind](http://ci.louis-schnellbach.com/job/Muon/branch/master/valgrindResult/graph)](http://ci.louis-schnellbach.com/job/Muon/branch/master/valgrindResult/)
