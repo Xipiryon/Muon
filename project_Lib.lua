@@ -13,6 +13,9 @@ project "Muon"
        ProjectRoot.."/include/**.hpp",
     }
 
+	filter "Debug*"
+		defines { "MUON_DEBUG"}
+
 	filter  "*DLL"
 		defines { "MUON_EXPORTS" }
 

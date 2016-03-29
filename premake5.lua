@@ -64,12 +64,10 @@ solution "Muon"
 	filter "Debug*"
 		targetsuffix "-d"
         flags   { "Symbols" }
-		defines { "MUON_DEBUG"}
 
 	filter "Release*"
 		optimize "Speed"
 		flags   { "LinkTimeOptimization", "NoRTTI" }
-		defines { "MUON_RELEASE" }
 
     filter  "*Lib"
         kind "StaticLib"
