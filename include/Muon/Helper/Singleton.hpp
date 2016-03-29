@@ -70,7 +70,7 @@ namespace m
 			*/
 			static T& createInstance()
 			{
-				MUON_ASSERT(!s_instance, "Singleton instance already created!");
+				MUON_ASSERT(s_instance == NULL, "Singleton instance already created!");
 				static T gInstance;
 				s_instance = &gInstance;
 				return getInstance();
@@ -81,7 +81,7 @@ namespace m
 			*/
 			static T& getInstance()
 			{
-				MUON_ASSERT_BREAK(s_instance, "Singleton instance has not been created!");
+				MUON_ASSERT_BREAK(s_instance != NULL, "Singleton instance has not been created!");
 				return *s_instance;
 			}
 
