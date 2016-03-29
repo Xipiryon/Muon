@@ -9,11 +9,14 @@ branches:
   only:
     - master
     - dev
-	- travis
+    - coverity_scan
 
 env:
   - BUILD_CONFIG=releasedll
   - BUILD_CONFIG=releaselib
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN
+   - secure: "xSXTPaNoL0iStgoU2Fyeujvl+c1SJ/YkPYaxzc5a7IRyBn6cg6n2+zQ44q2B9jMtc/uZM18HijBNJNaSJee95IbM7JfS4WcNaDwQHJC2ZiJb8knfD83WBIIWraeOBhGCMk86/TUNZZZNcdSBdr2uqWW9+eCqT2PkNwybFMUofhqnWcDzoO3YjVCQJMHRIrE45SmyJQJ1zjJIYbhtUjtOTpQHLL3TsWcMHcgNpxgofgC2ncud1bTKNeqFz3nLTdOJjG1Ak3laRdrtLtedFhixVawQYcvoZjPVClOicMvktTmSr8mNMOKYlVmos/wPBHEiw1fhBNum6cttGQPKL8pkr0GUwiKBZniFLYqQ1auD05zPCWgo8cAYkzLKZ8xev3vGyQTzanU1Q6vl0YJmP74n2goDvL+rKes3qy+UR37PJ7OcA6cbL2HL4IdYXlw/94Ici7S5DmrPwm1Xz0Wb7NRj5iaMIuQLhdvBQiDyI5TXaIIYb0M7RJCIZ73BymMBY8otG5Y8PW7D8VUg47u77abTD/owx/Adsiw/CtWfOrcDw6IKMh3rME1NZHP/Dgqq/471RBVq4kliUgiqdpS1nfSKGYfMQhzsxgLoa9Pt8tL4B92ke6uvlCVS9TfqwRoK8fQDjjbt+do44Jon3gUfJL4/JubaDub8JnYXmD3AUW9HtLQ="
 
 before_install:
   - chmod +x premake5
@@ -37,3 +40,12 @@ addons:
     packages:
       - gcc-4.8
       - g++-4.8
+
+  coverity_scan:
+    project:
+      name: "Xipiryon/Muon"
+      description: "Build submitted via Travis CI"
+    notification_email: louis.schnellbach@gmail.com
+    build_command_prepend: "chmod +x premake5; ./premake5 gmake"
+    build_command:   "make -j 4"
+    branch_pattern: coverity_scan
