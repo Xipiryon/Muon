@@ -89,7 +89,7 @@ namespace m
 	Variant& Variant::set(const T& rhs)
 	{
 		meta::MetaData* meta = MUON_META(T);
-		MUON_ASSERT(meta, "Cannot copy an NULL MetaData!");
+		MUON_ASSERT(meta != NULL, "Cannot copy an NULL MetaData!");
 		if (meta == NULL)
 		{
 			return reset();
@@ -103,7 +103,7 @@ namespace m
 		}
 
 		m_data = m_meta->create();
-		if(traits::UsePointer<T>::value || traits::UseReference<T>::value)
+		if (traits::UsePointer<T>::value || traits::UseReference<T>::value)
 		{
 			(*(T*)m_data) = rhs;
 		}
