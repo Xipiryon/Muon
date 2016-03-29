@@ -363,5 +363,5 @@ int main(int argc, char** argv)
 	::system("PAUSE");
 #endif
 
-	return 100 - (m::i32)(errorCount / (m::f32)totalTests) * 100;
+	return 0;
 }
