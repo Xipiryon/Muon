@@ -36,9 +36,18 @@
 //				NAMESPACE
 //		--------------------------
 
-enum { s_namespaceMuon = false };
+enum
+{
+	s_namespaceMuon = false
+};
 //! Library main namespace
-namespace m { enum { s_namespaceMuon = true }; }
+namespace m
+{
+	enum
+	{
+		s_namespaceMuon = true
+	};
+}
 
 //		--------------------------
 //				EXPORT
@@ -67,7 +76,7 @@ namespace m { enum { s_namespaceMuon = true }; }
 //! Is defined if target platform is a Windows OS
 #	define MUON_PLATFORM_WINDOWS
 //! Is defined if target platform is Web Browser. Currently only Emscripten is supported
-#	define MUON_PLATFORM_HTML
+#	define MUON_PLATFORM_WEB
 //! Is defined if target platform is a Linux OS
 #	define MUON_PLATFORM_LINUX
 //! Is defined if target platform is an Apple OS (Desktop / Mobile)
@@ -80,7 +89,7 @@ namespace m { enum { s_namespaceMuon = true }; }
 #elif defined(EMSCRIPTEN)
 //	Emscripten is using unix platform target as well, so define it
 //	before so we don't have any conflict
-#	define MUON_PLATFORM_HTML
+#	define MUON_PLATFORM_WEB
 #	include <emscripten.h>
 #elif defined(unix) || defined(__unix) || defined(__unix__) || defined(__linux__)
 //	Is defined on Linux platforms
@@ -107,14 +116,14 @@ namespace m { enum { s_namespaceMuon = true }; }
 #	define MUON_STR(exp)
 #endif
 
-// Remove inline when compiling with MUON_PLATFORM_HTML
+// Remove inline when compiling with MUON_PLATFORM_WEB
 #	define MUON_INLINE inline
 
 // Remove constexpr from Windows, as it doesn't handle it very well (yet)
 #if defined(_MSC_VER)
 #	define MUON_CONSTEXPR
 // Emscripten doesn't seem to support it either
-#elif defined(MUON_PLATFORM_HTML)
+#elif defined(MUON_PLATFORM_WEB)
 #	define MUON_CONSTEXPR
 #else
 #	define MUON_CONSTEXPR constexpr
@@ -148,7 +157,7 @@ namespace m { enum { s_namespaceMuon = true }; }
 #ifdef _MSC_VER
 #	define MUON_ASM(asm) __asm{asm}
 #	define MUON_ASM_BREAK MUON_ASM(int 3)
-#elif defined(MUON_PLATFORM_HTML)
+#elif defined(MUON_PLATFORM_WEB)
 #	define MUON_ASM(asm)
 #	define MUON_ASM_BREAK
 #else

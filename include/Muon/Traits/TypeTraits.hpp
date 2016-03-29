@@ -32,7 +32,7 @@
 #include "Muon/Traits/TypeInfo.hpp"
 #include "Muon/Memory/Allocator.hpp"
 
-#if defined(MUON_PLATFORM_WINDOWS) || defined(MUON_PLATFORM_HTML)
+#if defined(MUON_PLATFORM_WINDOWS) || defined(MUON_PLATFORM_WEB)
 namespace priv
 {
 	MUON_INLINE m::u64 _traits_hash(const char* m_str)
@@ -85,15 +85,17 @@ namespace m
 	{
 		enum TypeIDMask : u64
 		{
-			TYPE_ID_INVALID 	= 0x0FFFFFFFFFFFFFFF,
-			TYPE_ID_BASE_MASK	= 0x0FFFFFFFFFFFFFFF,
-			TYPE_ID_CUSTOM_MASK	= 0xF000000000000000,
+			TYPE_ID_INVALID = 0x0FFFFFFFFFFFFFFF,
+			TYPE_ID_BASE_MASK = 0x0FFFFFFFFFFFFFFF,
+			TYPE_ID_CUSTOM_MASK = 0xF000000000000000,
 		};
 
 		static const char* TYPE_NAME_UNREGISTERED = "#Unregistered#";
 
 		// Let the compiler not compile unregistered TypeTraits
-		template<typename T> struct TypeTraits {};
+		template<typename T> struct TypeTraits
+		{
+		};
 
 		template<> struct TypeTraits<void>
 		{
@@ -204,4 +206,3 @@ MUON_TRAITS(m::f64);
 MUON_TRAITS(m::RawPointer);
 
 #endif
-
