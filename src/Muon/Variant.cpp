@@ -59,7 +59,7 @@ namespace m
 		}
 
 		meta::MetaData* meta = rhs.getMeta();
-		MUON_ASSERT(meta, "Cannot copy an NULL MetaData!");
+		MUON_ASSERT(meta != NULL, "Cannot copy an NULL MetaData!");
 		if (meta == NULL)
 		{
 			return reset();
