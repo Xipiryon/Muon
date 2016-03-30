@@ -162,12 +162,16 @@ namespace test
 	};
 }
 
-MUON_TRAITS_META_REGISTER(UnitTestObject);
-MUON_TRAITS_META_REGISTER(SimpleObject);
-MUON_TRAITS_META_REGISTER(test::TestObject);
+MUON_TRAITS(UnitTestObject);
+MUON_TRAITS(SimpleObject);
+MUON_TRAITS(test::TestObject);
 
 int main(int argc, char** argv)
 {
+	MUON_META_REGISTER(UnitTestObject);
+	MUON_META_REGISTER(SimpleObject);
+	MUON_META_REGISTER(test::TestObject);
+
 	LogFile logFile;
 	m::system::Log::registerDefaultLogImpl();
 	m::system::Log::registerLogImpl(&logFile);

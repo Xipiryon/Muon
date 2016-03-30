@@ -87,18 +87,6 @@ namespace m
 		{
 			return getMeta(traits::TypeTraits<T>::name());
 		}
-
-		namespace priv
-		{
-			template<typename T>
-			struct MetaRegistrar
-			{
-				MetaRegistrar()
-				{
-					::m::meta::MetaDatabase::getInstance().registerMeta<T>();
-				}
-			};
-		}
 	}
 }
 
@@ -108,7 +96,5 @@ namespace m
 
 #define MUON_META_REGISTER(Type) ::m::meta::MetaDatabase::getInstance().registerMeta<Type>()
 #define MUON_META_CREATE(TypeName) ::m::meta::MetaDatabase::getInstance().createMeta(TypeName);
-
-#define MUON_TRAITS_META_REGISTER(Type) MUON_TRAITS(Type) static struct MUON_GLUE_LINE(Registrar__) : m::meta::priv::MetaRegistrar<Type> { MUON_GLUE_LINE(Registrar__)() : MetaRegistrar<Type>() {} } MUON_GLUE_COUNTER(s_instance);
 
 #endif
