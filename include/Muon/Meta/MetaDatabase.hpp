@@ -42,10 +42,11 @@ namespace m
 		* @brief
 		*
 		*/
-		class MUON_API MetaDatabase : public helper::Singleton<MetaDatabase>
+		class MUON_API MetaDatabase : public helper::NonCopyable
 		{
-			friend class helper::Singleton<MetaDatabase>;
 		public:
+			MUON_SINGLETON_GET(MetaDatabase);
+
 			template<typename T>
 			MetaData* registerMeta();
 
@@ -65,7 +66,6 @@ namespace m
 			typedef std::unordered_map<String, MetaData> MapMetaType;
 			MapMetaType* m_metadb;
 		};
-
 
 		template<typename T>
 		MetaData* MetaDatabase::registerMeta()
@@ -95,10 +95,6 @@ namespace m
 			{
 				MetaRegistrar()
 				{
-					if(!::m::helper::Singleton<MetaDatabase>::isInstantiated())
-					{
-						::m::meta::MetaDatabase::createInstance();
-					}
 					::m::meta::MetaDatabase::getInstance().registerMeta<T>();
 				}
 			};
@@ -116,4 +112,3 @@ namespace m
 #define MUON_TRAITS_META_REGISTER(Type) MUON_TRAITS(Type) static struct MUON_GLUE_LINE(Registrar__) : m::meta::priv::MetaRegistrar<Type> { MUON_GLUE_LINE(Registrar__)() : MetaRegistrar<Type>() {} } MUON_GLUE_COUNTER(s_instance);
 
 #endif
-

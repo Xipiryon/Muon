@@ -28,77 +28,16 @@
 #ifndef INCLUDE_MUON_SINGLETON_HPP
 #define INCLUDE_MUON_SINGLETON_HPP
 
-#include <stddef.h>
 #include "Muon/System/Assert.hpp"
 #include "Muon/Helper/NonCopyable.hpp"
 
 /*
 * @file Sinleton.hpp
 */
-namespace m
-{
-	namespace helper
-	{
-		/*!
-		* @brief Singleton pattern class
-		*
-		* This class is a helper to create Singleton classes.
-		* For a class to be used as such, it must have the following requirements:
-		* - Constructor must not have any argument
-		* - There must be a first call to instantiate() before any get()
-		* - Class must both inherit from Singleton<T> and declare it as friend
-		* @code{cpp}
-			class A : public m::modifier::Singleton<A>
-			{
-				friend class m::modifier::Singleton<A>;
-				public:
-					// ...
-				private:
-					A() {}
-					~A() {}
-			}
-		* @endcode
-		*/
-		template<typename T>
-		class Singleton : NonCopyable
-		{
-		public:
 
-			/*!
-			* @brief Create the unique instance of the class T
-			* @return the unique instance of T
-			*/
-			static T& createInstance()
-			{
-				MUON_ASSERT(s_instance == NULL, "Singleton instance already created!");
-				static T gInstance;
-				s_instance = &gInstance;
-				return getInstance();
-			}
-
-			/*!
-			* @brief Return the unique instance of T
-			*/
-			static T& getInstance()
-			{
-				MUON_ASSERT_BREAK(s_instance != NULL, "Singleton instance has not been created!");
-				return *s_instance;
-			}
-
-			/*!
-			* @brief Return true if the singleton is instantiated, false otherwhise
-			*/
-			static bool isInstantiated()
-			{
-				return s_instance != NULL;
-			}
-
-		private:
-			static T* s_instance;
-		};
-
-		template<typename T> T* Singleton<T>::s_instance = NULL;
-	}
-}
+/*
+* @brief
+*/
+#define MUON_SINGLETON_GET(Type) static Type& getInstance() { static Type gInstance; return gInstance; }
 
 #endif

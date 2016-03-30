@@ -43,10 +43,10 @@ namespace m
 		* @brief
 		*
 		*/
-		class MUON_API Allocator : public helper::Singleton<Allocator>
+		class MUON_API Allocator : public helper::NonCopyable
 		{
-			friend class helper::Singleton<Allocator>;
 		public:
+			MUON_SINGLETON_GET(Allocator);
 
 			template<typename T>
 			T* allocate(u64 n, const void * = 0)
@@ -66,13 +66,13 @@ namespace m
 			template<typename T>
 			void construct(T* p)
 			{
-				new ((T*) p) T();
+				new ((T*)p) T();
 			}
 
 			template<typename T>
 			void construct(T* p, const T& val)
 			{
-				new ((T*) p) T(val);
+				new ((T*)p) T(val);
 			}
 
 			template<typename T>
