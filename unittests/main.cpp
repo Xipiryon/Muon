@@ -162,12 +162,16 @@ namespace test
 	};
 }
 
-MUON_TRAITS_META_REGISTER(UnitTestObject);
-MUON_TRAITS_META_REGISTER(SimpleObject);
-MUON_TRAITS_META_REGISTER(test::TestObject);
+MUON_TRAITS_DECL(UnitTestObject);
+MUON_TRAITS_DECL(SimpleObject);
+MUON_TRAITS_DECL(test::TestObject);
 
 int main(int argc, char** argv)
 {
+	MUON_META_REGISTER(UnitTestObject);
+	MUON_META_REGISTER(SimpleObject);
+	MUON_META_REGISTER(test::TestObject);
+
 	LogFile logFile;
 	m::system::Log::registerDefaultLogImpl();
 	m::system::Log::registerLogImpl(&logFile);
@@ -229,7 +233,6 @@ int main(int argc, char** argv)
 	// Check the MetaData system, and register all the type we need
 	{
 		MUON_TITLE("m::meta::MetaDatabase");
-		MUON_CHECK(m::meta::MetaDatabase::isInstantiated(), "MetaDatabase is not already instantiated!");
 		UnitTestObject uto;
 		m::meta::MetaData* data = MUON_META(UnitTestObject);
 		m::meta::MetaData* dataName = MUON_META_NAME("UnitTestObject");

@@ -116,6 +116,6 @@ namespace m
 	}
 }
 
-MUON_TRAITS(m::Variant)
+MUON_TRAITS_DECL(m::Variant)
 
 #endif

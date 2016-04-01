@@ -42,7 +42,7 @@ namespace m
 //				ASSERTIONS
 //		--------------------------
 
-#if defined(MUON_PLATFORM_HTML)
+#if defined(MUON_PLATFORM_WEB)
 
 #	define MUON_ASSERT(cond, format, ...)
 #	define MUON_ASSERT_BREAK(cond, format, ...)
@@ -66,6 +66,5 @@ namespace m
 #	define MUON_ERROR_BREAK(format, args...) do { _MUON_ASSERT(format, ##args); MUON_ASM_BREAK; } while(0)
 
 #endif //MUON_PLATFORM_WINDOWS
-
 
 #endif	//INCLUDE_MUON_ASSERT_HPP
