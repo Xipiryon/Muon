@@ -18,7 +18,6 @@ project "UnitTests"
 
 	filter "Debug*"
 		links	{ "Muon-d" }
-		defines { "MUON_DEBUG"}
 
 	filter "Release*"
 		links { "Muon" }

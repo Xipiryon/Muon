@@ -64,6 +64,7 @@ solution "Muon"
 	filter "Debug*"
 		targetsuffix "-d"
         flags   { "Symbols" }
+		defines { "MUON_DEBUG"}
 
 	filter "Release*"
 		optimize "Speed"
