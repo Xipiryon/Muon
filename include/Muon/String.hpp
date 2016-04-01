@@ -360,7 +360,7 @@ namespace m
 	MUON_API system::ILogImpl& operator<<(system::ILogImpl& log, const String& str);
 }
 
-MUON_TRAITS(m::String)
+MUON_TRAITS_DECL(m::String)
 MUON_META_USEPOINTER(m::String);
 
 namespace std

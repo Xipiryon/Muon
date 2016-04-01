@@ -68,16 +68,25 @@ namespace priv
 }
 #endif
 
-#define _MUON_TRAITS_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return MUON_STR(Type); }
-#define _MUON_TRAITS_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u64 id() {using namespace ::priv; return ::m::traits::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
-#define _MUON_TRAITS_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u32 size() { return sizeof(Type); }
-#define _MUON_TRAITS_CREATE(Type) static MUON_INLINE Type* create() { return MUON_NEW(Type); }
-#define _MUON_TRAITS_COPY(Type) static MUON_INLINE void copy(Type* ptr, Type* val) { *ptr = *val; }
-#define _MUON_TRAITS_DESTROY(Type) static MUON_INLINE void destroy(Type* ptr) { MUON_DELETE(ptr); }
+#define _MUON_TRAITS_DECL_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return MUON_STR(Type); }
+#define _MUON_TRAITS_DECL_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u64 id() {using namespace ::priv; return ::m::traits::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
+#define _MUON_TRAITS_DECL_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u32 size() { return sizeof(Type); }
+#define _MUON_TRAITS_DECL_CREATE(Type) static MUON_INLINE Type* create() { return MUON_NEW(Type); }
+#define _MUON_TRAITS_DECL_COPY(Type) static MUON_INLINE void copy(Type* ptr, Type* val) { *ptr = *val; }
+#define _MUON_TRAITS_DECL_DESTROY(Type) static MUON_INLINE void destroy(Type* ptr) { MUON_DELETE(ptr); }
 
-#define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_NAME(Type) _MUON_TRAITS_ID(Type) _MUON_TRAITS_SIZE(Type) _MUON_TRAITS_CREATE(Type) _MUON_TRAITS_COPY(Type) _MUON_TRAITS_DESTROY(Type);
+#define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_DECL_NAME(Type) _MUON_TRAITS_DECL_ID(Type) _MUON_TRAITS_DECL_SIZE(Type) _MUON_TRAITS_DECL_CREATE(Type) _MUON_TRAITS_DECL_COPY(Type) _MUON_TRAITS_DECL_DESTROY(Type);
 #define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
-#define MUON_TRAITS(Type) static_assert(!s_namespaceMuon, "MUON_TRAITS must be placed outside any muon namespace"); namespace m { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
+//! Register a Type Traits
+#define MUON_TRAITS_DECL(Type) static_assert(!s_namespaceMuon, "MUON_TRAITS_DECL must be placed outside any muon namespace"); namespace m { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
+//! Access the TypeTraits struct
+#define MUON_TRAITS(Type) ::m::traits::TypeTraits<Type>
+//! Access the Type name from its TypeTraits (it must have been declared)
+#define MUON_TRAITS_NAME(Type) ::m::traits::TypeTraits<Type>::name()
+//! Access the Type ID from its TypeTraits (it must have been declared)
+#define MUON_TRAITS_ID(Type) ::m::traits::TypeTraits<Type>::id()
+//! Access the Type size from its TypeTraits (it must have been declared)
+#define MUON_TRAITS_SIZE(Type) ::m::traits::TypeTraits<Type>::size()
 
 namespace m
 {
@@ -190,19 +199,19 @@ namespace m
 	}
 }
 
-MUON_TRAITS(m::u8);
-MUON_TRAITS(m::u16);
-MUON_TRAITS(m::u32);
-MUON_TRAITS(m::u64);
+MUON_TRAITS_DECL(m::u8);
+MUON_TRAITS_DECL(m::u16);
+MUON_TRAITS_DECL(m::u32);
+MUON_TRAITS_DECL(m::u64);
 
-MUON_TRAITS(m::i8);
-MUON_TRAITS(m::i16);
-MUON_TRAITS(m::i32);
-MUON_TRAITS(m::i64);
+MUON_TRAITS_DECL(m::i8);
+MUON_TRAITS_DECL(m::i16);
+MUON_TRAITS_DECL(m::i32);
+MUON_TRAITS_DECL(m::i64);
 
-MUON_TRAITS(m::f32);
-MUON_TRAITS(m::f64);
+MUON_TRAITS_DECL(m::f32);
+MUON_TRAITS_DECL(m::f64);
 
-MUON_TRAITS(m::RawPointer);
+MUON_TRAITS_DECL(m::RawPointer);
 
 #endif

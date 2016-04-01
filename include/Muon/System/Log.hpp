@@ -258,7 +258,7 @@ namespace m
 	}
 }
 
-MUON_TRAITS(m::system::Log)
+MUON_TRAITS_DECL(m::system::Log)
 
 MUON_API std::ostream& operator<<(std::ostream& stream, const m::Endl& endl);
 

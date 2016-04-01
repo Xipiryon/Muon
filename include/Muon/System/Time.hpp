@@ -64,6 +64,6 @@ namespace m
 	}
 }
 
-MUON_TRAITS(m::system::Time)
-MUON_TRAITS(m::system::Timer)
+MUON_TRAITS_DECL(m::system::Time)
+MUON_TRAITS_DECL(m::system::Timer)
 #endif

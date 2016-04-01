@@ -162,9 +162,9 @@ namespace test
 	};
 }
 
-MUON_TRAITS(UnitTestObject);
-MUON_TRAITS(SimpleObject);
-MUON_TRAITS(test::TestObject);
+MUON_TRAITS_DECL(UnitTestObject);
+MUON_TRAITS_DECL(SimpleObject);
+MUON_TRAITS_DECL(test::TestObject);
 
 int main(int argc, char** argv)
 {
