@@ -46,62 +46,60 @@ namespace m
 {
 	namespace memory
 	{
-
-		namespace priv
+		/*!
+		* @brief
+		*
+		*/
+		template<typename T>
+		class PoolAllocator
 		{
-
-			struct MUON_API PoolMemBlock
+		public:
+			struct PoolMemBlock
 			{
-				explicit PoolMemBlock(u32 size);
+				explicit PoolMemBlock(u32 size)
+					: data((u32*)::malloc(size))
+				{
+				}
 
 				u32* data = NULL;
 			};
 
-			struct MUON_API PoolFreeBlock
+			struct PoolFreeBlock
 			{
-				PoolFreeBlock(u32* startIndex, u32 freeSize);
+				PoolFreeBlock(u32* startIndex, u32 freeSize)
+					: size(freeSize)
+					, start(startIndex)
+				{
+				}
 
 				u32 size = POOLALLOCATOR_SIZE;
 				u32* start = NULL;
 			};
 
-			extern MUON_API std::deque<PoolMemBlock> s_poolMem;
-			extern MUON_API std::map<u32, std::deque<PoolFreeBlock>> s_poolFree;
-		}
-
-		/*!
-		* @brief
-		*
-		*/
-		class MUON_API PoolAllocator
-		{
-		public:
-
-			template<typename T>
-			static T* allocate(u32 count)
+			static T* allocate(u32 n)
 			{
-				const u32 memBlock = count*sizeof(T);
+				const u32 memBlock = n*sizeof(T);
 				MUON_ASSERT_BREAK(memBlock <= POOLALLOCATOR_SIZE
 								  , "Cannot allocate a single element which size (%d*%d=%d) is bigger than POOLALLOCATOR_SIZE (%d)"
-								  , count, sizeof(T), memBlock, POOLALLOCATOR_SIZE);
+								  , n, sizeof(T), memBlock, POOLALLOCATOR_SIZE);
 				T* mem = NULL;
 				u32 poolId = 0;
 				u32 freeId = 0;
 				while (!mem)
 				{
 					// Allocate a whole new pool, create a new FreeList
-					if (poolId == priv::s_poolMem.size())
+					if (poolId == s_poolMem.size())
 					{
-						priv::s_poolMem.push_back(priv::PoolMemBlock(POOLALLOCATOR_SIZE));
-						priv::s_poolFree[poolId].push_back(priv::PoolFreeBlock(priv::s_poolMem.back().data, POOLALLOCATOR_SIZE));
+						s_poolMem.push_back(PoolMemBlock(POOLALLOCATOR_SIZE));
+						s_poolFree[poolId].push_back(PoolFreeBlock(s_poolMem.back().data, POOLALLOCATOR_SIZE));
 					}
 
 					// Search a free block big enough
-					auto& freeDeque = priv::s_poolFree[poolId];
+					auto& freeDeque = s_poolFree[poolId];
 					while (!mem && freeId < freeDeque.size())
 					{
 						// We've got a free list in this pool
-						priv::PoolFreeBlock& freeBlock = freeDeque[freeId];
+						PoolFreeBlock& freeBlock = freeDeque[freeId];
 						if (memBlock <= freeBlock.size)
 						{
 							mem = (T*)freeBlock.start;
@@ -124,38 +122,36 @@ namespace m
 				return mem;
 			}
 
-			template<typename T, typename... Args>
-			static T* construct(u32 count, T* ptr, Args... args)
+			template<typename... Args>
+			static T* construct(u32 n, T* ptr, Args... args)
 			{
-				for (u32 c = 0; c < count; ++c)
+				for (u32 c = 0; c < n; ++c)
 				{
 					new (ptr + c) T(args...);
 				}
 				return ptr;
 			}
 
-			template<typename T>
-			static void destroy(u32 count, T* ptr)
+			static void destroy(u32 n, T* ptr)
 			{
-				for (u32 c = 0; c < count; ++c)
+				for (u32 c = 0; c < n; ++c)
 				{
 					(ptr + c)->~T();
 				}
 			}
 
-			template<typename T>
-			static void deallocate(u32 count, T* ptr)
+			static void deallocate(u32 n, T* ptr)
 			{
 				bool assert = true;
-				for (u32 poolId = 0; poolId < priv::s_poolMem.size(); ++poolId)
+				for (u32 poolId = 0; poolId < s_poolMem.size(); ++poolId)
 				{
-					priv::PoolMemBlock pool = priv::s_poolMem.at(poolId);
+					PoolMemBlock pool = s_poolMem.at(poolId);
 					u32* start = pool.data;
 					u32* end = pool.data + POOLALLOCATOR_SIZE;
 					u32* uPtr = (u32*)ptr;
 					if (uPtr >= start && uPtr <= end)
 					{
-						u32 memSize = sizeof(T)*count;
+						u32 memSize = sizeof(T)*n;
 						if (uPtr + memSize > end)
 						{
 							const u32 memLeft = (u32)((u64)end - (u64)uPtr);
@@ -164,7 +160,7 @@ namespace m
 						}
 
 						// Merge free blocks and stop the function (so we don't hit the MUON_ERROR)
-						mergeFreeBlock(poolId, priv::PoolFreeBlock(start, memSize));
+						mergeFreeBlock(poolId, PoolFreeBlock(start, memSize));
 						assert = false;
 						break;
 					}
@@ -177,9 +173,46 @@ namespace m
 			}
 
 		private:
+			static void mergeFreeBlock(u32 poolId, PoolFreeBlock block)
+			{
+				auto itDeque = s_poolFree.find(poolId);
+				if (itDeque == s_poolFree.end())
+				{
+					MUON_ERROR_BREAK("Trying to free memory from a pool that doesn't exist!");
+				}
+				auto& freeDeque = itDeque->second;
 
-			static void mergeFreeBlock(u32 poolId, priv::PoolFreeBlock freeBlock);
+				// If we either find a free block that begin where we end, or end where we begin, update it
+				bool add = true;
+				for (auto& it : freeDeque)
+				{
+					if ((it.start + it.size) == block.start)
+					{
+						it.size += block.size;
+						add = false;
+						break;
+					}
+
+					if (it.start == (block.start + block.size))
+					{
+						it.start = block.start;
+						it.size += block.size;
+						add = false;
+						break;
+					}
+				}
+
+				if (add)
+				{
+					freeDeque.push_back(block);
+				}
+			}
+
+			static std::deque<PoolMemBlock> s_poolMem;
+			static std::map<u32, std::deque<PoolFreeBlock>> s_poolFree;
 		};
+		template<typename T> std::deque<typename PoolAllocator<T>::PoolMemBlock> PoolAllocator<T>::s_poolMem;
+		template<typename T> std::map<u32, std::deque<typename PoolAllocator<T>::PoolFreeBlock>> PoolAllocator<T>::s_poolFree;
 	}
 }
 

@@ -55,9 +55,6 @@ namespace m
 	typedef float	f32;
 	//! double
 	typedef double	f64;
-
-	//! void*
-	typedef void* RawPointer;
 }
 
 #endif

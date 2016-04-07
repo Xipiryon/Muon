@@ -30,6 +30,7 @@
 
 #include <type_traits>
 #include "Muon/Traits/TypeInfo.hpp"
+#include "Muon/Traits/RawType.hpp"
 #include "Muon/Memory/Allocator.hpp"
 
 #if defined(MUON_PLATFORM_WINDOWS) || defined(MUON_PLATFORM_WEB)
@@ -147,49 +148,6 @@ namespace m
 			_MUON_TRAITS_FUNCTIONS_DECL(char*);
 		};
 
-		// Template Functions to remove qualifier around a Template
-		template<typename T> struct RawType
-		{
-			typedef T type;
-		};
-		template<typename T> struct RawType<const T>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<T&>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<const T&>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<T&&>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<T*>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<const T*>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<const T* const>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		// Special case of char*
-		template<> struct RawType<const char*>
-		{
-			typedef const char* type;
-		};
-		template<> struct RawType<char*>
-		{
-			typedef char* type;
-		};
-
 		// Function which return a class member offset (works with virtual and abstract classes)
 		template<typename Class, typename MemberType>
 		MUON_CONSTEXPR u64 offset(MemberType Class::*member)
@@ -211,7 +169,5 @@ MUON_TRAITS_DECL(m::i64);
 
 MUON_TRAITS_DECL(m::f32);
 MUON_TRAITS_DECL(m::f64);
-
-MUON_TRAITS_DECL(m::RawPointer);
 
 #endif

@@ -44,71 +44,37 @@ namespace m
 		*
 		*/
 		template <typename T>
-		class MUON_API RawAllocator
+		class RawAllocator
 		{
 		public:
-			typedef u64			size_type;
-			typedef u64			difference_type;
-			typedef T*			pointer;
-			typedef const T*	const_pointer;
-			typedef T&			reference;
-			typedef const T&	const_reference;
-			typedef T			value_type;
 
-			RawAllocator() {}
-			RawAllocator(const RawAllocator&) {}
-
-			pointer allocate(u64 n, const void * = 0)
+			static T* allocate(u32 n)
 			{
 				return (T*)::malloc(n * sizeof(T));
 			}
 
-			void deallocate(void* p, u64)
+			template<typename... Args>
+			static T* construct(u32 n, T* p, Args&&... args)
 			{
-				if (p)
+				for (u32 c = 0; c < n; ++c)
 				{
-					::free(p);
+					new (p + c) T(args...);
+				}
+				return p;
+			}
+
+			static void destroy(u32 n, T* p)
+			{
+				for (u32 c = 0; c < n; ++c)
+				{
+					(p + c)->~T();
 				}
 			}
 
-			pointer address(reference x) const
+			static void deallocate(T* p)
 			{
-				return &x;
+				::free(p);
 			}
-
-			const_pointer address(const_reference x) const
-			{
-				return &x;
-			}
-
-			size_type max_size() const
-			{
-				return size_t(-1);
-			}
-
-			void construct(pointer p, const T& val)
-			{
-				new ((T*) p) T(val);
-			}
-
-			void destroy(pointer p)
-			{
-				p->~T();
-			}
-
-			RawAllocator<T>& operator=(const RawAllocator&)
-			{
-				return *this;
-			}
-
-			template <class U>
-			struct rebind { typedef RawAllocator<U> other; };
-
-			template <class U>
-			RawAllocator(const RawAllocator<U>&) {}
-
-			template <class U>
-			RawAllocator& operator=(const RawAllocator<U>&) { return *this; }
 		};
 	}
 }

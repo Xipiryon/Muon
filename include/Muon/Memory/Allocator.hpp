@@ -28,74 +28,19 @@
 #ifndef INCLUDE_MUON_ALLOCATOR_HPP
 #define INCLUDE_MUON_ALLOCATOR_HPP
 
-#include <map>
-#include "Muon/Helper/Singleton.hpp"
+#include "Muon/Traits/RawType.hpp"
 #include "Muon/Memory/RawAllocator.hpp"
 
 /*
 * @file Allocator.hpp
 */
-namespace m
-{
-	namespace memory
-	{
-		/*!
-		* @brief
-		*
-		*/
-		class MUON_API Allocator : public helper::NonCopyable
-		{
-		public:
-			MUON_SINGLETON_GET(Allocator);
-
-			template<typename T>
-			T* allocate(u64 n, const void * = 0)
-			{
-				return (T*)::malloc((u32)n * sizeof(T));
-			}
-
-			template<typename T>
-			void deallocate(void* p, u64)
-			{
-				if (p)
-				{
-					::free(p);
-				}
-			}
-
-			template<typename T>
-			void construct(T* p)
-			{
-				new ((T*)p) T();
-			}
-
-			template<typename T>
-			void construct(T* p, const T& val)
-			{
-				new ((T*)p) T(val);
-			}
-
-			template<typename T>
-			void destroy(T* p)
-			{
-				p->~T();
-			}
-
-		private:
-			Allocator();
-			~Allocator();
-
-			std::map<u64, void*>* m_allocators;
-		};
-	}
-}
 
 /*!
 * @def MUON_MALLOC(Class)
 * Allocate memory for given Class instance
 * @param Class Class or Struct to be allocated
 */
-#define MUON_MALLOC(Class) (Class*)::malloc(sizeof(Class))
+#define MUON_MALLOC(Class) ::m::memory::RawAllocator<typename ::m::traits::RawType<Class>::type >::allocate(1)
 
 /*!
 * @def MUON_NEW(Class, ...)
@@ -105,9 +50,9 @@ namespace m
 * @param ... Variadic parameters to be forwarded to the constructor
 */
 #if defined(MUON_PLATFORM_WINDOWS)
-#	define MUON_NEW(Class, ...) new (MUON_MALLOC(Class)) Class( __VA_ARGS__ )
+#	define MUON_NEW(Class, ...) ::m::memory::RawAllocator<typename ::m::traits::RawType<Class>::type >::construct(1, MUON_MALLOC(Class), __VA_ARGS__ )
 #else
-#	define MUON_NEW(Class, args...) new (MUON_MALLOC(Class)) Class(args)
+#	define MUON_NEW(Class, args...) ::m::memory::RawAllocator<typename ::m::traits::RawType<Class>::type>::construct(1, MUON_MALLOC(Class), args)
 #endif //MUON_PLATFORM_WINDOWS
 
 /*!
@@ -116,7 +61,7 @@ namespace m
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be freed from memory
 */
-#define MUON_FREE(Pointer) ::free(Pointer)
+#define MUON_FREE(Pointer) ::m::memory::RawAllocator<typename ::m::traits::RawType<decltype(Pointer)>::type>::deallocate(Pointer)
 
 /*!
 * @def MUON_DELETE(Pointer)
@@ -124,6 +69,6 @@ namespace m
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be destructed and freed from memory
 */
-#define MUON_DELETE(Pointer) (MUON_FREE(Pointer), Pointer)
+#define MUON_DELETE(Pointer) (::m::memory::RawAllocator<typename ::m::traits::RawType<decltype(Pointer)>::type>::destroy(1, Pointer), MUON_FREE(Pointer))
 
 #endif

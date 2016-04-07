@@ -25,63 +25,59 @@
 *
 *************************************************************************/
 
-#include "Muon/Memory/PoolAllocator.hpp"
+#ifndef INCLUDE_MUON_RAWTYPE_HPP
+#define INCLUDE_MUON_RAWTYPE_HPP
+
+#include "Muon/Traits/TypeInfo.hpp"
 
 namespace m
 {
-	namespace memory
+	namespace traits
 	{
-		namespace priv
+		// Template Functions to remove qualifier around a Template
+		template<typename T> struct RawType
 		{
-			PoolMemBlock::PoolMemBlock(u32 size)
-				: data((u32*)::malloc(size))
-			{
-			}
-
-			PoolFreeBlock::PoolFreeBlock(u32* startIndex, u32 freeSize)
-				: size(freeSize)
-				, start(startIndex)
-			{
-			}
-
-
-			std::deque<PoolMemBlock> s_poolMem;
-			std::map<u32, std::deque<PoolFreeBlock>> s_poolFree;
-		}
-
-		void PoolAllocator::mergeFreeBlock(u32 poolId, priv::PoolFreeBlock block)
+			typedef T type;
+		};
+		template<typename T> struct RawType<const T>
 		{
-			auto itDeque = priv::s_poolFree.find(poolId);
-			if (itDeque == priv::s_poolFree.end())
-			{
-				MUON_ERROR_BREAK("Trying to free memory from a pool that doesn't exist!");
-			}
-			auto& freeDeque = itDeque->second;
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<T&>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<const T&>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<T&&>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<T*>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<const T*>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<const T* const>
+		{
+			typedef typename RawType<T>::type type;
+		};
 
-			// If we either find a free block that begin where we end, or end where we begin, update it
-			bool add = true;
-			for (auto& it : freeDeque)
-			{
-				if ((it.start + it.size) == block.start)
-				{
-					it.size += block.size;
-					add = false;
-					break;
-				}
-
-				if (it.start == (block.start + block.size))
-				{
-					it.start = block.start;
-					it.size += block.size;
-					add = false;
-					break;
-				}
-			}
-
-			if(add)
-			{
-				freeDeque.push_back(block);
-			}
-		}
+		// Special case of char*
+		template<> struct RawType<const char*>
+		{
+			typedef const char* type;
+		};
+		template<> struct RawType<char*>
+		{
+			typedef char* type;
+		};
 	}
 }
+
+#endif
