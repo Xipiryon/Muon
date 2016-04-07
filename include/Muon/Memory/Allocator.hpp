@@ -52,7 +52,7 @@
 #if defined(MUON_PLATFORM_WINDOWS)
 #	define MUON_NEW(Class, ...) ::m::memory::RawAllocator<typename ::m::traits::RawType<Class>::type >::construct(1, MUON_MALLOC(Class), __VA_ARGS__ )
 #else
-#	define MUON_NEW(Class, args...) ::m::memory::RawAllocator<typename ::m::traits::RawType<Class>::type>::construct(1, MUON_MALLOC(Class), args)
+#	define MUON_NEW(Class, args...) ::m::memory::RawAllocator<typename ::m::traits::RawType<Class>::type>::construct(1, MUON_MALLOC(Class), ##args)
 #endif //MUON_PLATFORM_WINDOWS
 
 /*!
