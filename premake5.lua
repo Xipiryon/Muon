@@ -31,23 +31,18 @@ solution "Muon"
 	end
 	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL" }
 
+	implibdir "bin/lib"
 	if os.is("windows") then
-		implibdir "bin/lib"
 		buildoptions { "/GR-" }
-
-		-- Because on Windows, you can't start a program if .dll are not in the same folder...
-		postbuildcommands { string.gsub("copy "..SolutionRoot.."/bin/lib/*.dll "..SolutionRoot.."/bin/", "/", "\\") }
-
 	else
 		buildoptions { "--std=c++11 -fno-rtti" }
-		linkoptions { "-Wl,-rpath,bin/lib" }
 	end
 
 	-- If option exists, then override G_Install
-	if _OPTIONS["basedir"] then
-		G_Install.Root = _OPTIONS["basedir"]
-		G_Install.Header = _OPTIONS["basedir"].."/include"
-		G_Install.Lib = _OPTIONS["basedir"].."/bin/lib"
+	if _OPTIONS["installdir"] then
+		G_Install.Root = _OPTIONS["installdir"]
+		G_Install.Header = _OPTIONS["installdir"].."/include"
+		G_Install.Lib = _OPTIONS["installdir"].."/bin/lib"
 		print("Base directory has been overwritten to '"..G_Install.Root.."'")
 	end
 
@@ -91,7 +86,7 @@ end
 ------------------------------
 
 newoption {
-	trigger     = "basedir",
+	trigger     = "installdir",
 	value       = "PATH",
 	description = "Folder to search lib & include; default: '"..G_Install.Root.."'",
 }

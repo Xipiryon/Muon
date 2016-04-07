@@ -5,6 +5,7 @@
 project "UnitTests"
 	local ProjectRoot = os.getcwd()
 
+	dependson("Muon")
 	language "C++"
 	targetname "UnitTests"
 	targetdir (SolutionRoot.."/bin")
