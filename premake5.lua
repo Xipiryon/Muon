@@ -69,6 +69,7 @@ solution "Muon"
 		flags   { "Symbols" }
 
 	filter "Final*"
+		targetsuffix "-f"
 		optimize "Speed"
 		flags   { "LinkTimeOptimization" }
 
