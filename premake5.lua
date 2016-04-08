@@ -29,13 +29,14 @@ solution "Muon"
 	if _OPTIONS["unittests"] then
 		startproject "UnitTests"
 	end
-	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL" }
+
+	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL", "FinalDLL", "FinalLib" }
 
 	implibdir "bin/lib"
 	if os.is("windows") then
 		buildoptions { "/GR-" }
 	else
-		buildoptions { "--std=c++11 -fno-rtti" }
+		buildoptions { "--std=c++11" }
 	end
 
 	-- If option exists, then override G_Install
@@ -58,12 +59,18 @@ solution "Muon"
 
 	filter "Debug*"
 		targetsuffix "-d"
+		optimize "Debug"
         flags   { "Symbols" }
 		defines { "MUON_DEBUG"}
 
 	filter "Release*"
+		targetsuffix "-r"
 		optimize "Speed"
-		flags   { "LinkTimeOptimization", "NoRTTI" }
+		flags   { "Symbols" }
+
+	filter "Final*"
+		optimize "Speed"
+		flags   { "LinkTimeOptimization" }
 
     filter  "*Lib"
         kind "StaticLib"

@@ -21,4 +21,7 @@ project "UnitTests"
 		links	{ "Muon-d" }
 
 	filter "Release*"
+		links { "Muon-r" }
+
+	filter "Final*"
 		links { "Muon" }
