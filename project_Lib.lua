@@ -22,3 +22,5 @@ project "Muon"
 		else
 			postbuildcommands { "find "..SolutionRoot.."/bin/lib/ -name libMuon*.so -exec cp {} "..SolutionRoot.."/bin/ \\;" }
 		end
+
+	filter {}

@@ -25,3 +25,5 @@ project "UnitTests"
 
 	filter "Final*"
 		links { "Muon" }
+
+	filter {}
