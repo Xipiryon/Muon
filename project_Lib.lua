@@ -2,7 +2,7 @@
 -- Library
 -------------------------------------------
 
-project "Muon"
+project "Muon_Core"
 	local ProjectRoot = os.getcwd()
 
 	language "C++"

@@ -2,10 +2,10 @@
 -- Unit Tests
 -------------------------------------------
 
-project "UnitTests"
+project "Muon_UnitTests"
 	local ProjectRoot = os.getcwd()
 
-	dependson("Muon")
+	dependson("Muon_Core")
 	language "C++"
 	targetname "UnitTests"
 	targetdir (SolutionRoot.."/bin")
