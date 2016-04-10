@@ -17,13 +17,6 @@ project "Muon_UnitTests"
 		ProjectRoot.."/unittests/tinyxml2.h"
 	}
 
-	filter "Debug*"
-		links	{ "Muon-d" }
-
-	filter "Release*"
-		links { "Muon-r" }
-
-	filter "Final*"
-		links { "Muon-f" }
+	links { "Muon_Core" }
 
 	filter {}
