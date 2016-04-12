@@ -27,7 +27,7 @@ end
 solution "Muon"
 
 	if _OPTIONS["unittests"] then
-		startproject "UnitTests"
+		startproject "Muon_UnitTests"
 	end
 
 	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL", "FinalDLL", "FinalLib" }
@@ -86,6 +86,8 @@ solution "Muon"
 
     filter  "*DLL"
         kind "SharedLib"
+
+	filter {}
 
 ------------------------------
 -- Project
