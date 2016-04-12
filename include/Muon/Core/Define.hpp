@@ -33,23 +33,6 @@
 */
 
 //		--------------------------
-//				NAMESPACE
-//		--------------------------
-
-enum
-{
-	s_namespaceMuon = false
-};
-//! Library main namespace
-namespace m
-{
-	enum
-	{
-		s_namespaceMuon = true
-	};
-}
-
-//		--------------------------
 //				EXPORT
 //		--------------------------
 //Windows

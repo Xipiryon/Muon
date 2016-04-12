@@ -79,7 +79,7 @@ namespace priv
 #define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_DECL_NAME(Type) _MUON_TRAITS_DECL_ID(Type) _MUON_TRAITS_DECL_SIZE(Type) _MUON_TRAITS_DECL_CREATE(Type) _MUON_TRAITS_DECL_COPY(Type) _MUON_TRAITS_DECL_DESTROY(Type);
 #define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
 //! Register a Type Traits
-#define MUON_TRAITS_DECL(Type) static_assert(!s_namespaceMuon, "MUON_TRAITS_DECL must be placed outside any muon namespace"); namespace m { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
+#define MUON_TRAITS_DECL(Type) namespace m { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
 //! Access the TypeTraits struct
 #define MUON_TRAITS(Type) ::m::traits::TypeTraits<Type>
 //! Access the Type name from its TypeTraits (it must have been declared)
