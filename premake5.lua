@@ -57,6 +57,12 @@ solution "Muon"
 		G_Install.Lib
 	}
 
+	flags {
+		"NoImplicitLink",
+		"NoIncrementalLink",
+		"NoEditAndContinue",
+	}
+
 	filter "Debug*"
 		targetsuffix "-d"
 		optimize "Debug"
@@ -70,11 +76,13 @@ solution "Muon"
 
 	filter "Final*"
 		targetsuffix "-f"
-		optimize "Speed"
+		optimize "Full"
 		flags   { "LinkTimeOptimization" }
 
     filter  "*Lib"
         kind "StaticLib"
+		flags { "StaticRuntime" }
+		defines { "MUON_STATIC" }
 
     filter  "*DLL"
         kind "SharedLib"

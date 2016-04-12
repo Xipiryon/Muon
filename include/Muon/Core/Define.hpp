@@ -35,6 +35,9 @@
 //		--------------------------
 //				EXPORT
 //		--------------------------
+#if defined(MUON_STATIC)
+#	define MUON_API
+#else
 //Windows
 #	ifdef _MSC_VER
 #		if MUON_EXPORTS
@@ -50,6 +53,7 @@
 #			define MUON_API
 #		endif
 #	endif
+#endif
 
 //		-------------------------
 //				PLATFORMS
