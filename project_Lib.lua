@@ -19,8 +19,6 @@ project "Muon_Core"
 	filter "*DLL"
 		if os.is("windows") then
 			postbuildcommands { string.gsub("copy "..SolutionRoot.."/bin/lib/Muon*.dll "..SolutionRoot.."/bin/", "/", "\\") }
-		else
-			postbuildcommands { "find "..SolutionRoot.."/bin/lib/ -name libMuon*.so -exec cp {} "..SolutionRoot.."/bin/ \\;" }
 		end
 
 	filter {}
