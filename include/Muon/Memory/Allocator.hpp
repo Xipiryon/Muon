@@ -29,7 +29,7 @@
 #define INCLUDE_MUON_ALLOCATOR_HPP
 
 #include "Muon/Traits/RawType.hpp"
-#include "Muon/Memory/RawAllocator.hpp"
+#include "Muon/Memory/HeapAllocator.hpp"
 
 /*
 * @file Allocator.hpp
@@ -40,7 +40,7 @@
 * Allocate memory for given Class instance
 * @param Class Class or Struct to be allocated
 */
-#define MUON_MALLOC(Class) ::m::memory::RawAllocator<typename ::m::traits::RawType<Class>::type >::allocate(1)
+#define MUON_MALLOC(Class, Count) (Class*)::m::memory::HeapAllocator::allocate(sizeof(Class) * Count)
 
 /*!
 * @def MUON_NEW(Class, ...)
@@ -50,9 +50,9 @@
 * @param ... Variadic parameters to be forwarded to the constructor
 */
 #if defined(MUON_PLATFORM_WINDOWS)
-#	define MUON_NEW(Class, ...) ::m::memory::RawAllocator<typename ::m::traits::RawType<Class>::type >::construct(1, MUON_MALLOC(Class), __VA_ARGS__ )
+#	define MUON_NEW(Class, ...) ::m::memory::HeapAllocator::construct<typename ::m::traits::RawType<Class>::type>(MUON_MALLOC(Class, 1), __VA_ARGS__ )
 #else
-#	define MUON_NEW(Class, args...) ::m::memory::RawAllocator<typename ::m::traits::RawType<Class>::type>::construct(1, MUON_MALLOC(Class), ##args)
+#	define MUON_NEW(Class, args...) ::m::memory::HeapAllocator::construct<typename ::m::traits::RawType<Class>::type>(MUON_MALLOC(Class, 1), ##args)
 #endif //MUON_PLATFORM_WINDOWS
 
 /*!
@@ -61,7 +61,7 @@
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be freed from memory
 */
-#define MUON_FREE(Pointer) ::m::memory::RawAllocator<typename ::m::traits::RawType<decltype(Pointer)>::type>::deallocate(Pointer)
+#define MUON_FREE(Pointer) ::m::memory::HeapAllocator::deallocate(Pointer)
 
 /*!
 * @def MUON_DELETE(Pointer)
@@ -69,6 +69,6 @@
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be destructed and freed from memory
 */
-#define MUON_DELETE(Pointer) (::m::memory::RawAllocator<typename ::m::traits::RawType<decltype(Pointer)>::type>::destroy(1, Pointer), MUON_FREE(Pointer))
+#define MUON_DELETE(Pointer) (::m::memory::HeapAllocator::destroy<typename ::m::traits::RawType<decltype(Pointer)>::type>(Pointer), MUON_FREE(Pointer))
 
 #endif

@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_RAWALLOCATOR_HPP
-#define INCLUDE_MUON_RAWALLOCATOR_HPP
+#ifndef INCLUDE_MUON_HEAPALLOCATOR_HPP
+#define INCLUDE_MUON_HEAPALLOCATOR_HPP
 
 #include <new>
 #include <stdlib.h>
@@ -43,35 +43,29 @@ namespace m
 		* @brief
 		*
 		*/
-		template <typename T>
-		class RawAllocator
+		class HeapAllocator
 		{
 		public:
 
-			static T* allocate(u32 n)
+			static void* allocate(u32 size)
 			{
-				return (T*)::malloc(n * sizeof(T));
+				return ::malloc(size);
 			}
 
-			template<typename... Args>
-			static T* construct(u32 n, T* p, Args&&... args)
+			template<typename T, typename... Args>
+			static T* construct(T* p, Args&&... args)
 			{
-				for (u32 c = 0; c < n; ++c)
-				{
-					new (p + c) T(args...);
-				}
+				new (p)T(args...);
 				return p;
 			}
 
-			static void destroy(u32 n, T* p)
+			template <typename T>
+			static void destroy(T* p)
 			{
-				for (u32 c = 0; c < n; ++c)
-				{
-					(p + c)->~T();
-				}
+				p->~T();
 			}
 
-			static void deallocate(T* p)
+			static void deallocate(void* p)
 			{
 				::free(p);
 			}
