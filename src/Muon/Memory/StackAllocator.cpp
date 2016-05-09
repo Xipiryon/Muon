@@ -50,6 +50,7 @@ namespace m
 							  , size, m_blockSize - m_top);
 			void* ptr = (u8*)m_data + m_top;
 			m_top += size;
+			return ptr;
 		}
 
 		void StackAllocator::free(Marker marker)

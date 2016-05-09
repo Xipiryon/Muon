@@ -46,41 +46,11 @@ namespace m
 		{
 		public:
 
-			PoolAllocator(u32 blockSize)
-				: m_blockSize(blockSize)
-			{
-				m_data = ::malloc(m_blockSize);
-				m_end = ((u8*)m_data + m_blockSize);
-				u32* mem = (u32*)m_data;
-				while (mem < m_end)
-				{
-					*(mem++) = (u32)(mem + 1);
-				}
-				m_free = m_data;
-			}
+			PoolAllocator(u32 blockSize);
+			~PoolAllocator();
 
-			~PoolAllocator()
-			{
-				::free(m_data);
-			}
-
-			void* alloc()
-			{
-				MUON_ASSERT_BREAK(m_free != m_end, "Pool is full!");
-				u32* ptr = (u32*)m_free;
-				u32* nextFree = (u32*)m_free;
-				m_free = (u32*)*nextFree;
-				return ptr;
-			}
-
-			void free(u32* ptr)
-			{
-				u32* uptr = (u32*)ptr;
-				MUON_ASSERT_BREAK(uptr >= m_data && uptr <= m_end, "Given pointer is not stored in Pool!");
-
-				*uptr = (u32)m_free;
-				m_free = uptr;
-			}
+			void* alloc();
+			void free(u32* ptr);
 
 		private:
 			u32 m_blockSize;
