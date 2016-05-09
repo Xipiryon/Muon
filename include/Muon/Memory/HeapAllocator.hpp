@@ -43,30 +43,18 @@ namespace m
 		* @brief
 		*
 		*/
-		template<typename T>
 		class MUON_API HeapAllocator
 		{
 		public:
 
-			static T* allocate(u32 size)
+			static void* allocate(u32 size)
 			{
-				return (T*)::malloc(size);
+				return ::malloc(size);
 			}
 
-			static void deallocate(T* p)
+			static void deallocate(void* p)
 			{
 				::free(p);
-			}
-
-			template<typename... Args>
-			static T* construct(T* p, Args&&... args)
-			{
-				return new (p)T(args...);
-			}
-
-			static void destroy(T* p)
-			{
-				p->~T();
 			}
 		};
 	}

@@ -35,13 +35,30 @@
 * @file Allocator.hpp
 */
 
+namespace m
+{
+	namespace memory
+	{
+		template<typename T, typename... Args>
+		static T* construct(T* p, Args&&... args)
+		{
+			return new (p)T(args...);
+		}
+
+		template<typename T>
+		static void destroy(T* p)
+		{
+			p->~T();
+		}
+	}
+}
 /*!
 * @def MUON_MALLOC(Class)
 * Allocate memory for given Class instance
 * @param Class Type to be allocated
 * @param Count Number of element
 */
-#define MUON_MALLOC(Class, Count) ::m::memory::HeapAllocator<Class>::allocate(sizeof(Class) * Count)
+#define MUON_MALLOC(Class, Count) (Class*)::m::memory::HeapAllocator::allocate(sizeof(Class) * Count)
 
 /*!
 * @def MUON_NEW(Class, ...)
@@ -51,9 +68,9 @@
 * @param ... Variadic parameters to be forwarded to the constructor
 */
 #if defined(MUON_PLATFORM_WINDOWS)
-#	define MUON_NEW(Class, ...) ::m::memory::HeapAllocator<typename ::m::traits::RawType<Class>::type>::construct(MUON_MALLOC(Class, 1), __VA_ARGS__ )
+#	define MUON_NEW(Class, ...) ::m::memory::construct<typename ::m::traits::RawType<Class>::type>(MUON_MALLOC(Class, 1), __VA_ARGS__ )
 #else
-#	define MUON_NEW(Class, args...) ::m::memory::HeapAllocator<typename ::m::traits::RawType<Class>::type>::construct(MUON_MALLOC(Class, 1), ##args)
+#	define MUON_NEW(Class, args...) ::m::memory::construct<typename ::m::traits::RawType<Class>::type>(MUON_MALLOC(Class, 1), ##args)
 #endif //MUON_PLATFORM_WINDOWS
 
 /*!
@@ -62,7 +79,7 @@
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be freed from memory
 */
-#define MUON_FREE(Pointer) ::m::memory::HeapAllocator<typename ::m::traits::RawType<decltype(Pointer)>::type>::deallocate(Pointer)
+#define MUON_FREE(Pointer) ::m::memory::HeapAllocator::deallocate(Pointer)
 
 /*!
 * @def MUON_DELETE(Pointer)
@@ -70,6 +87,6 @@
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be destructed and freed from memory
 */
-#define MUON_DELETE(Pointer) (::m::memory::HeapAllocator<typename ::m::traits::RawType<decltype(Pointer)>::type>::destroy(Pointer), MUON_FREE(Pointer))
+#define MUON_DELETE(Pointer) (::m::memory::destroy<typename ::m::traits::RawType<decltype(Pointer)>::type>(Pointer), MUON_FREE(Pointer))
 
 #endif
