@@ -58,7 +58,7 @@ namespace m
 * @param Class Type to be allocated
 * @param Count Number of element
 */
-#define MUON_MALLOC(Class, Count) (Class*)::m::memory::HeapAllocator::allocate(sizeof(Class) * Count)
+#define MUON_MALLOC(Class, Count) (Class*)::m::memory::HeapAllocator::alloc(sizeof(Class) * Count)
 
 /*!
 * @def MUON_NEW(Class, ...)
@@ -79,7 +79,7 @@ namespace m
 * The given pointer will *not* be set to NULL after deletion.
 * @param Pointer Object to be freed from memory
 */
-#define MUON_FREE(Pointer) ::m::memory::HeapAllocator::deallocate(Pointer)
+#define MUON_FREE(Pointer) ::m::memory::HeapAllocator::free(Pointer)
 
 /*!
 * @def MUON_DELETE(Pointer)

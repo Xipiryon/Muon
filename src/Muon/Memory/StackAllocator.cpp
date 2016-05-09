@@ -25,32 +25,47 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_HEAPALLOCATOR_HPP
-#define INCLUDE_MUON_HEAPALLOCATOR_HPP
+#include "Muon/Memory/StackAllocator.hpp"
 
-#include <new>
-#include <stdlib.h>
-#include "Muon/Core/Typedef.hpp"
-
-/*
-* @file Allocator.hpp
-*/
 namespace m
 {
 	namespace memory
 	{
-		/*!
-		* @brief
-		*
-		*/
-		class MUON_API HeapAllocator
+		StackAllocator::StackAllocator(u32 blockSize)
+			: m_blockSize(blockSize)
+			, m_top(0)
 		{
-		public:
+			m_data = ::malloc(m_blockSize);
+		}
 
-			static void* alloc(u32 size);
-			static void free(void* p);
-		};
+		StackAllocator::~StackAllocator()
+		{
+			::free(m_data);
+		}
+
+		void* StackAllocator::alloc(u32 size)
+		{
+			MUON_ASSERT_BREAK(m_top + size <= m_blockSize
+							  , "Cannot allocate %u: %u left!"
+							  , size, m_blockSize - m_top);
+			void* ptr = (u8*)m_data + m_top;
+			m_top += size;
+		}
+
+		void StackAllocator::free(Marker marker)
+		{
+			MUON_ASSERT_BREAK(marker <= m_blockSize, "Marker outside Stack boundary");
+			m_top = marker;
+		}
+
+		StackAllocator::Marker StackAllocator::getMarker() const
+		{
+			return m_top;
+		}
+
+		void StackAllocator::clear()
+		{
+			m_top = 0;
+		}
 	}
 }
-
-#endif

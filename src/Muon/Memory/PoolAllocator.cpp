@@ -25,32 +25,46 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_HEAPALLOCATOR_HPP
-#define INCLUDE_MUON_HEAPALLOCATOR_HPP
+#include "Muon/Memory/PoolAllocator.hpp"
 
-#include <new>
-#include <stdlib.h>
-#include "Muon/Core/Typedef.hpp"
-
-/*
-* @file Allocator.hpp
-*/
 namespace m
 {
 	namespace memory
 	{
-		/*!
-		* @brief
-		*
-		*/
-		class MUON_API HeapAllocator
+		PoolAllocator::PoolAllocator(u32 blockSize)
+			: m_blockSize(blockSize)
 		{
-		public:
+			m_data = ::malloc(m_blockSize);
+			m_end = ((u8*)m_data + m_blockSize);
+			u32* mem = (u32*)m_data;
+			while (mem < m_end)
+			{
+				*(mem++) = (u32)(mem + 1);
+			}
+			m_free = m_data;
+		}
 
-			static void* alloc(u32 size);
-			static void free(void* p);
-		};
+		PoolAllocator::~PoolAllocator()
+		{
+			::free(m_data);
+		}
+
+		void* PoolAllocator::alloc()
+		{
+			MUON_ASSERT_BREAK(m_free != m_end, "Pool is full!");
+			u32* ptr = (u32*)m_free;
+			u32* nextFree = (u32*)m_free;
+			m_free = (u32*)*nextFree;
+			return ptr;
+		}
+
+		void PoolAllocator::free(u32* ptr)
+		{
+			u32* uptr = (u32*)ptr;
+			MUON_ASSERT_BREAK(uptr >= m_data && uptr <= m_end, "Given pointer is not stored in Pool!");
+
+			*uptr = (u32)m_free;
+			m_free = uptr;
+		}
 	}
 }
-
-#endif

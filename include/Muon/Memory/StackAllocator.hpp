@@ -25,15 +25,14 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_HEAPALLOCATOR_HPP
-#define INCLUDE_MUON_HEAPALLOCATOR_HPP
+#ifndef INCLUDE_MUON_STACKALLOCATOR_HPP
+#define INCLUDE_MUON_STACKALLOCATOR_HPP
 
-#include <new>
-#include <stdlib.h>
-#include "Muon/Core/Typedef.hpp"
+#include "Muon/Memory/HeapAllocator.hpp"
+#include "Muon/System/Assert.hpp"
 
 /*
-* @file Allocator.hpp
+* @file StackAllocator.hpp
 */
 namespace m
 {
@@ -43,12 +42,24 @@ namespace m
 		* @brief
 		*
 		*/
-		class MUON_API HeapAllocator
+		class MUON_API StackAllocator
 		{
 		public:
+			typedef u32 Marker;
 
-			static void* alloc(u32 size);
-			static void free(void* p);
+			StackAllocator(u32 blockSize);
+			~StackAllocator();
+
+			void* alloc(u32 size);
+			void free(Marker marker);
+			void clear();
+
+			Marker getMarker() const;
+
+		private:
+			u32 m_blockSize;
+			Marker m_top;
+			void* m_data;
 		};
 	}
 }

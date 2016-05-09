@@ -25,32 +25,20 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_HEAPALLOCATOR_HPP
-#define INCLUDE_MUON_HEAPALLOCATOR_HPP
+#include "Muon/Memory/HeapAllocator.hpp"
 
-#include <new>
-#include <stdlib.h>
-#include "Muon/Core/Typedef.hpp"
-
-/*
-* @file Allocator.hpp
-*/
 namespace m
 {
 	namespace memory
 	{
-		/*!
-		* @brief
-		*
-		*/
-		class MUON_API HeapAllocator
+		void* HeapAllocator::alloc(u32 size)
 		{
-		public:
+			return ::malloc(size);
+		}
 
-			static void* alloc(u32 size);
-			static void free(void* p);
-		};
+		void HeapAllocator::free(void* p)
+		{
+			::free(p);
+		}
 	}
 }
-
-#endif
