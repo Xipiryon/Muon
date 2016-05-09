@@ -31,15 +31,23 @@ namespace m
 {
 	namespace memory
 	{
+		union UintToPtr
+		{
+			void* ptr;
+			u32 i;
+		};
+
 		PoolAllocator::PoolAllocator(u32 blockSize)
 			: m_blockSize(blockSize)
 		{
 			m_data = ::malloc(m_blockSize);
 			m_end = ((u8*)m_data + m_blockSize);
 			u32* mem = (u32*)m_data;
+			UintToPtr cast;
 			while (mem < m_end)
 			{
-				*(mem++) = (u32)(mem + 1);
+				cast.ptr = mem + 1;
+				*(mem++) = cast.i;
 			}
 			m_free = m_data;
 		}
@@ -54,7 +62,9 @@ namespace m
 			MUON_ASSERT_BREAK(m_free != m_end, "Pool is full!");
 			u32* ptr = (u32*)m_free;
 			u32* nextFree = (u32*)m_free;
-			m_free = (u32*)*nextFree;
+			UintToPtr cast;
+			cast.i = *nextFree;
+			m_free = cast.ptr;
 			return ptr;
 		}
 
@@ -63,7 +73,9 @@ namespace m
 			u32* uptr = (u32*)ptr;
 			MUON_ASSERT_BREAK(uptr >= m_data && uptr <= m_end, "Given pointer is not stored in Pool!");
 
-			*uptr = (u32)m_free;
+			UintToPtr cast;
+			cast.ptr = m_free;
+			*uptr = cast.i;
 			m_free = uptr;
 		}
 	}
