@@ -28,8 +28,6 @@
 #ifndef INCLUDE_MUON_POOLALLOCATOR_HPP
 #define INCLUDE_MUON_POOLALLOCATOR_HPP
 
-#include <map>
-#include <deque>
 #include "Muon/Memory/HeapAllocator.hpp"
 #include "Muon/System/Assert.hpp"
 
@@ -54,9 +52,9 @@ namespace m
 				MUON_ASSERT(sizeof(T) % BlockSize == 0, "Size of element is not a multiple of block size!");
 				MUON_ASSERT_BREAK(sizeof(T) >= sizeof(u32*), "Size of element is smaller than 32-bit pointer!");
 
-				m_data = (u32*)::malloc(BlockSize);
-				m_end = (u32*)((u8*)m_data + BlockSize);
-				u32* mem = m_data;
+				m_data = (T*)::malloc(BlockSize);
+				m_end = (T*)((u8*)m_data + BlockSize);
+				T* mem = m_data;
 				while (mem < m_end)
 				{
 					*(mem++) = (u32)(mem + 1);
@@ -69,39 +67,28 @@ namespace m
 				::free(m_data);
 			}
 
-			T* allocate(u32 size)
+			T* allocate()
 			{
 				MUON_ASSERT_BREAK(m_free != m_end, "Pool is full!");
 				T* ptr = (T*)m_free;
-				u32* nextFree = m_free;
-				m_free = (u32*)*nextFree;
+				T* nextFree = m_free;
+				m_free = (T*)*nextFree;
 				return ptr;
 			}
 
 			void deallocate(T* ptr)
 			{
-				u32* uptr = (u32*)ptr;
+				T* uptr = (T*)ptr;
 				MUON_ASSERT_BREAK(uptr >= m_data && uptr <= m_end, "Given pointer is not stored in Pool!");
 
 				*uptr = (u32)m_free;
 				m_free = uptr;
 			}
 
-			template<typename... Args>
-			T* construct(T* p, Args&&... args)
-			{
-				return new (p)T(args...);
-			}
-
-			void destroy(T* p)
-			{
-				p->~T();
-			}
-
 		private:
-			u32* m_free;
-			u32* m_data;
-			u32* m_end;
+			T* m_free;
+			T* m_data;
+			T* m_end;
 		};
 	}
 }
