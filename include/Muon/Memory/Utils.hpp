@@ -25,31 +25,37 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_HEAPALLOCATOR_HPP
-#define INCLUDE_MUON_HEAPALLOCATOR_HPP
+#ifndef INCLUDE_MUON_MEMORY_UTILS_HPP
+#define INCLUDE_MUON_MEMORY_UTILS_HPP
 
-#include <new>
-#include <stdlib.h>
 #include "Muon/Core/Typedef.hpp"
-#include "Muon/Memory/Utils.hpp"
 
-/*
-* @file Allocator.hpp
-*/
 namespace m
 {
 	namespace memory
 	{
-		/*!
-		* @brief
-		*
-		*/
-		class MUON_API HeapAllocator
+		union MUON_API UintToPtr
 		{
-		public:
+			void* pointer;
+			m::u32 value;
+		};
 
-			static void* alloc(u32 size);
-			static void free(void* p);
+		template<m::u32 Size>
+		struct KiB
+		{
+			static const m::u32 bytes = Size * 1024;
+		};
+
+		template<m::u32 Size>
+		struct MiB
+		{
+			static const m::u32 bytes = KiB<Size * 1024>::bytes;
+		};
+
+		template<m::u32 Size>
+		struct GiB
+		{
+			static const m::u32 bytes = Mib<Size * 1024>::bytes;
 		};
 	}
 }

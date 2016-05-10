@@ -46,13 +46,14 @@ namespace m
 		{
 		public:
 
-			PoolAllocator(u32 blockSize);
+			PoolAllocator(u32 elementSize, u32 blockSize);
 			~PoolAllocator();
 
 			void* alloc();
 			void free(u32* ptr);
 
 		private:
+			u32 m_elementSize;
 			u32 m_blockSize;
 			void* m_free;
 			void* m_data;
