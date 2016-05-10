@@ -55,7 +55,7 @@ namespace m
 		template<m::u32 Size>
 		struct GiB
 		{
-			static const m::u32 bytes = Mib<Size * 1024>::bytes;
+			static const m::u32 bytes = MiB<Size * 1024>::bytes;
 		};
 	}
 }
