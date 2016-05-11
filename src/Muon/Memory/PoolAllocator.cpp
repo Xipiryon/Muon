@@ -58,6 +58,11 @@ namespace m
 			::free(m_data);
 		}
 
+		PoolAllocator::PoolAllocator(const PoolAllocator& o)
+			: PoolAllocator(o.m_elementSize, o.m_blockSize)
+		{
+		}
+
 		void* PoolAllocator::alloc()
 		{
 			MUON_ASSERT_BREAK(m_free != m_end, "Pool is full!");

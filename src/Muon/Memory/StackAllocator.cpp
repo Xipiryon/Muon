@@ -43,6 +43,11 @@ namespace m
 			::free(m_data);
 		}
 
+		StackAllocator::StackAllocator(const StackAllocator& o)
+			: StackAllocator(o.m_blockSize)
+		{
+		}
+
 		void* StackAllocator::alloc(u32 size)
 		{
 			MUON_ASSERT_BREAK(m_top + size <= m_blockSize

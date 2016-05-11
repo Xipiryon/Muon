@@ -44,11 +44,14 @@ namespace m
 		*/
 		class MUON_API StackAllocator
 		{
+			StackAllocator& operator=(const StackAllocator&);
 		public:
 			typedef u32 Marker;
 
 			StackAllocator(u32 blockSize);
 			~StackAllocator();
+
+			StackAllocator(const StackAllocator&);
 
 			void* alloc(u32 size);
 			void free(Marker marker);

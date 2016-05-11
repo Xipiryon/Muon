@@ -44,10 +44,12 @@ namespace m
 		*/
 		class MUON_API PoolAllocator
 		{
+			PoolAllocator& operator=(const PoolAllocator&);
 		public:
 
 			PoolAllocator(u32 elementSize, u32 blockSize);
 			~PoolAllocator();
+			PoolAllocator(const PoolAllocator&);
 
 			void* alloc();
 			void free(u32* ptr);
