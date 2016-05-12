@@ -349,7 +349,7 @@ namespace m
 			len = m_charcount - pos;
 		}
 
-		String s(len + 1, 0);
+		String s(len, 0);
 		::strncpy(s.m_str, m_str + pos, len);
 		*(s.m_str + len) = 0;
 		s.m_charcount = len;
@@ -558,18 +558,13 @@ namespace m
 		return String(str) + other;
 	}
 
-	bool operator==(const String& str, const String& other)
+	bool operator==(const String& str, const char* other)
 	{
-		if (str.cStr() == NULL || other.cStr() == NULL)
+		if (str.cStr() == NULL || other == NULL)
 		{
 			return false;
 		}
-		return (strcmp(str.cStr(), other.cStr()) == 0);
-	}
-
-	bool operator!=(const String& str, const String& other)
-	{
-		return !(str == other);
+		return (strcmp(str.cStr(), other) == 0);
 	}
 
 	bool operator!=(const String& str, const char* other)
@@ -577,9 +572,43 @@ namespace m
 		return !(str == other);
 	}
 
+	bool operator<(const String& str, const char* other)
+	{
+		return (::strcmp(str.cStr(), other) < 0);
+	}
+
+	bool operator<=(const String& str, const char* other)
+	{
+		return (str == other || str < other);
+	}
+
+	bool operator>(const String& str, const char* other)
+	{
+		return !(str < other);
+	}
+
+	bool operator>=(const String& str, const char* other)
+	{
+		return (str == other || str > other);
+	}
+
+	bool operator==(const String& str, const String& other)
+	{
+		if (str.cStr() == NULL || other.cStr() == NULL)
+		{
+			return false;
+		}
+		return str == other.cStr();
+	}
+
+	bool operator!=(const String& str, const String& other)
+	{
+		return !(str == other);
+	}
+
 	bool operator<(const String& str, const String& other)
 	{
-		return (::strcmp(str.cStr(), other.cStr()) < 0);
+		return str < other.cStr();
 	}
 
 	bool operator<=(const String& str, const String& other)
