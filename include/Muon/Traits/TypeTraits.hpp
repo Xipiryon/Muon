@@ -30,6 +30,7 @@
 
 #include <type_traits>
 #include "Muon/Traits/TypeInfo.hpp"
+#include "Muon/Traits/RawType.hpp"
 #include "Muon/Memory/Allocator.hpp"
 
 #if defined(MUON_PLATFORM_WINDOWS) || defined(MUON_PLATFORM_WEB)
@@ -78,7 +79,7 @@ namespace priv
 #define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_DECL_NAME(Type) _MUON_TRAITS_DECL_ID(Type) _MUON_TRAITS_DECL_SIZE(Type) _MUON_TRAITS_DECL_CREATE(Type) _MUON_TRAITS_DECL_COPY(Type) _MUON_TRAITS_DECL_DESTROY(Type);
 #define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
 //! Register a Type Traits
-#define MUON_TRAITS_DECL(Type) static_assert(!s_namespaceMuon, "MUON_TRAITS_DECL must be placed outside any muon namespace"); namespace m { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
+#define MUON_TRAITS_DECL(Type) namespace m { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
 //! Access the TypeTraits struct
 #define MUON_TRAITS(Type) ::m::traits::TypeTraits<Type>
 //! Access the Type name from its TypeTraits (it must have been declared)
@@ -147,49 +148,6 @@ namespace m
 			_MUON_TRAITS_FUNCTIONS_DECL(char*);
 		};
 
-		// Template Functions to remove qualifier around a Template
-		template<typename T> struct RawType
-		{
-			typedef T type;
-		};
-		template<typename T> struct RawType<const T>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<T&>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<const T&>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<T&&>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<T*>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<const T*>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		template<typename T> struct RawType<const T* const>
-		{
-			typedef typename RawType<T>::type type;
-		};
-		// Special case of char*
-		template<> struct RawType<const char*>
-		{
-			typedef const char* type;
-		};
-		template<> struct RawType<char*>
-		{
-			typedef char* type;
-		};
-
 		// Function which return a class member offset (works with virtual and abstract classes)
 		template<typename Class, typename MemberType>
 		MUON_CONSTEXPR u64 offset(MemberType Class::*member)
@@ -211,7 +169,5 @@ MUON_TRAITS_DECL(m::i64);
 
 MUON_TRAITS_DECL(m::f32);
 MUON_TRAITS_DECL(m::f64);
-
-MUON_TRAITS_DECL(m::RawPointer);
 
 #endif

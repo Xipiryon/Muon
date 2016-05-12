@@ -67,8 +67,8 @@ namespace m
 #define _MUON_META_SETNAMESPACE(Decl) namespace m { namespace traits { template<> struct Decl } }
 #define _MUON_META_SETATTRIB(Flag) static const bool value = true; static const u32 flag = Flag;
 #define _MUON_META_SETINFO(Class, Struct, Flag) _MUON_META_SETNAMESPACE(Struct<Class> { _MUON_META_SETATTRIB(Flag) };)
+
 #define MUON_META_USEPOINTER(Class) _MUON_META_SETINFO(Class, UsePointer, USE_POINTER_FLAG)
 #define MUON_META_USEREFERENCE(Class) _MUON_META_SETINFO(Class, UseReference, USE_REFERENCE_FLAG)
 
 #endif
-

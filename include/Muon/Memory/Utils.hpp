@@ -25,11 +25,39 @@
 *
 *************************************************************************/
 
-#include "Muon/Meta/MetaFactory.hpp"
+#ifndef INCLUDE_MUON_MEMORY_UTILS_HPP
+#define INCLUDE_MUON_MEMORY_UTILS_HPP
+
+#include "Muon/Core/Typedef.hpp"
 
 namespace m
 {
-	namespace meta
+	namespace memory
 	{
+		union MUON_API UintToPtr
+		{
+			void* pointer;
+			m::u32 value;
+		};
+
+		template<m::u32 Size>
+		struct KiB
+		{
+			static const m::u32 bytes = Size * 1024;
+		};
+
+		template<m::u32 Size>
+		struct MiB
+		{
+			static const m::u32 bytes = KiB<Size * 1024>::bytes;
+		};
+
+		template<m::u32 Size>
+		struct GiB
+		{
+			static const m::u32 bytes = MiB<Size * 1024>::bytes;
+		};
 	}
 }
+
+#endif

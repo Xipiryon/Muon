@@ -25,41 +25,57 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_POOLALLOCATOR_HPP
-#define INCLUDE_MUON_POOLALLOCATOR_HPP
+#ifndef INCLUDE_MUON_RAWTYPE_HPP
+#define INCLUDE_MUON_RAWTYPE_HPP
 
-#include "Muon/Memory/HeapAllocator.hpp"
-#include "Muon/System/Assert.hpp"
+#include "Muon/Traits/TypeInfo.hpp"
 
-/*
-* @file PoolAllocator.hpp
-*/
 namespace m
 {
-	namespace memory
+	namespace traits
 	{
-		/*!
-		* @brief
-		*
-		*/
-		class MUON_API PoolAllocator
+		// Template Functions to remove qualifier around a Template
+		template<typename T> struct RawType
 		{
-			PoolAllocator& operator=(const PoolAllocator&);
-		public:
+			typedef T type;
+		};
+		template<typename T> struct RawType<const T>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<T&>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<const T&>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<T&&>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<T*>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<const T*>
+		{
+			typedef typename RawType<T>::type type;
+		};
+		template<typename T> struct RawType<const T* const>
+		{
+			typedef typename RawType<T>::type type;
+		};
 
-			PoolAllocator(u32 elementSize, u32 blockSize);
-			~PoolAllocator();
-			PoolAllocator(const PoolAllocator&);
-
-			void* alloc();
-			void free(u32* ptr);
-
-		private:
-			u32 m_elementSize;
-			u32 m_blockSize;
-			void* m_free;
-			void* m_data;
-			void* m_end;
+		// Special case of char*
+		template<> struct RawType<const char*>
+		{
+			typedef const char* type;
+		};
+		template<> struct RawType<char*>
+		{
+			typedef char* type;
 		};
 	}
 }

@@ -31,57 +31,58 @@ namespace m
 {
 	namespace memory
 	{
-		namespace priv
+		PoolAllocator::PoolAllocator(u32 elementSize, u32 blockSize)
+			: m_elementSize(elementSize)
+			, m_blockSize(blockSize)
 		{
-			PoolMemBlock::PoolMemBlock(u32 size)
-				: data((u32*)::malloc(size))
+			MUON_ASSERT_BREAK(m_blockSize % m_elementSize == 0
+							  , "PoolAllocator block (%u) is not a mutliple of element size (%u)"
+							  , m_blockSize, m_elementSize);
+			MUON_ASSERT_BREAK(elementSize >= sizeof(u32)
+							  , "Element size (%u) is lower than m::u32 size (%u)!"
+							  , elementSize, sizeof(u32));
+			m_data = ::malloc(m_blockSize);
+			m_end = ((u8*)m_data + m_blockSize);
+			u8* mem = (u8*)m_data;
+			UintToPtr cast;
+			while (mem < m_end)
 			{
+				cast.pointer = mem + m_elementSize;
+				*(mem++) = cast.value;
 			}
-
-			PoolFreeBlock::PoolFreeBlock(u32* startIndex, u32 freeSize)
-				: size(freeSize)
-				, start(startIndex)
-			{
-			}
-
-
-			std::deque<PoolMemBlock> s_poolMem;
-			std::map<u32, std::deque<PoolFreeBlock>> s_poolFree;
+			m_free = m_data;
 		}
 
-		void PoolAllocator::mergeFreeBlock(u32 poolId, priv::PoolFreeBlock block)
+		PoolAllocator::~PoolAllocator()
 		{
-			auto itDeque = priv::s_poolFree.find(poolId);
-			if (itDeque == priv::s_poolFree.end())
-			{
-				MUON_ERROR_BREAK("Trying to free memory from a pool that doesn't exist!");
-			}
-			auto& freeDeque = itDeque->second;
+			::free(m_data);
+		}
 
-			// If we either find a free block that begin where we end, or end where we begin, update it
-			bool add = true;
-			for (auto& it : freeDeque)
-			{
-				if ((it.start + it.size) == block.start)
-				{
-					it.size += block.size;
-					add = false;
-					break;
-				}
+		PoolAllocator::PoolAllocator(const PoolAllocator& o)
+			: PoolAllocator(o.m_elementSize, o.m_blockSize)
+		{
+		}
 
-				if (it.start == (block.start + block.size))
-				{
-					it.start = block.start;
-					it.size += block.size;
-					add = false;
-					break;
-				}
-			}
+		void* PoolAllocator::alloc()
+		{
+			MUON_ASSERT_BREAK(m_free != m_end, "Pool is full!");
+			u32* ptr = (u32*)m_free;
+			u32* nextFree = (u32*)m_free;
+			UintToPtr cast;
+			cast.value = *nextFree;
+			m_free = cast.pointer;
+			return ptr;
+		}
 
-			if(add)
-			{
-				freeDeque.push_back(block);
-			}
+		void PoolAllocator::free(u32* ptr)
+		{
+			u32* uptr = (u32*)ptr;
+			MUON_ASSERT_BREAK(uptr >= m_data && uptr <= m_end, "Given pointer is not stored in Pool!");
+
+			UintToPtr cast;
+			cast.pointer = m_free;
+			*uptr = cast.value;
+			m_free = uptr;
 		}
 	}
 }

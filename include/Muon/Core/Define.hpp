@@ -33,25 +33,11 @@
 */
 
 //		--------------------------
-//				NAMESPACE
-//		--------------------------
-
-enum
-{
-	s_namespaceMuon = false
-};
-//! Library main namespace
-namespace m
-{
-	enum
-	{
-		s_namespaceMuon = true
-	};
-}
-
-//		--------------------------
 //				EXPORT
 //		--------------------------
+#if defined(MUON_STATIC)
+#	define MUON_API
+#else
 //Windows
 #	ifdef _MSC_VER
 #		if MUON_EXPORTS
@@ -67,6 +53,7 @@ namespace m
 #			define MUON_API
 #		endif
 #	endif
+#endif
 
 //		-------------------------
 //				PLATFORMS

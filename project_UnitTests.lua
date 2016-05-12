@@ -2,9 +2,10 @@
 -- Unit Tests
 -------------------------------------------
 
-project "UnitTests"
+project "Muon_UnitTests"
 	local ProjectRoot = os.getcwd()
 
+	dependson("Muon_Core")
 	language "C++"
 	targetname "UnitTests"
 	targetdir (SolutionRoot.."/bin")
@@ -16,8 +17,6 @@ project "UnitTests"
 		ProjectRoot.."/unittests/tinyxml2.h"
 	}
 
-	filter "Debug*"
-		links	{ "Muon-d" }
+	links { "Muon_Core" }
 
-	filter "Release*"
-		links { "Muon" }
+	filter {}

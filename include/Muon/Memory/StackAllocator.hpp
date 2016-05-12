@@ -25,20 +25,46 @@
 *
 *************************************************************************/
 
-#include "Muon/Memory/Allocator.hpp"
+#ifndef INCLUDE_MUON_STACKALLOCATOR_HPP
+#define INCLUDE_MUON_STACKALLOCATOR_HPP
 
+#include "Muon/Memory/HeapAllocator.hpp"
+#include "Muon/System/Assert.hpp"
+
+/*
+* @file StackAllocator.hpp
+*/
 namespace m
 {
 	namespace memory
 	{
-		Allocator::Allocator()
+		/*!
+		* @brief
+		*
+		*/
+		class MUON_API StackAllocator
 		{
-			m_allocators = new std::map<u64, void*>();
-		}
+			StackAllocator& operator=(const StackAllocator&);
+		public:
+			typedef u32 Marker;
 
-		Allocator::~Allocator()
-		{
-			delete m_allocators;
-		}
+			StackAllocator(u32 blockSize);
+			~StackAllocator();
+
+			StackAllocator(const StackAllocator&);
+
+			void* alloc(u32 size);
+			void free(Marker marker);
+			void clear();
+
+			Marker getMarker() const;
+
+		private:
+			u32 m_blockSize;
+			Marker m_top;
+			void* m_data;
+		};
 	}
 }
+
+#endif

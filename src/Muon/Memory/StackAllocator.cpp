@@ -25,43 +25,53 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_POOLALLOCATOR_HPP
-#define INCLUDE_MUON_POOLALLOCATOR_HPP
+#include "Muon/Memory/StackAllocator.hpp"
 
-#include "Muon/Memory/HeapAllocator.hpp"
-#include "Muon/System/Assert.hpp"
-
-/*
-* @file PoolAllocator.hpp
-*/
 namespace m
 {
 	namespace memory
 	{
-		/*!
-		* @brief
-		*
-		*/
-		class MUON_API PoolAllocator
+		StackAllocator::StackAllocator(u32 blockSize)
+			: m_blockSize(blockSize)
+			, m_top(0)
 		{
-			PoolAllocator& operator=(const PoolAllocator&);
-		public:
+			m_data = ::malloc(m_blockSize);
+		}
 
-			PoolAllocator(u32 elementSize, u32 blockSize);
-			~PoolAllocator();
-			PoolAllocator(const PoolAllocator&);
+		StackAllocator::~StackAllocator()
+		{
+			::free(m_data);
+		}
 
-			void* alloc();
-			void free(u32* ptr);
+		StackAllocator::StackAllocator(const StackAllocator& o)
+			: StackAllocator(o.m_blockSize)
+		{
+		}
 
-		private:
-			u32 m_elementSize;
-			u32 m_blockSize;
-			void* m_free;
-			void* m_data;
-			void* m_end;
-		};
+		void* StackAllocator::alloc(u32 size)
+		{
+			MUON_ASSERT_BREAK(m_top + size <= m_blockSize
+							  , "Cannot allocate %u: %u left!"
+							  , size, m_blockSize - m_top);
+			void* ptr = (u8*)m_data + m_top;
+			m_top += size;
+			return ptr;
+		}
+
+		void StackAllocator::free(Marker marker)
+		{
+			MUON_ASSERT_BREAK(marker <= m_blockSize, "Marker outside Stack boundary");
+			m_top = marker;
+		}
+
+		StackAllocator::Marker StackAllocator::getMarker() const
+		{
+			return m_top;
+		}
+
+		void StackAllocator::clear()
+		{
+			m_top = 0;
+		}
 	}
 }
-
-#endif

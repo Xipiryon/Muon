@@ -195,8 +195,8 @@ namespace m
 		* @param len Number of character you want to retrieve from starting position. 0 means "everything until the end of the string"
 		* @return A new String instance containing only the specified substring, or an empty one if outside boundaries
 		* @code
-			String hello = "Hello World";
-			hello.substr(0, 5); // "Hello"
+		String hello = "Hello World";
+		hello.substr(0, 5); // "Hello"
 		* @endcode
 		*/
 		String substr(u32 pos, u32 len = 0) const;
@@ -302,9 +302,9 @@ namespace m
 	* @param other Single character to be appended
 	* @return A new String
 	* @code
-		String a = "hell";
-		char b = 'o';
-		String c = a + b; // "hello"
+	String a = "hell";
+	char b = 'o';
+	String c = a + b; // "hello"
 	* @endcode
 	*/
 	MUON_API String operator+(const String& str, const char other);
@@ -315,9 +315,9 @@ namespace m
 	* @param other Raw array of characters to be appended
 	* @return A new String
 	* @code
-		String a = "he";
-		char b[] = "llo";
-		String c = a + b; // "hello"
+	String a = "he";
+	char b[] = "llo";
+	String c = a + b; // "hello"
 	* @endcode
 	*/
 	MUON_API String operator+(const String& str, const char* other);
@@ -328,9 +328,9 @@ namespace m
 	* @param other Other String instance
 	* @return A new String
 	* @code
-		String a = "he";
-		String b = "llo";
-		String c = a + b; // "hello"
+	String a = "he";
+	String b = "llo";
+	String c = a + b; // "hello"
 	* @endcode
 	*/
 	MUON_API String operator+(const String& str, const String& other);
@@ -341,21 +341,27 @@ namespace m
 	* @param other String instance to be appended
 	* @return A new String
 	* @code
-		char a[] = "he";
-		String b = "llo";
-		String c = a + b; // "hello"
+	char a[] = "he";
+	String b = "llo";
+	String c = a + b; // "hello"
 	* @endcode
 	*/
 	MUON_API String operator+(const char* str, const String& other);
 
-
+	// const char* compare operator
+	MUON_API bool operator==(const String& str, const char* other);
+	MUON_API bool operator!=(const String& str, const char* other);
+	MUON_API bool operator<(const String& str, const char* other);
+	MUON_API bool operator<=(const String& str, const char* other);
+	MUON_API bool operator>(const String& str, const char* other);
+	MUON_API bool operator>=(const String& str, const char* other);
+	// const m::String& compare operator
 	MUON_API bool operator==(const String& str, const String& other);
 	MUON_API bool operator!=(const String& str, const String& other);
 	MUON_API bool operator<(const String& str, const String& other);
 	MUON_API bool operator<=(const String& str, const String& other);
 	MUON_API bool operator>(const String& str, const String& other);
 	MUON_API bool operator>=(const String& str, const String& other);
-
 
 	MUON_API system::ILogImpl& operator<<(system::ILogImpl& log, const String& str);
 }

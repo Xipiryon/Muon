@@ -25,43 +25,20 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_POOLALLOCATOR_HPP
-#define INCLUDE_MUON_POOLALLOCATOR_HPP
-
 #include "Muon/Memory/HeapAllocator.hpp"
-#include "Muon/System/Assert.hpp"
 
-/*
-* @file PoolAllocator.hpp
-*/
 namespace m
 {
 	namespace memory
 	{
-		/*!
-		* @brief
-		*
-		*/
-		class MUON_API PoolAllocator
+		void* HeapAllocator::alloc(u32 size)
 		{
-			PoolAllocator& operator=(const PoolAllocator&);
-		public:
+			return ::malloc(size);
+		}
 
-			PoolAllocator(u32 elementSize, u32 blockSize);
-			~PoolAllocator();
-			PoolAllocator(const PoolAllocator&);
-
-			void* alloc();
-			void free(u32* ptr);
-
-		private:
-			u32 m_elementSize;
-			u32 m_blockSize;
-			void* m_free;
-			void* m_data;
-			void* m_end;
-		};
+		void HeapAllocator::free(void* p)
+		{
+			::free(p);
+		}
 	}
 }
-
-#endif

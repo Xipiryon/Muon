@@ -25,41 +25,42 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_POOLALLOCATOR_HPP
-#define INCLUDE_MUON_POOLALLOCATOR_HPP
+#ifndef INCLUDE_MUON_DOUBLESTACKALLOCATOR_HPP
+#define INCLUDE_MUON_DOUBLESTACKALLOCATOR_HPP
 
 #include "Muon/Memory/HeapAllocator.hpp"
 #include "Muon/System/Assert.hpp"
 
-/*
-* @file PoolAllocator.hpp
-*/
 namespace m
 {
 	namespace memory
 	{
-		/*!
-		* @brief
-		*
-		*/
-		class MUON_API PoolAllocator
+		class MUON_API DoubleStackAllocator
 		{
-			PoolAllocator& operator=(const PoolAllocator&);
+			DoubleStackAllocator& operator=(const DoubleStackAllocator&);
 		public:
+			typedef u32 Marker;
 
-			PoolAllocator(u32 elementSize, u32 blockSize);
-			~PoolAllocator();
-			PoolAllocator(const PoolAllocator&);
+			DoubleStackAllocator(u32 blockSize);
+			~DoubleStackAllocator();
 
-			void* alloc();
-			void free(u32* ptr);
+			DoubleStackAllocator(const DoubleStackAllocator&);
+
+			void* allocLeft(u32 size);
+			void freeLeft(Marker marker);
+			void clearLeft();
+
+			void* allocRight(u32 size);
+			void freeRight(Marker marker);
+			void clearRight();
+
+			Marker getMarkerLeft() const;
+			Marker getMarkerRight() const;
 
 		private:
-			u32 m_elementSize;
 			u32 m_blockSize;
-			void* m_free;
+			Marker m_top[2];
 			void* m_data;
-			void* m_end;
 		};
 	}
 }

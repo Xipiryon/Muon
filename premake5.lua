@@ -27,27 +27,23 @@ end
 solution "Muon"
 
 	if _OPTIONS["unittests"] then
-		startproject "UnitTests"
+		startproject "Muon_UnitTests"
 	end
-	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL" }
 
+	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL", "FinalDLL", "FinalLib" }
+
+	implibdir "bin/lib"
 	if os.is("windows") then
-		implibdir "bin/lib"
-		buildoptions { "/GR-" }
-
-		-- Because on Windows, you can't start a program if .dll are not in the same folder...
-		postbuildcommands { string.gsub("copy "..SolutionRoot.."/bin/lib/*.dll "..SolutionRoot.."/bin/", "/", "\\") }
-
+		buildoptions { "" }
 	else
-		buildoptions { "--std=c++11 -fno-rtti" }
-		linkoptions { "-Wl,-rpath,bin/lib" }
+		buildoptions { "--std=c++11" }
 	end
 
 	-- If option exists, then override G_Install
-	if _OPTIONS["basedir"] then
-		G_Install.Root = _OPTIONS["basedir"]
-		G_Install.Header = _OPTIONS["basedir"].."/include"
-		G_Install.Lib = _OPTIONS["basedir"].."/bin/lib"
+	if _OPTIONS["installdir"] then
+		G_Install.Root = _OPTIONS["installdir"]
+		G_Install.Header = _OPTIONS["installdir"].."/include"
+		G_Install.Lib = _OPTIONS["installdir"].."/bin/lib"
 		print("Base directory has been overwritten to '"..G_Install.Root.."'")
 	end
 
@@ -61,20 +57,37 @@ solution "Muon"
 		G_Install.Lib
 	}
 
+	flags {
+		"NoImplicitLink",
+		"NoIncrementalLink",
+		"NoEditAndContinue",
+	}
+
 	filter "Debug*"
 		targetsuffix "-d"
+		optimize "Debug"
         flags   { "Symbols" }
 		defines { "MUON_DEBUG"}
 
 	filter "Release*"
+		targetsuffix "-r"
 		optimize "Speed"
-		flags   { "LinkTimeOptimization", "NoRTTI" }
+		flags   { "Symbols" }
+
+	filter "Final*"
+		targetsuffix "-f"
+		optimize "Full"
+		flags   { "LinkTimeOptimization" }
 
     filter  "*Lib"
         kind "StaticLib"
+		flags { "StaticRuntime" }
+		defines { "MUON_STATIC" }
 
     filter  "*DLL"
         kind "SharedLib"
+
+	filter {}
 
 ------------------------------
 -- Project
@@ -91,7 +104,7 @@ end
 ------------------------------
 
 newoption {
-	trigger     = "basedir",
+	trigger     = "installdir",
 	value       = "PATH",
 	description = "Folder to search lib & include; default: '"..G_Install.Root.."'",
 }

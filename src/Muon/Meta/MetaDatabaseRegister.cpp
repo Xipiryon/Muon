@@ -55,8 +55,6 @@ namespace m
 			registerMeta<f32>();
 			registerMeta<f64>();
 
-			registerMeta<RawPointer>();
-
 			registerMeta<system::Log>();
 			registerMeta<system::Time>();
 			registerMeta<system::Timer>();

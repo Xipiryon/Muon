@@ -30,7 +30,7 @@
 
 #include <cstring>
 #include "Muon/System/Assert.hpp"
-#include "Muon/Memory/PoolAllocator.hpp"
+#include "Muon/Memory/Allocator.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
 #include "Muon/Traits/TypeInfo.hpp"
 
@@ -49,6 +49,7 @@ namespace m
 
 		Variant& reset();
 
+		void* getRawData() const;
 		meta::MetaData* getMeta() const;
 
 		template<typename T> Variant& set(const T& rhs);
