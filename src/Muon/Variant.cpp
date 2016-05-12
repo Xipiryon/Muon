@@ -51,6 +51,11 @@ namespace m
 		return m_meta;
 	}
 
+	void* Variant::getRawData() const
+	{
+		return m_data;
+	}
+
 	Variant& Variant::operator=(const Variant& rhs)
 	{
 		if (this == &rhs)

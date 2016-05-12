@@ -49,6 +49,7 @@ namespace m
 
 		Variant& reset();
 
+		void* getRawData() const;
 		meta::MetaData* getMeta() const;
 
 		template<typename T> Variant& set(const T& rhs);
