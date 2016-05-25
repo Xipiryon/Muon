@@ -367,7 +367,7 @@ namespace m
 }
 
 MUON_TRAITS_DECL(m::String)
-MUON_META_USEPOINTER(m::String);
+MUON_TRAITS_USEPOINTER(m::String);
 
 namespace std
 {
