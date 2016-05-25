@@ -41,6 +41,7 @@ namespace m
 			MUON_ASSERT_BREAK(elementSize >= sizeof(u32)
 							  , "Element size (%u) is lower than m::u32 size (%u)!"
 							  , elementSize, sizeof(u32));
+
 			m_data = ::malloc(m_blockSize);
 			m_end = ((u8*)m_data + m_blockSize);
 			u8* mem = (u8*)m_data;
@@ -63,7 +64,7 @@ namespace m
 		{
 		}
 
-		void* PoolAllocator::alloc()
+		void* PoolAllocator::alloc(u32)
 		{
 			MUON_ASSERT_BREAK(m_free != m_end, "Pool is full!");
 			u32* ptr = (u32*)m_free;
@@ -74,7 +75,7 @@ namespace m
 			return ptr;
 		}
 
-		void PoolAllocator::free(u32* ptr)
+		void PoolAllocator::free(void* ptr)
 		{
 			u32* uptr = (u32*)ptr;
 			MUON_ASSERT_BREAK(uptr >= m_data && uptr <= m_end, "Given pointer is not stored in Pool!");

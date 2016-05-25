@@ -28,12 +28,25 @@
 #ifndef INCLUDE_MUON_MEMORY_UTILS_HPP
 #define INCLUDE_MUON_MEMORY_UTILS_HPP
 
-#include "Muon/Core/Typedef.hpp"
+#include "Muon/Traits/RawType.hpp"
+#include "Muon/Memory/HeapAllocator.hpp"
 
 namespace m
 {
 	namespace memory
 	{
+		template<typename T, typename... Args>
+		static T* construct(T* p, Args&&... args)
+		{
+			return new (p)T(args...);
+		}
+
+		template<typename T>
+		static void destroy(T* p)
+		{
+			p->~T();
+		}
+
 		union MUON_API UintToPtr
 		{
 			void* pointer;
@@ -59,5 +72,17 @@ namespace m
 		};
 	}
 }
+
+#define MUON_MALLOC(Class, Count) (Class*)::m::memory::HeapAllocator().alloc(sizeof(Class) * Count)
+
+#if defined(MUON_PLATFORM_WINDOWS)
+#	define MUON_NEW(Class, ...) ::m::memory::construct<typename ::m::traits::RawType<Class>::type>(MUON_MALLOC(Class, 1), __VA_ARGS__ )
+#else
+#	define MUON_NEW(Class, args...) ::m::memory::construct<typename ::m::traits::RawType<Class>::type>(MUON_MALLOC(Class, 1), ##args)
+#endif //MUON_PLATFORM_WINDOWS
+
+#define MUON_FREE(Pointer) ::m::memory::HeapAllocator().free(Pointer)
+
+#define MUON_DELETE(Pointer) (::m::memory::destroy<typename ::m::traits::RawType<decltype(Pointer)>::type>(Pointer), MUON_FREE(Pointer))
 
 #endif

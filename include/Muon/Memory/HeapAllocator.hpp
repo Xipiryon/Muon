@@ -29,8 +29,8 @@
 #define INCLUDE_MUON_HEAPALLOCATOR_HPP
 
 #include <new>
-#include <stdlib.h>
 #include "Muon/Core/Typedef.hpp"
+#include "Muon/Memory/IAllocator.hpp"
 #include "Muon/Memory/Utils.hpp"
 
 /*
@@ -44,12 +44,13 @@ namespace m
 		* @brief
 		*
 		*/
-		class MUON_API HeapAllocator
+		class MUON_API HeapAllocator : public IAllocator
 		{
 		public:
+			virtual ~HeapAllocator();
 
-			static void* alloc(u32 size);
-			static void free(void* p);
+			virtual void* alloc(u32 size);
+			virtual void free(void* p);
 		};
 	}
 }

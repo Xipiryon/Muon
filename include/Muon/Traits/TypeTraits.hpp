@@ -31,7 +31,7 @@
 #include <type_traits>
 #include "Muon/Traits/TypeInfo.hpp"
 #include "Muon/Traits/RawType.hpp"
-#include "Muon/Memory/Allocator.hpp"
+#include "Muon/Memory/Utils.hpp"
 
 #if defined(MUON_PLATFORM_WINDOWS) || defined(MUON_PLATFORM_WEB)
 namespace priv
@@ -148,7 +148,6 @@ namespace m
 			_MUON_TRAITS_FUNCTIONS_DECL(char*);
 		};
 
-		// Function which return a class member offset (works with virtual and abstract classes)
 		template<typename Class, typename MemberType>
 		MUON_CONSTEXPR u64 offset(MemberType Class::*member)
 		{

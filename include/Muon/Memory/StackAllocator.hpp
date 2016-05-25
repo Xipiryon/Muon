@@ -28,7 +28,7 @@
 #ifndef INCLUDE_MUON_STACKALLOCATOR_HPP
 #define INCLUDE_MUON_STACKALLOCATOR_HPP
 
-#include "Muon/Memory/HeapAllocator.hpp"
+#include "Muon/Memory/Utils.hpp"
 #include "Muon/System/Assert.hpp"
 
 /*
@@ -42,26 +42,21 @@ namespace m
 		* @brief
 		*
 		*/
-		class MUON_API StackAllocator
+		class MUON_API StackAllocator : public IAllocator
 		{
 			StackAllocator& operator=(const StackAllocator&);
 		public:
-			typedef u32 Marker;
-
 			StackAllocator(u32 blockSize);
-			~StackAllocator();
-
 			StackAllocator(const StackAllocator&);
+			virtual ~StackAllocator();
 
-			void* alloc(u32 size);
-			void free(Marker marker);
+			virtual void* alloc(u32 size);
+			virtual void free(void* ptr);
 			void clear();
-
-			Marker getMarker() const;
 
 		private:
 			u32 m_blockSize;
-			Marker m_top;
+			u32 m_top;
 			void* m_data;
 		};
 	}

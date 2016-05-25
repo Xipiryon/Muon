@@ -58,15 +58,15 @@ namespace m
 			return ptr;
 		}
 
-		void StackAllocator::free(Marker marker)
+		void StackAllocator::free(void* ptr)
 		{
+			UintToPtr i, j;
+			i.pointer = ptr;
+			j.pointer = m_data;
+			u32 marker = i.value - j.value;
+
 			MUON_ASSERT_BREAK(marker <= m_blockSize, "Marker outside Stack boundary");
 			m_top = marker;
-		}
-
-		StackAllocator::Marker StackAllocator::getMarker() const
-		{
-			return m_top;
 		}
 
 		void StackAllocator::clear()

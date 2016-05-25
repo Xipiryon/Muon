@@ -26,7 +26,7 @@
 *************************************************************************/
 
 #include <cstring>
-#include "Muon/Memory/Allocator.hpp"
+#include "Muon/Memory/Utils.hpp"
 #include "Muon/Meta/MetaData.hpp"
 #include "Muon/Meta/MetaDatabase.hpp"
 

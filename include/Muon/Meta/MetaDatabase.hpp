@@ -29,7 +29,7 @@
 #define INCLUDE_MUON_METADATABASE_HPP
 
 #include <unordered_map>
-#include "Muon/Memory/Allocator.hpp"
+#include "Muon/Memory/Utils.hpp"
 #include "Muon/Meta/MetaData.hpp"
 #include "Muon/Meta/MetaFactory.hpp"
 #include "Muon/Helper/Singleton.hpp"
