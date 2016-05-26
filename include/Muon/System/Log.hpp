@@ -35,7 +35,9 @@
 
 namespace m
 {
-	struct Endl {};
+	struct Endl
+	{
+	};
 
 	/*!
 	* @brief End line structure
@@ -45,19 +47,19 @@ namespace m
 	* The system::ILogImpl::endl function will be called (for each registered impls)
 	* when a m::endl instance is given to the Log class.
 	* @code
-		struct CustomILogImpl : public m::system::ILogImpl
-		{
-			ILogImpl& endl()
-			{
-				return (*this << "\n");
-			}
-			// Other overrides are skipped for code simplicity
-		}
+	struct CustomILogImpl : public m::system::ILogImpl
+	{
+	ILogImpl& endl()
+	{
+	return (*this << "\n");
+	}
+	// Other overrides are skipped for code simplicity
+	}
 
-		// ...
-		// Skipping the registering and Log class instantiation part
-		// ...
-		log() << "Hello" << m::endl;	// Will output "Hello\n"
+	// ...
+	// Skipping the registering and Log class instantiation part
+	// ...
+	log() << "Hello" << m::endl;	// Will output "Hello\n"
 	* @endcode
 	* @see system::ILogImpl
 	*/
@@ -85,14 +87,14 @@ namespace m
 			* @param tag A string that will be prepended to any instance's log call
 			* @param level Level of Log output
 			*/
-			Log(const String& tag, LogLevel level = LOG_INFO);
+			Log(const String& tag, eLogLevel level = LOG_INFO);
 
 			/*!
 			* @brief Construct a Log instance
 			*
 			* @param level Level of Log output
 			*/
-			Log(LogLevel level = LOG_INFO);
+			Log(eLogLevel level = LOG_INFO);
 
 			~Log();
 
@@ -163,12 +165,12 @@ namespace m
 			* This setting is used by every instances of Log in the application.
 			* @param level Level Specify the lowest level of output used by the Log
 			*/
-			static void setLevel(LogLevel level);
+			static void setLevel(eLogLevel level);
 
 			/*!
 			* @brief Get the minimum Log level required to print.
 			*/
-			static LogLevel getLevel();
+			static eLogLevel getLevel();
 
 			/*!
 			* @brief Log an object
@@ -212,11 +214,11 @@ namespace m
 			* the default behavior is to use the last level set.
 			* @param level New level required to print
 			*/
-			virtual Log& operator()(LogLevel level = LOG_INTERNAL);
+			virtual Log& operator()(eLogLevel level = LOG_INTERNAL);
 
 		protected:
 			String m_tag;
-			LogLevel m_level;
+			eLogLevel m_level;
 
 		private:
 			static std::vector<ILogImpl*>& getLogImpl();

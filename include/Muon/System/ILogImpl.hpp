@@ -35,21 +35,14 @@
 */
 namespace m
 {
-	/*!
-	* @file ILogImpl.hpp
-	* @enum LogLevel
-	* @brief Minimum Level required for Log to be printed
-	* @see system::Log::setLevel
-	* @see system::Log::getLevel
-	*/
-	enum LogLevel
+	enum eLogLevel
 	{
-		LOG_DEBUG       = 0x1,
-		LOG_INFO        = 0x2,
-		LOG_WARNING     = 0x4,
-		LOG_ERROR       = 0x8,
+		LOG_DEBUG = 0x1,
+		LOG_INFO = 0x2,
+		LOG_WARNING = 0x4,
+		LOG_ERROR = 0x8,
 
-		LOG_INTERNAL    = 0			//!< Internal, should not be used directly
+		LOG_INTERNAL = 0			//!< Internal, should not be used directly
 	};
 
 	class String;
@@ -58,7 +51,7 @@ namespace m
 		/*!
 		* @brief Custom Log Interface
 		*
-		* In order to create an new log implementation, you must 
+		* In order to create an new log implementation, you must
 		* inherit from this class and then register it.
 		* An example of custom log implementation could be:
 		* - Output in a HTML format
@@ -75,9 +68,9 @@ namespace m
 			/*!
 			* @brief Open the stream
 			*
-			* Override this method if you need a 
+			* Override this method if you need a
 			* particular way to open your stream.
-			* 
+			*
 			* @param filename The name given to system::Log::open
 			* @return true if stream has been correctly opened
 			*/
@@ -86,7 +79,7 @@ namespace m
 			/*!
 			* @brief Close the stream
 			*
-			* Override this method if you need a 
+			* Override this method if you need a
 			* particular way to close your stream.
 			*
 			* @return true if stream has been correctly closed
@@ -100,13 +93,13 @@ namespace m
 			* You can override it if you want a specific behaviour when code
 			* like this is used:
 			* @code{.cpp}
-				// This will call the function with LOG_INTERNAL
-				log() << "Hello" << m::endl;
-				// This will call the function with same parameter as for log call
-				log(LOG_DEBUG) << "World" << m::endl;
+			// This will call the function with LOG_INTERNAL
+			log() << "Hello" << m::endl;
+			// This will call the function with same parameter as for log call
+			log(LOG_DEBUG) << "World" << m::endl;
 			* @endcode
 			*/
-			virtual void operator()(LogLevel level);
+			virtual void operator()(eLogLevel level);
 
 			/*!
 			* @brief Override the endl behavior
@@ -142,7 +135,7 @@ namespace m
 			virtual ILogImpl& operator<<(bool pod) = 0;
 
 		protected:
-			LogLevel m_level;
+			eLogLevel m_level;
 		};
 	}
 }
