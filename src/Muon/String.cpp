@@ -211,9 +211,9 @@ namespace m
 
 	String& String::operator=(const char* str)
 	{
-		if (str)
+		clear();
+		if (str && *str)
 		{
-			clear();
 			m_charcount = ::strlen(str);
 			m_memsize = m_charcount;
 			m_str = (char*)::malloc(sizeof(char) * (m_charcount + 1));
