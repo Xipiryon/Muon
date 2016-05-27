@@ -28,7 +28,7 @@
 #ifndef INCLUDE_MUON_RAWTYPE_HPP
 #define INCLUDE_MUON_RAWTYPE_HPP
 
-#include "Muon/Traits/TypeInfo.hpp"
+#include "Muon/Core/Define.hpp"
 
 namespace m
 {

@@ -29,7 +29,6 @@
 #define INCLUDE_MUON_TYPETRAITS_HPP
 
 #include <type_traits>
-#include "Muon/Traits/TypeInfo.hpp"
 #include "Muon/Traits/RawType.hpp"
 #include "Muon/Memory/Utils.hpp"
 
@@ -70,7 +69,7 @@ namespace priv
 #endif
 
 #define _MUON_TRAITS_DECL_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return MUON_STR(Type); }
-#define _MUON_TRAITS_DECL_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u64 id() {using namespace ::priv; return ::m::traits::TYPE_ID_BASE_MASK & _MUON_TRAITS_ID_ATTRIB(Type); }
+#define _MUON_TRAITS_DECL_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u64 id() {using namespace ::priv; return _MUON_TRAITS_ID_ATTRIB(Type); }
 #define _MUON_TRAITS_DECL_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u32 size() { return sizeof(Type); }
 #define _MUON_TRAITS_DECL_CREATE(Type) static MUON_INLINE Type* create() { return MUON_NEW(Type); }
 #define _MUON_TRAITS_DECL_COPY(Type) static MUON_INLINE void copy(Type* ptr, Type* val) { *ptr = *val; }
@@ -78,31 +77,20 @@ namespace priv
 
 #define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_DECL_NAME(Type) _MUON_TRAITS_DECL_ID(Type) _MUON_TRAITS_DECL_SIZE(Type) _MUON_TRAITS_DECL_CREATE(Type) _MUON_TRAITS_DECL_COPY(Type) _MUON_TRAITS_DECL_DESTROY(Type);
 #define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
-//! Register a Type Traits
+
 #define MUON_TRAITS_DECL(Type) namespace m { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
-//! Access the TypeTraits struct
-#define MUON_TRAITS(Type) ::m::traits::TypeTraits<Type>
-//! Access the Type name from its TypeTraits (it must have been declared)
-#define MUON_TRAITS_NAME(Type) ::m::traits::TypeTraits<Type>::name()
-//! Access the Type ID from its TypeTraits (it must have been declared)
-#define MUON_TRAITS_ID(Type) ::m::traits::TypeTraits<Type>::id()
-//! Access the Type size from its TypeTraits (it must have been declared)
-#define MUON_TRAITS_SIZE(Type) ::m::traits::TypeTraits<Type>::size()
+
+#define MUON_TRAITS_GET(Type) ::m::traits::TypeTraits<Type>
+#define MUON_TRAITS_GET_NAME(Type) ::m::traits::TypeTraits<Type>::name()
+#define MUON_TRAITS_GET_ID(Type) ::m::traits::TypeTraits<Type>::id()
+#define MUON_TRAITS_GET_SIZE(Type) ::m::traits::TypeTraits<Type>::size()
 
 namespace m
 {
 	namespace traits
 	{
-		enum TypeIDMask : u64
-		{
-			TYPE_ID_INVALID = 0x0FFFFFFFFFFFFFFF,
-			TYPE_ID_BASE_MASK = 0x0FFFFFFFFFFFFFFF,
-			TYPE_ID_CUSTOM_MASK = 0xF000000000000000,
-		};
+		static const u64 INVALID_TYPE_ID = -1;
 
-		static const char* TYPE_NAME_UNREGISTERED = "#Unregistered#";
-
-		// Let the compiler not compile unregistered TypeTraits
 		template<typename T> struct TypeTraits
 		{
 		};
@@ -115,7 +103,7 @@ namespace m
 			}
 			static MUON_INLINE MUON_CONSTEXPR::m::u64 id()
 			{
-				return TYPE_ID_INVALID;
+				return INVALID_TYPE_ID;
 			}
 			static MUON_INLINE MUON_CONSTEXPR::m::u32 size()
 			{
@@ -133,19 +121,21 @@ namespace m
 			}
 		};
 
-		template<> struct TypeTraits<bool>
+		template<> struct TypeTraits<void*>
 		{
-			_MUON_TRAITS_FUNCTIONS_DECL(bool);
-		};
-
-		template<> struct TypeTraits<const char*>
-		{
-			_MUON_TRAITS_FUNCTIONS_DECL(const char*);
-		};
-
-		template<> struct TypeTraits<char*>
-		{
-			_MUON_TRAITS_FUNCTIONS_DECL(char*);
+			_MUON_TRAITS_DECL_NAME(void*);
+			_MUON_TRAITS_DECL_ID(void*);
+			_MUON_TRAITS_DECL_SIZE(void*);
+			static MUON_INLINE void* create()
+			{
+				return NULL;
+			}
+			static MUON_INLINE void copy(void*, void*)
+			{
+			}
+			static MUON_INLINE void destroy(void*)
+			{
+			}
 		};
 
 		template<typename Class, typename MemberType>
@@ -155,6 +145,10 @@ namespace m
 		}
 	}
 }
+
+MUON_TRAITS_DECL(bool);
+MUON_TRAITS_DECL(char*);
+MUON_TRAITS_DECL(const char*);
 
 MUON_TRAITS_DECL(m::u8);
 MUON_TRAITS_DECL(m::u16);
