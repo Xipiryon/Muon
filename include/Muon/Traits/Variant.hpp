@@ -174,6 +174,11 @@ namespace m
 				return *(T*)&m_data;
 			}
 
+			void* getRaw() const
+			{
+				return (void*)&m_data;
+			}
+
 			void reset()
 			{
 				Helper::destroy(m_id, &m_data);
