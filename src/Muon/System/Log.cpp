@@ -52,7 +52,7 @@ namespace
 			std::cout << std::endl; return *this;
 		}
 
-		virtual void operator()(m::LogLevel level)
+		virtual void operator()(m::eLogLevel level)
 		{
 			m_level = level;
 		}
@@ -115,9 +115,9 @@ namespace
 	}
 	;
 #if defined(MUON_DEBUG)
-	m::LogLevel m_logLevel = m::LOG_DEBUG;
+	m::eLogLevel m_logLevel = m::LOG_DEBUG;
 #else
-	m::LogLevel m_logLevel = m::LOG_INFO;
+	m::eLogLevel m_logLevel = m::LOG_INFO;
 #endif
 
 	m::String m_openFilename;
@@ -164,14 +164,14 @@ namespace m
 			if (impl == NULL)
 			{
 				Log("ILogImpl", LOG_ERROR)
-						<< "Couldn't allocate ILogImpl!"
-						<< m::endl;
+					<< "Couldn't allocate ILogImpl!"
+					<< m::endl;
 				return false;
 			}
 			return true;
 		}
 
-		Log::Log(const String& tag, LogLevel level)
+		Log::Log(const String& tag, eLogLevel level)
 			: m_level(level)
 			, m_tagDisplayed(false)
 		{
@@ -187,7 +187,7 @@ namespace m
 			(*this)(m_level);
 		}
 
-		Log::Log(LogLevel level)
+		Log::Log(eLogLevel level)
 			: m_level(level)
 			, m_tagDisplayed(false)
 		{
@@ -282,7 +282,7 @@ namespace m
 			privGetLogImpl().clear();
 		}
 
-		Log& Log::operator()(LogLevel level)
+		Log& Log::operator()(eLogLevel level)
 		{
 			auto& logImpl = getLogImpl();
 			m_level = (level == LOG_INTERNAL ? m_level : level);
@@ -294,12 +294,12 @@ namespace m
 			return *this;
 		}
 
-		void Log::setLevel(LogLevel level)
+		void Log::setLevel(eLogLevel level)
 		{
 			m_logLevel = level;
 		}
 
-		LogLevel Log::getLevel()
+		eLogLevel Log::getLevel()
 		{
 			return m_logLevel;
 		}

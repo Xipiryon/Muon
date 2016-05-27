@@ -48,7 +48,7 @@ namespace m
 			return (*this << "\n");
 		}
 
-		void ILogImpl::operator()(LogLevel level)
+		void ILogImpl::operator()(eLogLevel level)
 		{
 		}
 
