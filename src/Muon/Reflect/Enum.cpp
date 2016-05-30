@@ -32,7 +32,8 @@ namespace m
 {
 	namespace reflect
 	{
-		const String Enum::s_InvalidValueName = "#InvalidEnumValue#";
+		const String Enum::Pair::InvalidPairName = "#InvalidEnumValue#";
+		const i32 Enum::Pair::InvalidPairValue = -1;
 
 		EnumBuilder::EnumBuilder(Enum& enumParam)
 			: m_enum(enumParam)
@@ -88,7 +89,7 @@ namespace m
 				}
 				return Pair(it->first, it->second);
 			}
-			return Pair(s_InvalidValueName, -1);
+			return Pair(Pair::InvalidPairName, Pair::InvalidPairValue);
 		}
 
 		Enum::Pair Enum::getByName(const String& name) const
@@ -99,7 +100,7 @@ namespace m
 			{
 				return Pair(it->first, it->second);
 			}
-			return Pair(s_InvalidValueName, -1);
+			return Pair(Pair::InvalidPairName, Pair::InvalidPairValue);
 		}
 
 		Enum::Pair Enum::getByValue(i32 value) const
@@ -113,7 +114,7 @@ namespace m
 			}
 
 			MUON_ERROR("No value '%d' is registered in '%s'!", value, m_name.cStr());
-			return Pair(s_InvalidValueName, -1);
+			return Pair(Pair::InvalidPairName, Pair::InvalidPairValue);
 		}
 	}
 }

@@ -41,7 +41,7 @@ namespace m
 		{
 			class MUON_API EnumDatabase
 			{
-				static const Enum s_InvalidEnum;
+				static const Enum InvalidEnum;
 			public:
 				MUON_SINGLETON_GET(EnumDatabase);
 

@@ -51,10 +51,12 @@ namespace m
 		class MUON_API Enum
 		{
 			friend class EnumBuilder;
-			static const String s_InvalidValueName;
 		public:
 			struct Pair
 			{
+				static const String InvalidPairName;
+				static const i32 InvalidPairValue;
+
 				Pair(const String&, i32);
 				template<typename T>
 				T as() const

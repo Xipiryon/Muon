@@ -33,7 +33,7 @@ namespace m
 	{
 		namespace detail
 		{
-			const Enum EnumDatabase::s_InvalidEnum;
+			const Enum EnumDatabase::InvalidEnum;
 
 			Enum& EnumDatabase::add(const String& name)
 			{
@@ -68,7 +68,7 @@ namespace m
 				{
 					return it->second;
 				}
-				return s_InvalidEnum;
+				return InvalidEnum;
 			}
 
 			u32 EnumDatabase::size() const
