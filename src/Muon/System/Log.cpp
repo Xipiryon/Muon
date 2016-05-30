@@ -303,6 +303,11 @@ namespace m
 		{
 			return m_logLevel;
 		}
+
+		u32 Log::getImplCount()
+		{
+			return getLogImpl().size();
+		}
 	}
 }
 

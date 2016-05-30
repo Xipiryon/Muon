@@ -216,6 +216,8 @@ namespace m
 			*/
 			virtual Log& operator()(eLogLevel level = LOG_INTERNAL);
 
+			static u32 getImplCount();
+
 		protected:
 			String m_tag;
 			eLogLevel m_level;

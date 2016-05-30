@@ -54,14 +54,20 @@ namespace m
 				va_start(args, format);
 				finalSize = vsnprintf(buffer, size, format, args);
 				va_end(args);
-			}
-			while (finalSize < 0 || finalSize >= size);
+			} while (finalSize < 0 || finalSize >= size);
 
 			//Output it
-			Log log("ASSERT", LOG_ERROR);
-			log() << file << m::endl;
-			log() << "[" << func << ":" << line << "]" << m::endl;
-			log() << buffer << m::endl;
+			if (Log::getImplCount() > 0)
+			{
+				Log log("ASSERT", LOG_ERROR);
+				log() << file << m::endl;
+				log() << "[" << func << ":" << line << "]" << m::endl;
+				log() << buffer << m::endl;
+			}
+			else
+			{
+				printf("[ASSERT] %s [%s:%d] %s\n", file, func, line, buffer);
+			}
 			free(buffer);
 		}
 	}
