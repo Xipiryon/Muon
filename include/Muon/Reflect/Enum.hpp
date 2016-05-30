@@ -29,6 +29,7 @@
 #define INCLUDE_MUON_REFLECT_ENUM_HPP
 
 #include <unordered_map>
+#include "Muon/Traits/TypeTraits.hpp"
 #include "Muon/String.hpp"
 
 namespace m
@@ -81,5 +82,7 @@ namespace m
 		};
 	}
 }
+
+MUON_TRAITS_DECL(m::reflect::Enum);
 
 #endif

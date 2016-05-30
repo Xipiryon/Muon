@@ -25,7 +25,7 @@
 *
 *************************************************************************/
 
-#include "Muon/Reflect/Detail/EnumManager.hpp"
+#include "Muon/Reflect/Detail/EnumDatabase.hpp"
 #include "Muon/Reflect/Enum.hpp"
 
 namespace m
@@ -53,17 +53,17 @@ namespace m
 
 		EnumBuilder Enum::declare(const String& name)
 		{
-			return EnumBuilder(detail::EnumManager::getInstance().add(name));
+			return EnumBuilder(detail::EnumDatabase::getInstance().add(name));
 		}
 
 		void Enum::undeclare(const String& name)
 		{
-			detail::EnumManager::getInstance().remove(name);
+			detail::EnumDatabase::getInstance().remove(name);
 		}
 
 		const Enum& Enum::retrieve(const String& name)
 		{
-			return detail::EnumManager::getInstance().get(name);
+			return detail::EnumDatabase::getInstance().get(name);
 		}
 
 		String Enum::name() const

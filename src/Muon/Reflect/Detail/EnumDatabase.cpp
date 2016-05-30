@@ -25,13 +25,7 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_REFLECT_ENUMMANAGER_HPP
-#define INCLUDE_MUON_REFLECT_ENUMMANAGER_HPP
-
-#include <map>
-#include "Muon/String.hpp"
-#include "Muon/Helper/Singleton.hpp"
-#include "Muon/Reflect/Enum.hpp"
+#include "Muon/Reflect/Detail/EnumDatabase.hpp"
 
 namespace m
 {
@@ -39,24 +33,53 @@ namespace m
 	{
 		namespace detail
 		{
-			class EnumManager
+			const Enum EnumDatabase::s_InvalidEnum;
+
+			Enum& EnumDatabase::add(const String& name)
 			{
-				static const Enum s_InvalidEnum;
-			public:
-				MUON_SINGLETON_GET(EnumManager);
+				auto it = m_enums.find(name);
+				MUON_ASSERT_BREAK(it == m_enums.end(), "Enum '%s' already registered!", name.cStr());
 
-				Enum& add(const String& name);
-				void remove(const String& name);
-				const Enum& get(const String& name);
+				if (it == m_enums.end())
+				{
+					return m_enums[name];
+				}
 
-				u32 size() const;
-				bool exists(const String& name);
+				return it->second;
+			}
 
-			private:
-				std::map<String, Enum> m_enums;
-			};
+			void EnumDatabase::remove(const String& name)
+			{
+				auto it = m_enums.find(name);
+				MUON_ASSERT_BREAK(it != m_enums.end(), "Enum '%s' not registered!", name.cStr());
+
+				if (it != m_enums.end())
+				{
+					m_enums.erase(it);
+				}
+			}
+
+			const Enum& EnumDatabase::get(const String& name)
+			{
+				auto it = m_enums.find(name);
+				MUON_ASSERT_BREAK(it != m_enums.end(), "Enum '%s' not registered!", name.cStr());
+
+				if (it != m_enums.end())
+				{
+					return it->second;
+				}
+				return s_InvalidEnum;
+			}
+
+			u32 EnumDatabase::size() const
+			{
+				return m_enums.size();
+			}
+
+			bool EnumDatabase::exists(const String& name)
+			{
+				return (m_enums.find(name) != m_enums.end());
+			}
 		}
 	}
 }
-
-#endif
