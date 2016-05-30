@@ -39,7 +39,7 @@ namespace m
 	{
 		namespace detail
 		{
-			class EnumDatabase
+			class MUON_API EnumDatabase
 			{
 				static const Enum s_InvalidEnum;
 			public:
