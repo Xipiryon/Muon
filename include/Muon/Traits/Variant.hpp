@@ -31,6 +31,7 @@
 #include "Muon/Traits/TypeTraits.hpp"
 #include "Muon/System/Assert.hpp"
 #include "Muon/Memory/Utils.hpp"
+#include "Muon/String.hpp"
 
 namespace m
 {
@@ -148,6 +149,7 @@ namespace m
 					Helper::copy(o.m_id, &m_data, &o.m_data);
 					m_id = o.m_id;
 					m_size = o.m_size;
+					m_name = o.m_name;
 				}
 				return *this;
 			}
@@ -165,6 +167,7 @@ namespace m
 				new (&m_data)T(std::forward<Args>(args)...);
 				m_id = TypeTraits<T>::id();
 				m_size = TypeTraits<T>::size();
+				m_name = TypeTraits<T>::name();
 				return *this;
 			}
 
@@ -196,9 +199,15 @@ namespace m
 				return m_size;
 			}
 
+			const String& name() const
+			{
+				return m_name;
+			}
+
 		private:
 			u64 m_id;
 			u32 m_size;
+			String m_name;
 			RawData<Helper::size> m_data;
 		};
 	}
