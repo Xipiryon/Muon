@@ -27,14 +27,17 @@
 
 #include "Muon/Reflect/Detail/EnumDatabase.hpp"
 
+namespace
+{
+	const m::reflect::Enum INVALID_ENUM;
+}
+
 namespace m
 {
 	namespace reflect
 	{
 		namespace detail
 		{
-			const Enum EnumDatabase::InvalidEnum;
-
 			Enum& EnumDatabase::add(const String& name)
 			{
 				auto it = m_enums.find(name);
@@ -59,7 +62,7 @@ namespace m
 				}
 			}
 
-			const Enum& EnumDatabase::get(const String& name)
+			const Enum& EnumDatabase::retrieve(const String& name)
 			{
 				auto it = m_enums.find(name);
 				MUON_ASSERT_BREAK(it != m_enums.end(), "Enum '%s' not registered!", name.cStr());
@@ -68,7 +71,7 @@ namespace m
 				{
 					return it->second;
 				}
-				return InvalidEnum;
+				return INVALID_ENUM;
 			}
 
 			u32 EnumDatabase::size() const

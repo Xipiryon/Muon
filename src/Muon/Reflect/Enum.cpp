@@ -28,13 +28,16 @@
 #include "Muon/Reflect/Detail/EnumDatabase.hpp"
 #include "Muon/Reflect/Enum.hpp"
 
+namespace
+{
+	const m::String INVALID_PAIR_NAME = "#InvalidEnumValue#";
+	const m::i32 INVALID_PAIR_VALUE = -1;
+}
+
 namespace m
 {
 	namespace reflect
 	{
-		const String Enum::Pair::InvalidPairName = "#InvalidEnumValue#";
-		const i32 Enum::Pair::InvalidPairValue = -1;
-
 		EnumBuilder::EnumBuilder(Enum& enumParam)
 			: m_enum(enumParam)
 		{
@@ -64,7 +67,7 @@ namespace m
 
 		const Enum& Enum::retrieve(const String& name)
 		{
-			return detail::EnumDatabase::getInstance().get(name);
+			return detail::EnumDatabase::getInstance().retrieve(name);
 		}
 
 		String Enum::name() const
@@ -89,7 +92,7 @@ namespace m
 				}
 				return Pair(it->first, it->second);
 			}
-			return Pair(Pair::InvalidPairName, Pair::InvalidPairValue);
+			return Pair(INVALID_PAIR_NAME, INVALID_PAIR_VALUE);
 		}
 
 		Enum::Pair Enum::getByName(const String& name) const
@@ -100,7 +103,7 @@ namespace m
 			{
 				return Pair(it->first, it->second);
 			}
-			return Pair(Pair::InvalidPairName, Pair::InvalidPairValue);
+			return Pair(INVALID_PAIR_NAME, INVALID_PAIR_VALUE);
 		}
 
 		Enum::Pair Enum::getByValue(i32 value) const
@@ -114,7 +117,7 @@ namespace m
 			}
 
 			MUON_ERROR("No value '%d' is registered in '%s'!", value, m_name.cStr());
-			return Pair(Pair::InvalidPairName, Pair::InvalidPairValue);
+			return Pair(INVALID_PAIR_NAME, INVALID_PAIR_VALUE);
 		}
 	}
 }

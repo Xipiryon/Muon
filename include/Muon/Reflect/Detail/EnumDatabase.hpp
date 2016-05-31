@@ -25,8 +25,8 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_REFLECT_ENUMMANAGER_HPP
-#define INCLUDE_MUON_REFLECT_ENUMMANAGER_HPP
+#ifndef INCLUDE_MUON_REFLECT_ENUMDATABASE_HPP
+#define INCLUDE_MUON_REFLECT_ENUMDATABASE_HPP
 
 #include <map>
 #include "Muon/String.hpp"
@@ -41,13 +41,12 @@ namespace m
 		{
 			class MUON_API EnumDatabase
 			{
-				static const Enum InvalidEnum;
 			public:
 				MUON_SINGLETON_GET(EnumDatabase);
 
 				Enum& add(const String& name);
 				void remove(const String& name);
-				const Enum& get(const String& name);
+				const Enum& retrieve(const String& name);
 
 				u32 size() const;
 				bool exists(const String& name);

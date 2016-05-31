@@ -54,9 +54,6 @@ namespace m
 		public:
 			struct Pair
 			{
-				static const String InvalidPairName;
-				static const i32 InvalidPairValue;
-
 				Pair(const String&, i32);
 				template<typename T>
 				T as() const
