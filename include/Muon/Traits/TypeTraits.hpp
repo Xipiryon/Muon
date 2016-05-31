@@ -74,11 +74,17 @@ namespace priv
 #define _MUON_TRAITS_DECL_CREATE(Type) static MUON_INLINE Type* create() { return MUON_NEW(Type); }
 #define _MUON_TRAITS_DECL_COPY(Type) static MUON_INLINE void copy(Type* ptr, Type* val) { *ptr = *val; }
 #define _MUON_TRAITS_DECL_DESTROY(Type) static MUON_INLINE void destroy(Type* ptr) { MUON_DELETE(ptr); }
+#define _MUON_TRAITS_DECL_CREATE_ABSTRACT(Type) static MUON_INLINE Type* create() { return NULL; }
+#define _MUON_TRAITS_DECL_COPY_ABSTRACT(Type) static MUON_INLINE void copy(Type* ptr, Type* val) { }
+#define _MUON_TRAITS_DECL_DESTROY_ABSTRACT(Type) static MUON_INLINE void destroy(Type* ptr) { }
 
-#define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_DECL_NAME(Type) _MUON_TRAITS_DECL_ID(Type) _MUON_TRAITS_DECL_SIZE(Type) _MUON_TRAITS_DECL_CREATE(Type) _MUON_TRAITS_DECL_COPY(Type) _MUON_TRAITS_DECL_DESTROY(Type);
+#define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_DECL_NAME(Type) _MUON_TRAITS_DECL_ID(Type) _MUON_TRAITS_DECL_SIZE(Type) /*_MUON_TRAITS_DECL_CREATE(Type) _MUON_TRAITS_DECL_COPY(Type) _MUON_TRAITS_DECL_DESTROY(Type);*/
 #define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
+#define _MUON_TRAITS_FUNCTIONS_DECL_ABSTRACT(Type) _MUON_TRAITS_DECL_NAME(Type) _MUON_TRAITS_DECL_ID(Type) _MUON_TRAITS_DECL_SIZE(Type) _MUON_TRAITS_DECL_CREATE_ABSTRACT(Type) _MUON_TRAITS_DECL_COPY_ABSTRACT(Type) _MUON_TRAITS_DECL_DESTROY_ABSTRACT(Type);
+#define _MUON_TRAITS_STRUCT_ABSTRACT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL_ABSTRACT(Type) };
 
 #define MUON_TRAITS_DECL(Type) namespace m { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
+#define MUON_TRAITS_DECL_ABSTRACT(Type) namespace m { namespace traits { _MUON_TRAITS_STRUCT_ABSTRACT(Type) } }
 
 #define MUON_TRAITS_GET(Type) ::m::traits::TypeTraits<Type>
 #define MUON_TRAITS_GET_NAME(Type) ::m::traits::TypeTraits<Type>::name()
