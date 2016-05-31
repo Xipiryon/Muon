@@ -30,8 +30,8 @@
 
 namespace
 {
-	const m::String INVALID_PAIR_NAME = "#InvalidEnumValue#";
-	const m::i32 INVALID_PAIR_VALUE = -1;
+	const m::reflect::Enum EMPTY_ENUM;
+	const m::reflect::EnumValue EMPTY_ENUM_VALUE(EMPTY_ENUM, "#InvalidEnumValue#", -1);
 }
 
 namespace m
@@ -49,10 +49,37 @@ namespace m
 			return *this;
 		}
 
-		Enum::Pair::Pair(const String& name_, i32 value_)
-			: name(name_)
-			, value(value_)
+		EnumValue::EnumValue()
+			: EnumValue(EMPTY_ENUM_VALUE)
 		{
+		}
+
+		EnumValue& EnumValue::operator=(const EnumValue& o)
+		{
+			MUON_ERROR("EnumValue can't be copied!");
+			return *this;
+		}
+
+		EnumValue::EnumValue(const Enum& enumRef, const String& name_, i32 value_)
+			: m_enum(enumRef)
+			, m_name(name_)
+			, m_value(value_)
+		{
+		}
+
+		const Enum& EnumValue::getEnum() const
+		{
+			return m_enum;
+		}
+
+		const String& EnumValue::name() const
+		{
+			return m_name;
+		}
+
+		i32 EnumValue::value() const
+		{
+			return m_value;
 		}
 
 		EnumBuilder Enum::declare(const String& name)
@@ -80,7 +107,7 @@ namespace m
 			return m_pairs.size();
 		}
 
-		Enum::Pair Enum::getByIndex(u32 index) const
+		EnumValue Enum::getByIndex(u32 index) const
 		{
 			MUON_ASSERT_BREAK(index < size(), "Not enough element in Enum!");
 			if (index < size())
@@ -90,34 +117,34 @@ namespace m
 				{
 					++it;
 				}
-				return Pair(it->first, it->second);
+				return EnumValue(*this, it->first, it->second);
 			}
-			return Pair(INVALID_PAIR_NAME, INVALID_PAIR_VALUE);
+			return EMPTY_ENUM_VALUE;
 		}
 
-		Enum::Pair Enum::getByName(const String& name) const
+		EnumValue Enum::getByName(const String& name) const
 		{
 			auto it = m_pairs.find(name);
 			MUON_ASSERT_BREAK(it != m_pairs.end(), "Value '%s' is not registered in '%s'!", name.cStr(), m_name.cStr());
 			if (it != m_pairs.end())
 			{
-				return Pair(it->first, it->second);
+				return EnumValue(*this, it->first, it->second);
 			}
-			return Pair(INVALID_PAIR_NAME, INVALID_PAIR_VALUE);
+			return EMPTY_ENUM_VALUE;
 		}
 
-		Enum::Pair Enum::getByValue(i32 value) const
+		EnumValue Enum::getByValue(i32 value) const
 		{
 			for (auto it = m_pairs.begin(); it != m_pairs.end(); it++)
 			{
 				if (it->second == value)
 				{
-					return Pair(it->first, it->second);
+					return EnumValue(*this, it->first, it->second);
 				}
 			}
 
 			MUON_ERROR("No value '%d' is registered in '%s'!", value, m_name.cStr());
-			return Pair(INVALID_PAIR_NAME, INVALID_PAIR_VALUE);
+			return EMPTY_ENUM_VALUE;
 		}
 	}
 }

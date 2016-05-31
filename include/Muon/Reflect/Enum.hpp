@@ -42,28 +42,33 @@ namespace m
 		{
 		public:
 			EnumBuilder(Enum&);
-			EnumBuilder& value(const String& name, m::i32 value);
+			EnumBuilder& value(const String& name, i32 value);
 
 		private:
 			Enum& m_enum;
+		};
+
+		class MUON_API EnumValue
+		{
+		public:
+			EnumValue();
+			EnumValue(const Enum&, const String&, i32);
+			EnumValue& operator=(const EnumValue& o);
+
+			const Enum& getEnum() const;
+			const String& name() const;
+			i32 value() const;
+
+		private:
+			const Enum& m_enum;
+			const String& m_name;
+			const i32 m_value;
 		};
 
 		class MUON_API Enum
 		{
 			friend class EnumBuilder;
 		public:
-			struct Pair
-			{
-				Pair(const String&, i32);
-				template<typename T>
-				T as() const
-				{
-					return static_cast<T>(value);
-				}
-
-				const String& name;
-				const i32 value;
-			};
 
 			static EnumBuilder declare(const String& name);
 			static void undeclare(const String& name);
@@ -72,9 +77,9 @@ namespace m
 			String name() const;
 			u32 size() const;
 
-			Pair getByIndex(u32 index) const;
-			Pair getByName(const String& name) const;
-			Pair getByValue(i32 value) const;
+			EnumValue getByIndex(u32 index) const;
+			EnumValue getByName(const String& name) const;
+			EnumValue getByValue(i32 value) const;
 		private:
 			String m_name;
 			std::unordered_map<String, i32> m_pairs;
@@ -82,6 +87,6 @@ namespace m
 	}
 }
 
-MUON_TRAITS_DECL(m::reflect::Enum);
+MUON_TRAITS_DECL(m::reflect::EnumValue);
 
 #endif
