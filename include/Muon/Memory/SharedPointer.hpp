@@ -64,6 +64,13 @@ namespace m
 				m_refCount->add();
 			}
 
+			SharedPointer(T* ptr)
+				: m_refCount(MUON_NEW(RefCounter))
+				, m_data(ptr)
+			{
+				m_refCount->add();
+			}
+
 			SharedPointer(const SharedPointer<T>& o)
 				: m_refCount(o.m_refCount)
 				, m_data(o.m_data)
