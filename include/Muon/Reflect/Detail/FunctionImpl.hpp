@@ -46,13 +46,14 @@ namespace m
 			// Extract the n'th element and cast it to
 			// the expected type
 			// *******************************
-			template<typename T>
+			template<typename T, typename R = traits::RawType<T>::type>
 			T extractArg(const ArgContainer& args, u32 index)
 			{
-				MUON_ASSERT_BREAK(args[index].id() == traits::TypeTraits<T>::id()
+				// Type must be equal, or if const char*, it must match String
+				MUON_ASSERT_BREAK(args[index].isCompatible<R>()
 								  , "Argument does not match: expected '%s', got '%s'"
-								  , traits::TypeTraits<T>::name(), args[index].name().cStr());
-				return args[index].get<T>();
+								  , traits::TypeTraits<R>::name(), args[index].name().cStr());
+				return args[index].get<R>();
 			}
 
 			// Helper caller, extract and call the function

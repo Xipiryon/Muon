@@ -36,11 +36,6 @@ namespace m
 			m_value = None();
 		}
 
-		Value::Value(const char* value)
-		{
-			m_value = String(value);
-		}
-
 		u64 Value::id() const
 		{
 			return m_value.id();

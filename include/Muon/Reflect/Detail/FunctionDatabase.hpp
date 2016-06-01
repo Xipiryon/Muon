@@ -30,7 +30,6 @@
 
 #include <map>
 #include "Muon/String.hpp"
-#include "Muon/Memory/SharedPointer.hpp"
 #include "Muon/Helper/Singleton.hpp"
 #include "Muon/Reflect/Function.hpp"
 

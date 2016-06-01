@@ -25,11 +25,15 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_REFLECT_VALUEENUMCONVERTER
-#define INCLUDE_MUON_REFLECT_VALUEENUMCONVERTER
+#ifndef INCLUDE_MUON_REFLECT_VALUEMAPPER_HPP
+#define INCLUDE_MUON_REFLECT_VALUEMAPPER_HPP
 
+#include "Muon/Traits/TypeTraits.hpp"
+#include "Muon/Traits/Variant.hpp"
 #include "Muon/Reflect/Type.hpp"
-#include "Muon/Reflect/Value.hpp"
+#include "Muon/Reflect/Enum.hpp"
+#include "Muon/Reflect/UserObject.hpp"
+#include "Muon/String.hpp"
 
 namespace m
 {
@@ -37,12 +41,19 @@ namespace m
 	{
 		namespace detail
 		{
-			template<typename T, typename Check = void> struct ValueEnumConverter;
+			typedef m::traits::Variant<None, bool,
+				i8, i16, i32, i64,
+				u8, u16, u32, u64,
+				f32, f64,
+				String, EnumValue, UserObject> ValueVariant;
+
+			template<typename T, typename Check = void> struct ValueMapper;
+			template<typename T, typename Check = void> struct ValueCompatibiliy;
 
 			template<typename T>
 			eType mapToEnum()
 			{
-				return static_cast<eType>(ValueEnumConverter<T>::type);
+				return static_cast<eType>(ValueMapper<T>::type);
 			}
 
 #define _MUON_CONVERT_FROM(RetType, ArgType, ConvertCode) static RetType from(ArgType value) { ConvertCode ;}
@@ -77,14 +88,17 @@ namespace m
 #define _MUON_CONVERT_FROM_USEROBJECT(RetType, ConvertCode) \
 	_MUON_CONVERT_FROM(RetType, const UserObject&, ConvertCode);
 
+#define _MUON_CONVERT_FROM_VALUEVARIANT(RetType, ConvertCode) \
+	_MUON_CONVERT_FROM(RetType, const ValueVariant&, ConvertCode);
+
 #define _MUON_CONVERT_ERROR(RetValue) \
 	MUON_ERROR("Impossible to cast from '%s' to '%s'"\
 			, m::reflect::eTypeStr[type] \
-			, m::reflect::eTypeStr[ValueEnumConverter<decltype(value)>::type]); \
+			, m::reflect::eTypeStr[ValueMapper<decltype(value)>::type]); \
 	return RetValue;
 
 			template<typename T, typename Check>
-			struct ValueEnumConverter
+			struct ValueMapper
 			{
 				static const i32 type = eType::USER_OBJECT;
 				static UserObject to(const T& value)
@@ -97,13 +111,13 @@ namespace m
 				_MUON_CONVERT_FROM_FLOATING(T, _MUON_CONVERT_ERROR(UserObjec()));
 				_MUON_CONVERT_FROM_STRING(T, _MUON_CONVERT_ERROR(UserObjec()));
 				_MUON_CONVERT_FROM_ENUM(T, _MUON_CONVERT_ERROR(UserObjec()));
-				_MUON_CONVERT_FROM_USEROBJECT(T, return value);
+				_MUON_CONVERT_FROM_USEROBJECT(T, return value.getObjectConstRef<T>());
 			};
 
 			// Muon to Enum type
 			// *****************
 			template<>
-			struct ValueEnumConverter<bool>
+			struct ValueMapper<bool>
 			{
 				static const i32 type = eType::BOOL;
 				static bool to(bool value)
@@ -117,10 +131,11 @@ namespace m
 				_MUON_CONVERT_FROM_STRING(bool, return (value == "true"));
 				_MUON_CONVERT_FROM_ENUM(bool, return value.value() != 0);
 				_MUON_CONVERT_FROM_USEROBJECT(bool, return false);
+				_MUON_CONVERT_FROM_VALUEVARIANT(bool, return value.get<bool>());
 			};
 
 			template<typename T>
-			struct ValueEnumConverter<T, typename std::enable_if<std::is_integral<T>::value>::type>
+			struct ValueMapper<T, typename std::enable_if<std::is_integral<T>::value>::type>
 			{
 				static const i32 type = eType::INTEGER;
 				static T to(T value)
@@ -134,10 +149,11 @@ namespace m
 				_MUON_CONVERT_FROM_STRING(T, return ::atoi(value.cStr()));
 				_MUON_CONVERT_FROM_ENUM(T, return static_cast<T>(value.value()));
 				_MUON_CONVERT_FROM_USEROBJECT(T, _MUON_CONVERT_ERROR(0));
+				_MUON_CONVERT_FROM_VALUEVARIANT(T, return value.get<T>());
 			};
 
 			template<typename T>
-			struct ValueEnumConverter<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
+			struct ValueMapper<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
 			{
 				static const i32 type = eType::FLOAT;
 				static T to(T value)
@@ -151,10 +167,11 @@ namespace m
 				_MUON_CONVERT_FROM_STRING(T, return ::atof(value.cStr()));
 				_MUON_CONVERT_FROM_ENUM(T, return static_cast<T>(value.value()));
 				_MUON_CONVERT_FROM_USEROBJECT(T, _MUON_CONVERT_ERROR(0.));
+				_MUON_CONVERT_FROM_VALUEVARIANT(T, return value.get<T>());
 			};
 
 			template<>
-			struct ValueEnumConverter<m::String>
+			struct ValueMapper<m::String>
 			{
 				static const i32 type = eType::STRING;
 				static const String& to(const String& value)
@@ -169,10 +186,11 @@ namespace m
 				_MUON_CONVERT_FROM_STRING(String, return value);
 				_MUON_CONVERT_FROM_ENUM(String, return value.name());
 				_MUON_CONVERT_FROM_USEROBJECT(String, _MUON_CONVERT_ERROR(""));
+				_MUON_CONVERT_FROM_VALUEVARIANT(String, return value.get<String>());
 			};
 
 			template<>
-			struct ValueEnumConverter<EnumValue>
+			struct ValueMapper<EnumValue>
 			{
 				static const i32 type = eType::ENUM;
 				static const EnumValue& to(const EnumValue& value)
@@ -186,22 +204,109 @@ namespace m
 				_MUON_CONVERT_FROM_STRING(EnumValue, _MUON_CONVERT_ERROR(EnumValue()));
 				_MUON_CONVERT_FROM_ENUM(EnumValue, return value);
 				_MUON_CONVERT_FROM_USEROBJECT(EnumValue, _MUON_CONVERT_ERROR(EnumValue()));
+				_MUON_CONVERT_FROM_VALUEVARIANT(EnumValue, return value.get<EnumValue>());
 			};
 
 			template<>
-			struct ValueEnumConverter<void>
+			struct ValueMapper<void>
 			{
 				static const i32 type = eType::NONE;
 			};
 
+			template<>
+			struct ValueMapper<const char*>
+			{
+				static const i32 type = eType::STRING;
+				static m::String to(const char* value)
+				{
+					return m::String(value);
+				}
+
+				template<typename T>
+				static const char* from(const T&)
+				{
+					MUON_ERROR("Can't convert from '%s' to temporary const char*!", traits::TypeTraits<T>::name());
+					return NULL;
+				}
+
+				_MUON_CONVERT_FROM_STRING(const char*, return value.cStr());
+				_MUON_CONVERT_FROM_VALUEVARIANT(const char*, return value.get<String>().cStr());
+			};
+
+			template<typename T>
+			struct ValueMapper<const T> : ValueMapper<T>
+			{
+			};
+
+			template<typename T>
+			struct ValueMapper<const T&> : ValueMapper<T>
+			{
+			};
+
 			// Enum to Muon type
 			// *****************
+
+			// Compatibility
+			// *****************
+			template<typename T, typename = void>
+			struct ValueCompatibility
+			{
+				static bool compatible(const ValueVariant& value)
+				{
+					return value.id() == traits::TypeTraits<UserObject>::id();
+				}
+			};
+
+			template<typename T>
+			struct ValueCompatibility<T, typename std::enable_if<std::is_integral<T>::value>::type>
+			{
+				static bool compatible(const ValueVariant& value)
+				{
+					return value.id() == traits::TypeTraits<T>::id();
+				}
+			};
+
+			template<typename T>
+			struct ValueCompatibility<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
+			{
+				static bool compatible(const ValueVariant& value)
+				{
+					return value.id() == traits::TypeTraits<T>::id();
+				}
+			};
+
+			template<>
+			struct ValueCompatibility<bool>
+			{
+				static bool compatible(const ValueVariant& value)
+				{
+					return value.id() == traits::TypeTraits<bool>::id();
+				}
+			};
+
+			template<typename T>
+			struct ValueCompatibility<const T> : ValueCompatibility<T>
+			{
+			};
+
+			template<typename T>
+			struct ValueCompatibility<const T&> : ValueCompatibility<T>
+			{
+			};
 		}
 	}
 }
 
 #undef _MUON_CONVERT_FROM
+#undef _MUON_CONVERT_FROM_BOOL
+#undef _MUON_CONVERT_FROM_INTEGER_SIGNED
+#undef _MUON_CONVERT_FROM_INTEGER_UNSIGNED
 #undef _MUON_CONVERT_FROM_INTEGER
 #undef _MUON_CONVERT_FROM_FLOATING
+#undef _MUON_CONVERT_FROM_STRING
+#undef _MUON_CONVERT_FROM_ENUM
+#undef _MUON_CONVERT_FROM_USEROBJECT
+#undef _MUON_CONVERT_FROM_VALUEVARIANT
+#undef _MUON_CONVERT_ERROR
 
 #endif

@@ -25,54 +25,14 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_REFLECT_VALUE_HPP
-#define INCLUDE_MUON_REFLECT_VALUE_HPP
-
-#include "Muon/Traits/Variant.hpp"
-#include "Muon/Reflect/Type.hpp"
-#include "Muon/Reflect/Detail/ValueMapper.hpp"
+#include "Muon/Reflect/UserObject.hpp"
 
 namespace m
 {
 	namespace reflect
 	{
-		class MUON_API Value
+		UserObject::UserObject()
 		{
-		public:
-			Value();
-
-			template<typename T>
-			Value(const T& value)
-			{
-				m_value = detail::ValueMapper<T>::to(value);
-			}
-
-			template<typename T>
-			operator T() const
-			{
-				return get<T>();
-			}
-
-			template<typename T>
-			T get() const
-			{
-				return detail::ValueMapper<T>::from(m_value);
-			}
-
-			template<typename T>
-			bool isCompatible() const
-			{
-				return detail::ValueCompatibility<T>::compatible(m_value);
-			}
-
-			u64 id() const;
-			u32 size() const;
-			const String& name() const;
-
-		private:
-			detail::ValueVariant m_value;
-		};
+		}
 	}
 }
-
-#endif

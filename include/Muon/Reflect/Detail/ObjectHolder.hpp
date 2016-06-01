@@ -25,53 +25,53 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_REFLECT_VALUE_HPP
-#define INCLUDE_MUON_REFLECT_VALUE_HPP
+#ifndef INCLUDE_MUON_REFLECT_OBJECTHOLDER_HPP
+#define INCLUDE_MUON_REFLECT_OBJECTHOLDER_HPP
 
-#include "Muon/Traits/Variant.hpp"
+#include "Muon/System/Assert.hpp"
+#include "Muon/Traits/TypeTraits.hpp"
 #include "Muon/Reflect/Type.hpp"
-#include "Muon/Reflect/Detail/ValueMapper.hpp"
 
 namespace m
 {
 	namespace reflect
 	{
-		class MUON_API Value
+		namespace detail
 		{
-		public:
-			Value();
+			class MUON_API IObjectHolder
+			{
+			public:
+				IObjectHolder()
+				{
+				}
+
+				virtual ~IObjectHolder()
+				{
+				}
+
+				virtual void* getObject() const = 0;
+				/*
+			{
+			MUON_ERROR("Not implemented!");
+			return NULL;
+			}
+			// */
+			};
 
 			template<typename T>
-			Value(const T& value)
+			class ObjectHolderCopy
 			{
-				m_value = detail::ValueMapper<T>::to(value);
-			}
+			public:
 
-			template<typename T>
-			operator T() const
-			{
-				return get<T>();
-			}
+				virtual void* getObject() const
+				{
+					return m_object;
+				}
 
-			template<typename T>
-			T get() const
-			{
-				return detail::ValueMapper<T>::from(m_value);
-			}
-
-			template<typename T>
-			bool isCompatible() const
-			{
-				return detail::ValueCompatibility<T>::compatible(m_value);
-			}
-
-			u64 id() const;
-			u32 size() const;
-			const String& name() const;
-
-		private:
-			detail::ValueVariant m_value;
-		};
+			private:
+				T m_object;
+			};
+		}
 	}
 }
 
