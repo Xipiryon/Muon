@@ -50,8 +50,8 @@ namespace m
 			T extractArg(const ArgContainer& args, u32 index)
 			{
 				MUON_ASSERT_BREAK(args[index].id() == traits::TypeTraits<T>::id()
-								  , "Argument does not match expected type: '%s' != '%s'"
-								  , args[index].name().cStr(), traits::TypeTraits<T>::name());
+								  , "Argument does not match: expected '%s', got '%s'"
+								  , traits::TypeTraits<T>::name(), args[index].name().cStr());
 				return args[index].get<T>();
 			}
 
