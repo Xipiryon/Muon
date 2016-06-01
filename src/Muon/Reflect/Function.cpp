@@ -84,11 +84,6 @@ namespace m
 			return m_argTypes[i];
 		}
 
-		Value Function::call(const String& name, const ArgContainer& args)
-		{
-			return detail::FunctionDatabase::getInstance().get(name).call(args);
-		}
-
 		Value Function::call(const ArgContainer& args)
 		{
 			return call(EMPTY_OBJECT, args);

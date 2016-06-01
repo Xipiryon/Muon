@@ -54,7 +54,6 @@ namespace m
 			eType getReturnType() const;
 			eType getArgType(u32 i) const;
 
-			static Value call(const String& name, const ArgContainer& args = ArgContainer::EMPTY);
 			Value call(const ArgContainer& args = ArgContainer::EMPTY);
 			Value call(const UserObject& obj, const ArgContainer& args = ArgContainer::EMPTY);
 
