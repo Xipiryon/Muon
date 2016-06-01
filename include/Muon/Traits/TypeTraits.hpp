@@ -51,6 +51,7 @@ namespace priv
 		return v;
 	}
 #	define _MUON_TRAITS_ID_ATTRIB(Type) ::priv::_traits_hash(MUON_STR(Type))
+#	define _MUON_TRAITS_ID_ATTRIB_BODY(Type)  using namespace ::priv; static u64 __i = _MUON_TRAITS_ID_ATTRIB(Type); return __i
 }
 #else
 namespace priv
@@ -65,11 +66,12 @@ namespace priv
 		return _traits_const_hash(str);
 	}
 #	define _MUON_TRAITS_ID_ATTRIB(Type) #Type ## _traits_hash
+#	define _MUON_TRAITS_ID_ATTRIB_BODY(Type) using namespace ::priv; return _MUON_TRAITS_ID_ATTRIB(Type)
 }
 #endif
 
 #define _MUON_TRAITS_DECL_NAME(Type) static MUON_INLINE MUON_CONSTEXPR const char* name() { return MUON_STR(Type); }
-#define _MUON_TRAITS_DECL_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u64 id() {using namespace ::priv; return _MUON_TRAITS_ID_ATTRIB(Type); }
+#define _MUON_TRAITS_DECL_ID(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u64 id() { _MUON_TRAITS_ID_ATTRIB_BODY(Type); }
 #define _MUON_TRAITS_DECL_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u32 size() { return sizeof(Type); }
 #define _MUON_TRAITS_DECL_CREATE(Type) static MUON_INLINE Type* create() { return MUON_NEW(Type); }
 #define _MUON_TRAITS_DECL_COPY(Type) static MUON_INLINE void copy(Type* ptr, Type* val) { *ptr = *val; }
