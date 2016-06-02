@@ -34,5 +34,15 @@ namespace m
 		UserObject::UserObject()
 		{
 		}
+
+		UserObject::UserObject(const UserObject& o)
+			: m_objectHolder(o.m_objectHolder)
+		{
+		}
+
+		void* UserObject::getPointer() const
+		{
+			return &(*m_objectHolder);
+		}
 	}
 }

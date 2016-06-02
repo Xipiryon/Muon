@@ -42,19 +42,49 @@ namespace m
 		{
 			template<typename T> class CFunction;
 			template<typename T> struct CallHelper;
+			template<typename T, typename = void> struct ArgExtractor;
 
 			// Extract the n'th element and cast it to
 			// the expected type
 			// *******************************
-			template<typename T, typename R = traits::RawType<T>::type>
-			T extractArg(const ArgContainer& args, u32 index)
+			template<typename T>
+			struct ArgExtractor<T, typename std::enable_if<!std::is_pointer<T>::value && !std::is_reference<T>::value>::type>
 			{
-				// Type must be equal, or if const char*, it must match String
-				MUON_ASSERT_BREAK(args[index].isCompatible<R>()
-								  , "Argument does not match: expected '%s', got '%s'"
-								  , traits::TypeTraits<R>::name(), args[index].name().cStr());
-				return args[index].get<R>();
-			}
+				static T extract(const ArgContainer& args, u32 index)
+				{
+					MUON_ASSERT_BREAK(args[index].isCompatible<T>()
+									  , "Argument does not match: expected '%s&', got '%s'"
+									  , traits::TypeTraits<traits::RawType<T>::type>::name()
+									  , args[index].name().cStr());
+					return args[index].get<T>();
+				}
+			};
+
+			template<typename T>
+			struct ArgExtractor<T, typename std::enable_if<std::is_reference<T>::value>::type>
+			{
+				static T& extract(const ArgContainer& args, u32 index)
+				{
+					MUON_ASSERT_BREAK(args[index].isCompatible<T>()
+									  , "Argument does not match: expected '%s&', got '%s'"
+									  , traits::TypeTraits<traits::RawType<T>::type>::name()
+									  , args[index].name().cStr());
+					return args[index].get<T&>();
+				}
+			};
+
+			template<typename T>
+			struct ArgExtractor<T, typename std::enable_if<std::is_pointer<T>::value>::type>
+			{
+				static T extract(const ArgContainer& args, u32 index)
+				{
+					MUON_ASSERT_BREAK(args[index].isCompatible<T>()
+									  , "Argument does not match: expected '%s*', got '%s'"
+									  , traits::TypeTraits<traits::RawType<T>::type>::name()
+									  , args[index].name().cStr());
+					return args[index].get<T>();
+				}
+			};
 
 			// Helper caller, extract and call the function
 			// *******************************
@@ -71,7 +101,7 @@ namespace m
 				template<typename Func, typename...Args, m::u32...Indexes>
 				static Value callImpl(const Func& function, const ArgContainer& args, helper::index_sequence<Indexes...>)
 				{
-					return function(extractArg<Args>(args, Indexes)...);
+					return function(ArgExtractor<Args>::extract(args, Indexes)...);
 				}
 			};
 
@@ -90,7 +120,7 @@ namespace m
 				template<typename Func, typename...Args, m::u32...Indexes>
 				static Value callImpl(const Func& function, const ArgContainer& args, helper::index_sequence<Indexes...>)
 				{
-					function(extractArg<Args>(args, Indexes)...);
+					function(ArgExtractor<Args>::extract(args, Indexes)...);
 					return None();
 				}
 			};
@@ -112,7 +142,7 @@ namespace m
 				{
 					MUON_ASSERT_BREAK(args.count() == sizeof...(Args)
 									  , "Parameter count not matching for '%s': expected %d, got %d!"
-									  , name().cStr(), args.count(), sizeof...(Args));
+									  , name().cStr(), sizeof...(Args), args.count());
 
 					if (args.count() == sizeof...(Args))
 					{

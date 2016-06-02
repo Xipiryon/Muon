@@ -42,8 +42,8 @@ namespace m
 		public:
 			static const ArgContainer EMPTY;
 
-			template<typename...VarArgs>
-			ArgContainer(VarArgs...args)
+			template<typename...Args>
+			ArgContainer(Args...args)
 				: m_args(std::initializer_list<Value>({ args... }))
 			{
 			}

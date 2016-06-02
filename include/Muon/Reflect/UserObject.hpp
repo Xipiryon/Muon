@@ -41,37 +41,50 @@ namespace m
 		{
 		public:
 
+			template<typename T>
+			static UserObject makeCopy(const T& obj);
+
+			template<typename T>
+			static UserObject makeReference(T& obj);
+
+			template<typename T>
+			static UserObject makeReference(const T& obj);
+
 			UserObject();
+			UserObject(const UserObject& o);
 
 			template<typename T>
-			UserObject(const T& obj)
-			{
-			}
+			UserObject(const T& obj);
 
-			template<typename T>
-			T getObjectCopy() const
-			{
-				return *static_cast<T*>(m_object->getObject());
-			}
-
-			template<typename T>
-			T* getObjectPointer() const
-			{
-				return static_cast<T*>(m_object->getObject());
-			}
-
-			template<typename T>
-			const T& getObjectConstRef() const
-			{
-				return *static_cast<T*>(m_object->getObject());
-			}
+			void* getPointer() const;
 
 		private:
-			std::shared_ptr<detail::IObjectHolder> m_object;
+			std::shared_ptr<detail::IObjectHolder> m_objectHolder;
 		};
 	}
 }
 
 MUON_TRAITS_DECL(m::reflect::UserObject);
+
+template<typename T>
+m::reflect::UserObject m::reflect::UserObject::makeCopy(const T& obj)
+{
+}
+
+template<typename T>
+m::reflect::UserObject m::reflect::UserObject::makeReference(T& obj)
+{
+}
+
+template<typename T>
+m::reflect::UserObject m::reflect::UserObject::makeReference(const T& obj)
+{
+}
+
+template<typename T>
+m::reflect::UserObject::UserObject(const T& obj)
+{
+	m_objectHolder.reset(MUON_NEW(m::reflect::detail::ObjectHolderRef<T>, const_cast<T*>(&obj)));
+}
 
 #endif

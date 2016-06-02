@@ -56,7 +56,7 @@ namespace m
 			template<typename T>
 			T get() const
 			{
-				return detail::ValueMapper<T>::from(m_value);
+				return m::reflect::detail::ValueMapper<T>::from(m_value);
 			}
 
 			template<typename T>

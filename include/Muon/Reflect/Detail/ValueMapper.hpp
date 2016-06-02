@@ -49,12 +49,32 @@ namespace m
 
 			template<typename T, typename Check = void> struct ValueMapper;
 			template<typename T, typename Check = void> struct ValueCompatibiliy;
+			template<typename T, typename Check = void> struct ValueTypeMapper;
 
 			template<typename T>
 			eType mapToEnum()
 			{
 				return static_cast<eType>(ValueMapper<T>::type);
 			}
+
+			//typename std::enable_if<std::is_reference<T>::value>::type >
+			template<typename T>
+			struct ValueTypeMapper<T>
+			{
+				typedef T type;
+			};
+
+			template<typename T>
+			struct ValueTypeMapper<T*>
+			{
+				typedef T* type;
+			};
+
+			template<typename T>
+			struct ValueTypeMapper<T&>
+			{
+				typedef T& type;
+			};
 
 #define _MUON_CONVERT_FROM(RetType, ArgType, ConvertCode) static RetType from(ArgType value) { ConvertCode ;}
 
@@ -103,18 +123,19 @@ namespace m
 				static const i32 type = eType::USER_OBJECT;
 				static UserObject to(const T& value)
 				{
-					return UserObject(/*source*/);
+					return UserObject(value);
 				}
 
-				_MUON_CONVERT_FROM_BOOL(T, _MUON_CONVERT_ERROR(UserObjec()));
-				_MUON_CONVERT_FROM_INTEGER(T, _MUON_CONVERT_ERROR(UserObjec()));
-				_MUON_CONVERT_FROM_FLOATING(T, _MUON_CONVERT_ERROR(UserObjec()));
-				_MUON_CONVERT_FROM_STRING(T, _MUON_CONVERT_ERROR(UserObjec()));
-				_MUON_CONVERT_FROM_ENUM(T, _MUON_CONVERT_ERROR(UserObjec()));
-				_MUON_CONVERT_FROM_USEROBJECT(T, return value.getObjectConstRef<T>());
+				_MUON_CONVERT_FROM_BOOL(T, _MUON_CONVERT_ERROR(UserObject()));
+				_MUON_CONVERT_FROM_INTEGER(T, _MUON_CONVERT_ERROR(UserObject()));
+				_MUON_CONVERT_FROM_FLOATING(T, _MUON_CONVERT_ERROR(UserObject()));
+				_MUON_CONVERT_FROM_STRING(T, _MUON_CONVERT_ERROR(UserObject()));
+				_MUON_CONVERT_FROM_ENUM(T, _MUON_CONVERT_ERROR(UserObject()));
+				_MUON_CONVERT_FROM_USEROBJECT(T, return *static_cast<T*>(value.getPointer()));
+				_MUON_CONVERT_FROM_VALUEVARIANT(T, return *static_cast<T*>(value.get<UserObject>().getPointer()));
 			};
 
-			// Muon to Enum type
+			// Type Mapper Specialization
 			// *****************
 			template<>
 			struct ValueMapper<bool>
@@ -213,6 +234,30 @@ namespace m
 				static const i32 type = eType::NONE;
 			};
 
+			template<typename T>
+			struct ValueMapper<T*> : ValueMapper<T>
+			{
+				//_MUON_CONVERT_FROM_USEROBJECT(T*, return static_cast<T*>(value.getPointer()));
+			};
+
+			template<typename T>
+			struct ValueMapper<const T*> : ValueMapper<T*>
+			{
+				//_MUON_CONVERT_FROM_USEROBJECT(const T*, return static_cast<T*>(value.getPointer()));
+			};
+
+			template<typename T>
+			struct ValueMapper<T&> : ValueMapper<T>
+			{
+				//_MUON_CONVERT_FROM_USEROBJECT(T&, return *static_cast<T*>(value.getPointer()));
+			};
+
+			template<typename T>
+			struct ValueMapper<const T&> : ValueMapper<T>
+			{
+				//_MUON_CONVERT_FROM_USEROBJECT(const T&, return *static_cast<T*>(value.getPointer()));
+			};
+
 			template<>
 			struct ValueMapper<const char*>
 			{
@@ -233,18 +278,25 @@ namespace m
 				_MUON_CONVERT_FROM_VALUEVARIANT(const char*, return value.get<String>().cStr());
 			};
 
-			template<typename T>
-			struct ValueMapper<const T> : ValueMapper<T>
+			template <i32 N>
+			struct ValueMapper<char[N]>
 			{
+				static const i32 type = eType::STRING;
+				static m::String to(const char value[N])
+				{
+					return m::String(value);
+				}
 			};
 
-			template<typename T>
-			struct ValueMapper<const T&> : ValueMapper<T>
+			template <i32 N>
+			struct ValueMapper<const char[N]>
 			{
+				static const i32 type = eType::STRING;
+				static m::String to(const char value[N])
+				{
+					return m::String(value);
+				}
 			};
-
-			// Enum to Muon type
-			// *****************
 
 			// Compatibility
 			// *****************
@@ -284,8 +336,44 @@ namespace m
 				}
 			};
 
+			template<>
+			struct ValueCompatibility<EnumValue>
+			{
+				static bool compatible(const ValueVariant& value)
+				{
+					return value.id() == traits::TypeTraits<EnumValue>::id();
+				}
+			};
+
+			template<>
+			struct ValueCompatibility<String>
+			{
+				static bool compatible(const ValueVariant& value)
+				{
+					return value.id() == traits::TypeTraits<String>::id();
+				}
+			};
+
+			template<>
+			struct ValueCompatibility<const char*>
+			{
+				static bool compatible(const ValueVariant& value)
+				{
+					return value.id() == traits::TypeTraits<String>::id();
+				}
+			};
+
+			template<>
+			struct ValueCompatibility<char*>
+			{
+				static bool compatible(const ValueVariant& value)
+				{
+					return value.id() == traits::TypeTraits<String>::id();
+				}
+			};
+
 			template<typename T>
-			struct ValueCompatibility<const T> : ValueCompatibility<T>
+			struct ValueCompatibility<T&> : ValueCompatibility<T>
 			{
 			};
 
