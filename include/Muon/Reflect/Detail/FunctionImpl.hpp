@@ -53,7 +53,7 @@ namespace m
 				static T extract(const ArgContainer& args, u32 index)
 				{
 					MUON_ASSERT_BREAK(args[index].isCompatible<T>()
-									  , "Argument does not match: expected '%s&', got '%s'"
+									  , "Argument does not match: expected '%s', got '%s'"
 									  , traits::TypeTraits<traits::RawType<T>::type>::name()
 									  , args[index].name().cStr());
 					return args[index].get<T>();
