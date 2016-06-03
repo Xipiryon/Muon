@@ -32,17 +32,25 @@ namespace m
 	namespace reflect
 	{
 		UserObject::UserObject()
+			: m_objectHolder()
+			, m_isReference(false)
 		{
 		}
 
 		UserObject::UserObject(const UserObject& o)
 			: m_objectHolder(o.m_objectHolder)
+			, m_isReference(o.m_isReference)
 		{
 		}
 
 		void* UserObject::getPointer() const
 		{
 			return &(*m_objectHolder);
+		}
+
+		bool UserObject::isReference() const
+		{
+			return m_isReference;
 		}
 	}
 }

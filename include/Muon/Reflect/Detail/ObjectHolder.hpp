@@ -57,8 +57,13 @@ namespace m
 			class ObjectHolderCopy : public IObjectHolder
 			{
 			public:
-				ObjectHolderCopy(const T& obj)
-					: m_object(obj)
+				ObjectHolderCopy(T* obj)
+					: m_object(*obj)
+				{
+				}
+
+				ObjectHolderCopy(const ObjectHolderCopy& o)
+					: m_object(o.m_object)
 				{
 				}
 
@@ -80,31 +85,18 @@ namespace m
 				{
 				}
 
-				virtual void* object() const
-				{
-					return static_cast<void*>(m_object);
-				}
-
-			private:
-				T* m_object;
-			};
-
-			template<typename T>
-			class ObjectHolderConstRef : public IObjectHolder
-			{
-			public:
-				ObjectHolderConstRef(T* obj)
-					: m_object(obj)
+				ObjectHolderRef(const ObjectHolderRef& o)
+					: m_object(o.m_object)
 				{
 				}
 
 				virtual void* object() const
 				{
-					return static_cast<void*>(m_object);
+					return (void*)m_object;
 				}
 
 			private:
-				T* m_object;
+				typename std::remove_const<T>::type* m_object;
 			};
 		}
 	}
