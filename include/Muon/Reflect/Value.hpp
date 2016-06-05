@@ -48,7 +48,7 @@ namespace m
 			static Value copy(const char* o);
 
 			template<typename T>
-			static Value reference(const T& o);
+			static Value ref(const T& o);
 
 			template<typename T>
 			operator T&() const;
@@ -100,7 +100,7 @@ m::reflect::Value m::reflect::Value::copy(const T& value)
 }
 
 template<typename T>
-m::reflect::Value m::reflect::Value::reference(const T& value)
+m::reflect::Value m::reflect::Value::ref(const T& value)
 {
 	Value v;
 	v.m_value.reset();
