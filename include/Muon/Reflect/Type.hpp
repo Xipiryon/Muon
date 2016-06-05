@@ -32,11 +32,15 @@
 
 namespace m
 {
+	class String;
 	namespace reflect
 	{
 		struct None
 		{
 		};
+
+		class EnumValue;
+		class UserObject;
 
 		enum eType
 		{
@@ -45,7 +49,7 @@ namespace m
 			INTEGER,
 			FLOAT,
 			STRING,
-			ENUM,
+			ENUM_VALUE,
 			USER_OBJECT,
 		};
 
@@ -55,7 +59,7 @@ namespace m
 			"INTEGER",
 			"FLOAT",
 			"STRING",
-			"ENUM",
+			"ENUM_VALUE",
 			"USER_OBJECT",
 		};
 	}

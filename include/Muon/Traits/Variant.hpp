@@ -131,6 +131,7 @@ namespace m
 			}
 
 			Variant(const Variant<Ts...>& o)
+				: Variant()
 			{
 				operator=(o);
 			}
@@ -144,12 +145,15 @@ namespace m
 			{
 				if (&o != this)
 				{
-					Helper::destroy(m_id, &m_data);
-					Helper::create(o.m_id, &m_data);
+					if (id() != o.id())
+					{
+						Helper::destroy(m_id, &m_data);
+						Helper::create(o.m_id, &m_data);
+						m_id = o.m_id;
+						m_size = o.m_size;
+						m_name = o.m_name;
+					}
 					Helper::copy(o.m_id, &m_data, &o.m_data);
-					m_id = o.m_id;
-					m_size = o.m_size;
-					m_name = o.m_name;
 				}
 				return *this;
 			}
@@ -172,9 +176,9 @@ namespace m
 			}
 
 			template<typename T>
-			const T& get() const
+			T& get() const
 			{
-				return *(T*)&m_data;
+				return (T&)m_data;
 			}
 
 			void* getRaw() const

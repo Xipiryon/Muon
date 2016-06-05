@@ -32,23 +32,50 @@ namespace m
 	namespace reflect
 	{
 		Value::Value()
+			: m_value()
+			, m_pointer(NULL)
+			, m_id(traits::TypeTraits<None>::id())
+			, m_size(traits::TypeTraits<None>::size())
+			, m_name(traits::TypeTraits<None>::name())
 		{
-			m_value = None();
+		}
+
+		Value::Value(const Value& o)
+			: m_value(o.m_value)
+			, m_pointer(o.m_pointer)
+			, m_id(o.m_id)
+			, m_size(o.m_size)
+			, m_name(o.m_name)
+		{
+		}
+
+		Value Value::copy(const char* value)
+		{
+			Value v;
+			v.m_value = m::String(value);
+			v.m_pointer = NULL;
+			v._setup<m::String>();
+			return v;
+		}
+
+		bool Value::isReference() const
+		{
+			return (m_pointer != NULL);
 		}
 
 		u64 Value::id() const
 		{
-			return m_value.id();
+			return m_id;
 		}
 
 		u32 Value::size() const
 		{
-			return m_value.size();
+			return m_size;
 		}
 
 		const String& Value::name() const
 		{
-			return m_value.name();
+			return m_name;
 		}
 	}
 }
