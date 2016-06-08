@@ -37,91 +37,45 @@ namespace m
 {
 	namespace traits
 	{
-		namespace details
+		namespace detail
 		{
 			template<typename T, typename...Ts>
 			struct VariantHelper
 			{
 				static const u32 size = sizeof(T) > VariantHelper<Ts...>::size ? sizeof(T) : VariantHelper<Ts...>::size;
-
-				inline static void create(u64 id, void* data)
-				{
-					if (id == TypeTraits<T>::id())
-					{
-						new (data)T();
-					}
-					else
-					{
-						VariantHelper<Ts...>::create(id, data);
-					}
-				}
-
-				inline static void copy(u64 id, void* dst, const void* src)
-				{
-					if (id == TypeTraits<T>::id())
-					{
-						*reinterpret_cast<T*>(dst) = *reinterpret_cast<const T*>(src);
-					}
-					else
-					{
-						VariantHelper<Ts...>::copy(id, dst, src);
-					}
-				}
-
-				inline static void destroy(u64 id, void* data)
-				{
-					if (id == TypeTraits<T>::id())
-					{
-						reinterpret_cast<T*>(data)->~T();
-					}
-					else
-					{
-						VariantHelper<Ts...>::destroy(id, data);
-					}
-				}
+				inline static void create(u64 id, void* data);
+				inline static void copy(u64 id, void* dst, const void* src);
+				inline static void destroy(u64 id, void* data);
 			};
 
 			template<typename T>
 			struct VariantHelper<T>
 			{
 				static const u32 size = sizeof(T);
-
-				inline static void create(u64 id, void* data)
-				{
-					if (id == TypeTraits<T>::id())
-					{
-						new (data)T();
-					}
-				}
-
-				inline static void copy(u64 id, void* dst, const void* src)
-				{
-					if (id == TypeTraits<T>::id())
-					{
-						*reinterpret_cast<T*>(dst) = *reinterpret_cast<const T*>(src);
-					}
-				}
-
-				inline static void destroy(u64 id, void* data)
-				{
-					if (id == TypeTraits<T>::id())
-					{
-						reinterpret_cast<T*>(data)->~T();
-					}
-				}
+				inline static void create(u64 id, void* data);
+				inline static void copy(u64 id, void* dst, const void* src);
+				inline static void destroy(u64 id, void* data);
 			};
 		}
 
 		template<typename...Ts>
 		class MUON_API Variant
 		{
-			typedef details::VariantHelper<Ts...> Helper;
+			typedef detail::VariantHelper<Ts...> Helper;
 
 			template<u32 Size>
 			struct RawData
 			{
 				u8 data[Size];
 			};
+
+			template<typename T>
+			void setupTraitsInfo()
+			{
+				m_id = TypeTraits<T>::id();
+				m_size = TypeTraits<T>::size();
+				m_name = TypeTraits<T>::name();
+			}
 
 		public:
 			Variant()
@@ -139,6 +93,11 @@ namespace m
 			~Variant()
 			{
 				Helper::destroy(m_id, &m_data);
+			}
+
+			Variant& operator=(const char* str)
+			{
+				return (*this = String(str));
 			}
 
 			Variant& operator=(const Variant<Ts...>& o)
@@ -159,20 +118,28 @@ namespace m
 			}
 
 			template<typename T>
-			Variant& operator=(const T& rhs)
+			Variant& operator=(const T& o)
 			{
-				return set<T>(rhs);
+				return set(o);
 			}
 
-			template<typename T, typename...Args>
-			Variant& set(Args&&...args)
+			template<typename T>
+			Variant& set(const T& o)
 			{
-				Helper::destroy(m_id, &m_data);
-				new (&m_data)T(std::forward<Args>(args)...);
-				m_id = TypeTraits<T>::id();
-				m_size = TypeTraits<T>::size();
-				m_name = TypeTraits<T>::name();
+				if (id() != TypeTraits<T>::id())
+				{
+					Helper::destroy(m_id, &m_data);
+					Helper::create(m_id, &m_data);
+					setupTraitsInfo<T>();
+				}
+				Helper::copy(m_id, &m_data, &o);
 				return *this;
+			}
+
+			template<typename T>
+			operator T&() const
+			{
+				return get<T>();
 			}
 
 			template<typename T>
@@ -181,7 +148,7 @@ namespace m
 				return (T&)m_data;
 			}
 
-			void* getRaw() const
+			void* pointer() const
 			{
 				return (void*)&m_data;
 			}
@@ -191,6 +158,7 @@ namespace m
 				Helper::destroy(m_id, &m_data);
 				m_id = INVALID_TYPE_ID;
 				m_size = 0;
+				m_name = "";
 			}
 
 			u64 id() const
@@ -216,5 +184,7 @@ namespace m
 		};
 	}
 }
+
+#include "Muon/Traits/Detail/VariantDetail.hpp"
 
 #endif

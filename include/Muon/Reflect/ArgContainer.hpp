@@ -25,11 +25,10 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_REFLECT_ARGS_HPP
-#define INCLUDE_MUON_REFLECT_ARGS_HPPe
+#ifndef INCLUDE_MUON_REFLECT_ARGCONTAINER_HPP
+#define INCLUDE_MUON_REFLECT_ARGCONTAINER_HPP
 
 #include <vector>
-#include <initializer_list>
 #include "Muon/Traits/TypeTraits.hpp"
 #include "Muon/Reflect/Value.hpp"
 

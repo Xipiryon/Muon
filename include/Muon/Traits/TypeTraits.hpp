@@ -75,9 +75,8 @@ namespace priv
 #define _MUON_TRAITS_DECL_SIZE(Type) static MUON_INLINE MUON_CONSTEXPR ::m::u32 size() { return sizeof(Type); }
 
 #define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_DECL_NAME(Type) _MUON_TRAITS_DECL_ID(Type) _MUON_TRAITS_DECL_SIZE(Type)
-#define _MUON_TRAITS_STRUCT(Type) template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
 
-#define MUON_TRAITS_DECL(Type) namespace m { namespace traits { _MUON_TRAITS_STRUCT(Type) } }
+#define MUON_TRAITS_DECL(Type) template<> struct m::traits::TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
 
 #define MUON_TRAITS_GET(Type) ::m::traits::TypeTraits<Type>
 #define MUON_TRAITS_GET_NAME(Type) ::m::traits::TypeTraits<Type>::name()
@@ -108,16 +107,6 @@ namespace m
 			{
 				return 0;
 			}
-			static MUON_INLINE void* create()
-			{
-				return NULL;
-			}
-			static MUON_INLINE void copy(void*, void*)
-			{
-			}
-			static MUON_INLINE void destroy(void*)
-			{
-			}
 		};
 
 		template<> struct TypeTraits<void*>
@@ -125,16 +114,6 @@ namespace m
 			_MUON_TRAITS_DECL_NAME(void*);
 			_MUON_TRAITS_DECL_ID(void*);
 			_MUON_TRAITS_DECL_SIZE(void*);
-			static MUON_INLINE void* create()
-			{
-				return NULL;
-			}
-			static MUON_INLINE void copy(void*, void*)
-			{
-			}
-			static MUON_INLINE void destroy(void*)
-			{
-			}
 		};
 
 		template<typename Class, typename MemberType>
