@@ -49,6 +49,7 @@ namespace m
 			ArgContainer& operator+=(const Value& o);
 			ArgContainer operator+(const Value& o);
 
+			void clear();
 			u32 count() const;
 			const Value& operator[](u32 i) const;
 			Value& operator[](u32 i);

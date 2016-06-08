@@ -43,18 +43,18 @@ namespace m
 			struct VariantHelper
 			{
 				static const u32 size = sizeof(T) > VariantHelper<Ts...>::size ? sizeof(T) : VariantHelper<Ts...>::size;
-				inline static void create(u64 id, void* data);
-				inline static void copy(u64 id, void* dst, const void* src);
-				inline static void destroy(u64 id, void* data);
+				inline static void create(u64 id, const char* name, void* data);
+				inline static void copy(u64 id, const char* name, void* dst, const void* src);
+				inline static void destroy(u64 id, const char* name, void* data);
 			};
 
 			template<typename T>
 			struct VariantHelper<T>
 			{
 				static const u32 size = sizeof(T);
-				inline static void create(u64 id, void* data);
-				inline static void copy(u64 id, void* dst, const void* src);
-				inline static void destroy(u64 id, void* data);
+				inline static void create(u64 id, const char* name, void* data);
+				inline static void copy(u64 id, const char* name, void* dst, const void* src);
+				inline static void destroy(u64 id, const char* name, void* data);
 			};
 		}
 
@@ -81,6 +81,7 @@ namespace m
 			Variant()
 				: m_id(INVALID_TYPE_ID)
 				, m_size(0)
+				, m_name("INVALID_TYPE_ID")
 			{
 			}
 
@@ -92,7 +93,7 @@ namespace m
 
 			~Variant()
 			{
-				Helper::destroy(m_id, &m_data);
+				Helper::destroy(m_id, m_name.cStr(), &m_data);
 			}
 
 			Variant& operator=(const char* str)
@@ -104,15 +105,18 @@ namespace m
 			{
 				if (&o != this)
 				{
-					if (id() != o.id())
+					if (m_id != o.m_id)
 					{
-						Helper::destroy(m_id, &m_data);
-						Helper::create(o.m_id, &m_data);
+						reset();
+						Helper::create(m_id, m_name.cStr(), &m_data);
 						m_id = o.m_id;
 						m_size = o.m_size;
 						m_name = o.m_name;
 					}
-					Helper::copy(o.m_id, &m_data, &o.m_data);
+					if (m_id != INVALID_TYPE_ID)
+					{
+						Helper::copy(m_id, m_name.cStr(), &m_data, &o.m_data);
+					}
 				}
 				return *this;
 			}
@@ -128,12 +132,17 @@ namespace m
 			{
 				if (id() != TypeTraits<T>::id())
 				{
-					Helper::destroy(m_id, &m_data);
-					Helper::create(m_id, &m_data);
+					reset();
+					Helper::create(m_id, m_name.cStr(), &m_data);
 					setupTraitsInfo<T>();
 				}
-				Helper::copy(m_id, &m_data, &o);
+				Helper::copy(m_id, m_name.cStr(), &m_data, &o);
 				return *this;
+			}
+
+			Variant& set(const char* str)
+			{
+				return set(String(str));
 			}
 
 			template<typename T>
@@ -155,10 +164,10 @@ namespace m
 
 			void reset()
 			{
-				Helper::destroy(m_id, &m_data);
+				Helper::destroy(m_id, m_name.cStr(), &m_data);
 				m_id = INVALID_TYPE_ID;
 				m_size = 0;
-				m_name = "";
+				m_name = "INVALID_TYPE_ID";
 			}
 
 			u64 id() const

@@ -55,10 +55,9 @@ namespace m
 			eType getArgType(u32 i) const;
 
 			Value call(const ArgContainer& args = ArgContainer::EMPTY);
-			Value call(const UserObject& obj, const ArgContainer& args = ArgContainer::EMPTY);
 
 		protected:
-			virtual Value execute(const UserObject& obj, const ArgContainer& args) const = 0;
+			virtual Value execute(const ArgContainer& args) const = 0;
 			Function(const String& name, eType retType, const std::vector<eType>& argTypes);
 
 		private:
@@ -68,8 +67,6 @@ namespace m
 		};
 	}
 }
-
-MUON_TRAITS_DECL_ABSTRACT(m::reflect::Function);
 
 template<typename Ret, typename...Args>
 m::reflect::Function::Function(const String& name)

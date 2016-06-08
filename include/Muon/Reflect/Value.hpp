@@ -40,6 +40,8 @@ namespace m
 		class MUON_API Value
 		{
 		public:
+			static const Value EMPTY;
+
 			Value();
 			Value(const Value& o);
 
@@ -118,7 +120,7 @@ m::reflect::Value::operator T&() const
 template<typename T>
 T& m::reflect::Value::get() const
 {
-	return (m_pointer != NULL ? *(T*)m_pointer : m_value.get<T>());
+	return  (m_pointer == NULL ? m_value.get<T>() : *(T*)m_pointer);
 }
 
 template<typename T>

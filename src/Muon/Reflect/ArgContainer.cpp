@@ -47,6 +47,11 @@ namespace m
 			return r;
 		}
 
+		void ArgContainer::clear()
+		{
+			m_args.clear();
+		}
+
 		u32 ArgContainer::count() const
 		{
 			return m_args.size();

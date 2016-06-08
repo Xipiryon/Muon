@@ -39,32 +39,32 @@ namespace m
 			// Recursive VariantHelper
 			// ***************
 			template<typename T, typename...Ts>
-			void VariantHelper<T, Ts...>::create(u64 id, void* data)
+			void VariantHelper<T, Ts...>::create(u64 id, const char* name, void* data)
 			{
-				(id == TypeTraits<T>::id() ? VariantHelper<T>::create(id, data) : VariantHelper<Ts...>::create(id, data));
+				(id == TypeTraits<T>::id() ? VariantHelper<T>::create(id, name, data) : VariantHelper<Ts...>::create(id, name, data));
 			}
 
 			template<typename T, typename...Ts>
-			void VariantHelper<T, Ts...>::copy(u64 id, void* dst, const void* src)
+			void VariantHelper<T, Ts...>::copy(u64 id, const char* name, void* dst, const void* src)
 			{
-				(id == TypeTraits<T>::id() ? VariantHelper<T>::copy(id, dst, src) : VariantHelper<Ts...>::copy(id, dst, src));
+				(id == TypeTraits<T>::id() ? VariantHelper<T>::copy(id, name, dst, src) : VariantHelper<Ts...>::copy(id, name, dst, src));
 			}
 
 			template<typename T, typename...Ts>
-			void VariantHelper<T, Ts...>::destroy(u64 id, void* data)
+			void VariantHelper<T, Ts...>::destroy(u64 id, const char* name, void* data)
 			{
-				(id == TypeTraits<T>::id() ? VariantHelper<T>::destroy(id, data) : VariantHelper<Ts...>::destroy(id, data));
+				(id == TypeTraits<T>::id() ? VariantHelper<T>::destroy(id, name, data) : VariantHelper<Ts...>::destroy(id, name, data));
 			}
 
 			// Final VariantHelper
 			// ***************
 
 			template<typename T>
-			void VariantHelper<T>::create(u64 id, void* data)
+			void VariantHelper<T>::create(u64 id, const char* name, void* data)
 			{
 				MUON_ASSERT_BREAK(id == INVALID_TYPE_ID
-								  , "Variant type mismatch when trying to create '%s'!"
-								  , TypeTraits<T>::name());
+								  , "Variant type mismatch when trying to create '%s' (current '%s')"
+								  , TypeTraits<T>::name(), name);
 				if (id == INVALID_TYPE_ID)
 				{
 					new (data)T();
@@ -72,11 +72,11 @@ namespace m
 			}
 
 			template<typename T>
-			void VariantHelper<T>::copy(u64 id, void* dst, const void* src)
+			void VariantHelper<T>::copy(u64 id, const char* name, void* dst, const void* src)
 			{
 				MUON_ASSERT_BREAK(id == TypeTraits<T>::id()
-								  , "Variant type mismatch when trying to copy '%s'!"
-								  , TypeTraits<T>::name());
+								  , "Variant type mismatch when trying to copy '%s' (current '%s')"
+								  , TypeTraits<T>::name(), name);
 				if (id == TypeTraits<T>::id())
 				{
 					*(T*)dst = *(T*)src;
@@ -84,11 +84,11 @@ namespace m
 			}
 
 			template<typename T>
-			void VariantHelper<T>::destroy(u64 id, void* data)
+			void VariantHelper<T>::destroy(u64 id, const char* name, void* data)
 			{
 				MUON_ASSERT_BREAK(id == INVALID_TYPE_ID || id == TypeTraits<T>::id()
-								  , "Variant Type mismatch when trying to destroy '%s'!"
-								  , TypeTraits<T>::name());
+								  , "Variant Type mismatch when trying to destroy '%s' (current '%s')"
+								  , TypeTraits<T>::name(), name);
 
 				if (id != INVALID_TYPE_ID && id == TypeTraits<T>::id())
 				{

@@ -31,6 +31,8 @@ namespace m
 {
 	namespace reflect
 	{
+		const Value Value::EMPTY;
+
 		Value::Value()
 			: m_value()
 			, m_pointer(NULL)
@@ -41,19 +43,18 @@ namespace m
 		}
 
 		Value::Value(const Value& o)
-			: m_value(o.m_value)
-			, m_pointer(o.m_pointer)
+			: m_pointer(o.m_pointer)
 			, m_id(o.m_id)
 			, m_size(o.m_size)
 			, m_name(o.m_name)
 		{
+			m_value = o.m_value;
 		}
 
 		Value Value::copy(const char* value)
 		{
 			Value v;
 			v.m_value = m::String(value);
-			v.m_pointer = NULL;
 			v._setup<m::String>();
 			return v;
 		}

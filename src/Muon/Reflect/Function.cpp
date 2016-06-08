@@ -28,11 +28,6 @@
 #include "Muon/Reflect/Function.hpp"
 #include "Muon/Reflect/Detail/FunctionDatabase.hpp"
 
-namespace
-{
-	const m::reflect::UserObject EMPTY_OBJECT;
-}
-
 namespace m
 {
 	namespace reflect
@@ -86,12 +81,7 @@ namespace m
 
 		Value Function::call(const ArgContainer& args)
 		{
-			return call(EMPTY_OBJECT, args);
-		}
-
-		Value Function::call(const UserObject& obj, const ArgContainer& args)
-		{
-			return execute(obj, args);
+			return execute(args);
 		}
 	}
 }
