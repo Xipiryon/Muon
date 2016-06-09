@@ -39,9 +39,15 @@ namespace m
 			// Recursive VariantHelper
 			// ***************
 			template<typename T, typename...Ts>
-			void VariantHelper<T, Ts...>::create(u64 id, const char* name, void* data)
+			void VariantHelper<T, Ts...>::create(u64 cId, u64 nId, const char* name, void* data)
 			{
-				(id == TypeTraits<T>::id() ? VariantHelper<T>::create(id, name, data) : VariantHelper<Ts...>::create(id, name, data));
+				MUON_ASSERT_BREAK(cId == INVALID_TYPE_ID
+								  , "Variant not empty when trying to create '%s', stored '%s'"
+								  , TypeTraits<T>::name(), name);
+				if (cId == INVALID_TYPE_ID)
+				{
+					(nId == TypeTraits<T>::id() ? VariantHelper<T>::create(cId, nId, name, data) : VariantHelper<Ts...>::create(cId, nId, name, data));
+				}
 			}
 
 			template<typename T, typename...Ts>
@@ -60,12 +66,12 @@ namespace m
 			// ***************
 
 			template<typename T>
-			void VariantHelper<T>::create(u64 id, const char* name, void* data)
+			void VariantHelper<T>::create(u64 /*unused*/, u64 id, const char* name, void* data)
 			{
-				MUON_ASSERT_BREAK(id == INVALID_TYPE_ID
-								  , "Variant type mismatch when trying to create '%s' (current '%s')"
-								  , TypeTraits<T>::name(), name);
-				if (id == INVALID_TYPE_ID)
+				MUON_ASSERT_BREAK(id == TypeTraits<T>::id()
+								  , "Variant not able to store '%s' type!"
+								  , TypeTraits<T>::name());
+				if (id == TypeTraits<T>::id())
 				{
 					new (data)T();
 				}

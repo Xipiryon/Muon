@@ -31,8 +31,6 @@ namespace m
 {
 	namespace reflect
 	{
-		const Value Value::EMPTY;
-
 		Value::Value()
 			: m_value()
 			, m_pointer(NULL)

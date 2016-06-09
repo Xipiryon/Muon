@@ -39,7 +39,7 @@ namespace m
 		class MUON_API ArgContainer
 		{
 		public:
-			static const ArgContainer EMPTY;
+			static const ArgContainer Empty;
 
 			template<typename T>
 			ArgContainer& ref(const T& o);

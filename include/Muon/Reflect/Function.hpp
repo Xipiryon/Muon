@@ -54,7 +54,7 @@ namespace m
 			eType getReturnType() const;
 			eType getArgType(u32 i) const;
 
-			Value call(const ArgContainer& args = ArgContainer::EMPTY);
+			Value call(const ArgContainer& args = ArgContainer::Empty);
 
 		protected:
 			virtual Value execute(const ArgContainer& args) const = 0;

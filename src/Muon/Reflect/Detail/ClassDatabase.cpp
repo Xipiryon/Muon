@@ -29,7 +29,7 @@
 
 namespace
 {
-	static const m::reflect::Class EMPTY_CLASS;
+	static const m::reflect::Class Default;
 }
 
 namespace m
@@ -75,7 +75,7 @@ namespace m
 				{
 					return it->second;
 				}
-				return EMPTY_CLASS;
+				return Default;
 			}
 
 			u32 ClassDatabase::size() const

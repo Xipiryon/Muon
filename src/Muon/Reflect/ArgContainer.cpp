@@ -31,7 +31,7 @@ namespace m
 {
 	namespace reflect
 	{
-		const ArgContainer ArgContainer::EMPTY;
+		const ArgContainer ArgContainer::Empty;
 
 		ArgContainer& ArgContainer::operator+=(const Value& o)
 		{

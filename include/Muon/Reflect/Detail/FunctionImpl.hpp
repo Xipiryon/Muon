@@ -121,7 +121,7 @@ namespace m
 				static Value callImpl(const Func& function, const ArgContainer& args, helper::index_sequence<Indexes...>)
 				{
 					function(ArgExtractor<Args>::extract(args, Indexes)...);
-					return None();
+					return Value();
 				}
 			};
 
@@ -148,7 +148,7 @@ namespace m
 					{
 						return CallHelper<Ret>::call<decltype(m_function), Args...>(m_function, args);
 					}
-					return None();
+					return Value();
 				}
 			private:
 				std::function<Ret(Args...)> m_function;
@@ -178,7 +178,7 @@ namespace m
 					{
 						return CallHelper<Ret>::call(m_function, args);
 					}
-					return None();
+					return Value();
 				}
 			private:
 				std::function<Ret()> m_function;

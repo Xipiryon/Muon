@@ -43,7 +43,7 @@ namespace m
 			struct VariantHelper
 			{
 				static const u32 size = sizeof(T) > VariantHelper<Ts...>::size ? sizeof(T) : VariantHelper<Ts...>::size;
-				inline static void create(u64 id, const char* name, void* data);
+				inline static void create(u64 cId, u64 nId, const char* name, void* data);
 				inline static void copy(u64 id, const char* name, void* dst, const void* src);
 				inline static void destroy(u64 id, const char* name, void* data);
 			};
@@ -52,14 +52,14 @@ namespace m
 			struct VariantHelper<T>
 			{
 				static const u32 size = sizeof(T);
-				inline static void create(u64 id, const char* name, void* data);
+				inline static void create(u64 cId, u64 nId, const char* name, void* data);
 				inline static void copy(u64 id, const char* name, void* dst, const void* src);
 				inline static void destroy(u64 id, const char* name, void* data);
 			};
 		}
 
 		template<typename...Ts>
-		class MUON_API Variant
+		class Variant
 		{
 			typedef detail::VariantHelper<Ts...> Helper;
 
@@ -108,7 +108,7 @@ namespace m
 					if (m_id != o.m_id)
 					{
 						reset();
-						Helper::create(m_id, m_name.cStr(), &m_data);
+						Helper::create(m_id, o.m_id, m_name.cStr(), &m_data);
 						m_id = o.m_id;
 						m_size = o.m_size;
 						m_name = o.m_name;
@@ -133,7 +133,7 @@ namespace m
 				if (id() != TypeTraits<T>::id())
 				{
 					reset();
-					Helper::create(m_id, m_name.cStr(), &m_data);
+					Helper::create(m_id, TypeTraits<T>::id(), m_name.cStr(), &m_data);
 					setupTraitsInfo<T>();
 				}
 				Helper::copy(m_id, m_name.cStr(), &m_data, &o);

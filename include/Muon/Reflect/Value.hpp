@@ -30,8 +30,8 @@
 
 #include "Muon/Traits/Variant.hpp"
 #include "Muon/Reflect/Type.hpp"
-//#include "Muon/Reflect/Enum.hpp"
-//#include "Muon/Reflect/UserObject.hpp"
+#include "Muon/Reflect/Enum.hpp"
+#include "Muon/Reflect/UserObject.hpp"
 
 namespace m
 {
@@ -40,8 +40,6 @@ namespace m
 		class MUON_API Value
 		{
 		public:
-			static const Value EMPTY;
-
 			Value();
 			Value(const Value& o);
 
@@ -67,12 +65,8 @@ namespace m
 			const String& name() const;
 
 		private:
-			m::traits::Variant<None
-				, bool, u64, f64, String
-				//, EnumValue
-				//, UserObject
-			> m_value;
-			void* m_pointer;
+			m::traits::Variant<None, bool, u64, f64, String, EnumValue, UserObject> m_value;
+			void* m_pointer = NULL;
 
 			u64 m_id;
 			u32 m_size;
@@ -126,7 +120,7 @@ T& m::reflect::Value::get() const
 template<typename T>
 bool m::reflect::Value::compatible() const
 {
-	return false;//detail::ValueCompatibility<T>::compatible(*this);
+	return detail::ValueCompatibility<T>::compatible(*this);
 }
 
 #endif
