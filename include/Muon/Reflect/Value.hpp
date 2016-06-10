@@ -42,13 +42,10 @@ namespace m
 		public:
 			Value();
 			Value(const Value& o);
+			Value(const char* str);
 
 			template<typename T>
-			static Value copy(const T& o);
-			static Value copy(const char* o);
-
-			template<typename T>
-			static Value ref(const T& o);
+			Value(T& o);
 
 			template<typename T>
 			operator T&() const;
@@ -59,26 +56,14 @@ namespace m
 			template<typename T>
 			bool compatible() const;
 
-			bool isReference() const;
+			void* object() const;
+
 			u64 id() const;
 			u32 size() const;
 			const String& name() const;
 
 		private:
 			m::traits::Variant<None, bool, u64, f64, String, EnumValue, UserObject> m_value;
-			void* m_pointer = NULL;
-
-			u64 m_id;
-			u32 m_size;
-			String m_name;
-
-			template<typename T>
-			void _setup()
-			{
-				m_id = traits::TypeTraits<T>::id();
-				m_size = traits::TypeTraits<T>::size();
-				m_name = traits::TypeTraits<T>::name();
-			}
 		};
 	}
 }
@@ -86,23 +71,9 @@ namespace m
 #include "Muon/Reflect/Detail/ValueMapper.hpp"
 
 template<typename T>
-m::reflect::Value m::reflect::Value::copy(const T& value)
+m::reflect::Value::Value(T& o)
 {
-	Value v;
-	v.m_value = value;
-	v.m_pointer = NULL;
-	v._setup<T>();
-	return v;
-}
-
-template<typename T>
-m::reflect::Value m::reflect::Value::ref(const T& value)
-{
-	Value v;
-	v.m_value.reset();
-	v.m_pointer = (void*)&value;
-	v._setup<T>();
-	return v;
+	m_value = detail::ValueMapper<T>::to(o);
 }
 
 template<typename T>
@@ -114,7 +85,7 @@ m::reflect::Value::operator T&() const
 template<typename T>
 T& m::reflect::Value::get() const
 {
-	return  (m_pointer == NULL ? m_value.get<T>() : *(T*)m_pointer);
+	return detail::ValueMapper<T&>::from(*this);
 }
 
 template<typename T>

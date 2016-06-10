@@ -43,9 +43,9 @@ namespace m
 		{
 		}
 
-		void* UserObject::getPointer() const
+		void* UserObject::object() const
 		{
-			return &(*m_objectHolder);
+			return m_objectHolder.get()->object();
 		}
 
 		bool UserObject::isReference() const

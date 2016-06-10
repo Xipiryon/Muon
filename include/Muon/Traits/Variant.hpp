@@ -157,7 +157,7 @@ namespace m
 				return (T&)m_data;
 			}
 
-			void* pointer() const
+			void* object() const
 			{
 				return (void*)&m_data;
 			}

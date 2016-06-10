@@ -39,23 +39,20 @@ namespace m
 	{
 		class MUON_API UserObject
 		{
-			static UserObject makeCopy(UserObject& obj);
-			static UserObject makeReference(UserObject& obj);
+			static UserObject copy(UserObject& obj);
+			static UserObject ref(UserObject& obj);
 		public:
 
 			template<typename T>
-			static UserObject makeCopy(T& obj);
+			static UserObject copy(const T& obj);
 
 			template<typename T>
-			static UserObject makeReference(T& obj);
+			static UserObject ref(T& obj);
 
 			UserObject();
 			UserObject(const UserObject& o);
 
-			template<typename T>
-			UserObject(const T& obj);
-
-			void* getPointer() const;
+			void* object() const;
 			bool isReference() const;
 
 		private:
@@ -68,7 +65,7 @@ namespace m
 MUON_TRAITS_DECL(m::reflect::UserObject);
 
 template<typename T>
-m::reflect::UserObject m::reflect::UserObject::makeCopy(T& obj)
+m::reflect::UserObject m::reflect::UserObject::copy(const T& obj)
 {
 	UserObject userObj;
 	userObj.m_objectHolder.reset(MUON_NEW(m::reflect::detail::ObjectHolderCopy<T>, const_cast<T*>(&obj)));
@@ -77,16 +74,12 @@ m::reflect::UserObject m::reflect::UserObject::makeCopy(T& obj)
 }
 
 template<typename T>
-m::reflect::UserObject m::reflect::UserObject::makeReference(T& obj)
+m::reflect::UserObject m::reflect::UserObject::ref(T& obj)
 {
-	return UserObject(obj);
-}
-
-template<typename T>
-m::reflect::UserObject::UserObject(const T& obj)
-{
-	m_objectHolder.reset(MUON_NEW(m::reflect::detail::ObjectHolderRef<T>, const_cast<T*>(&obj)));
-	m_isReference = true;
+	UserObject userObj;
+	userObj.m_objectHolder.reset(MUON_NEW(m::reflect::detail::ObjectHolderRef<T>, const_cast<T*>(&obj)));
+	userObj.m_isReference = true;
+	return userObj;
 }
 
 #endif

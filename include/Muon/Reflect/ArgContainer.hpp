@@ -41,11 +41,6 @@ namespace m
 		public:
 			static const ArgContainer Empty;
 
-			template<typename T>
-			ArgContainer& ref(const T& o);
-			template<typename T>
-			ArgContainer& copy(const T& o);
-
 			ArgContainer& operator+=(const Value& o);
 			ArgContainer operator+(const Value& o);
 
@@ -58,20 +53,6 @@ namespace m
 			std::vector<Value> m_args;
 		};
 	}
-}
-
-template<typename T>
-m::reflect::ArgContainer& m::reflect::ArgContainer::ref(const T& o)
-{
-	*this += Value::ref(o);
-	return *this;
-}
-
-template<typename T>
-m::reflect::ArgContainer& m::reflect::ArgContainer::copy(const T& o)
-{
-	*this += Value::copy(o);
-	return *this;
 }
 
 #endif

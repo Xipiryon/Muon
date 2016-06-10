@@ -33,48 +33,38 @@ namespace m
 	{
 		Value::Value()
 			: m_value()
-			, m_pointer(NULL)
-			, m_id(traits::TypeTraits<None>::id())
-			, m_size(traits::TypeTraits<None>::size())
-			, m_name(traits::TypeTraits<None>::name())
 		{
+			m_value.set(None());
 		}
 
 		Value::Value(const Value& o)
-			: m_pointer(o.m_pointer)
-			, m_id(o.m_id)
-			, m_size(o.m_size)
-			, m_name(o.m_name)
+			: m_value(o.m_value)
 		{
-			m_value = o.m_value;
 		}
 
-		Value Value::copy(const char* value)
+		Value::Value(const char* value)
 		{
-			Value v;
-			v.m_value = m::String(value);
-			v._setup<m::String>();
-			return v;
+			m_value = m::String(value);
 		}
 
-		bool Value::isReference() const
+		void* Value::object() const
 		{
-			return (m_pointer != NULL);
+			return m_value.object();
 		}
 
 		u64 Value::id() const
 		{
-			return m_id;
+			return m_value.id();
 		}
 
 		u32 Value::size() const
 		{
-			return m_size;
+			return m_value.size();
 		}
 
 		const String& Value::name() const
 		{
-			return m_name;
+			return m_value.name();
 		}
 	}
 }

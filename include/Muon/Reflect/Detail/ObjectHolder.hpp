@@ -80,7 +80,7 @@ namespace m
 			class ObjectHolderRef : public IObjectHolder
 			{
 			public:
-				ObjectHolderRef(T* obj)
+				ObjectHolderRef(const T* obj)
 					: m_object(obj)
 				{
 				}
@@ -96,7 +96,7 @@ namespace m
 				}
 
 			private:
-				typename std::remove_const<T>::type* m_object;
+				const T* m_object;
 			};
 		}
 	}

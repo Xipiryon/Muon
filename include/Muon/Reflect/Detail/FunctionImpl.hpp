@@ -47,42 +47,63 @@ namespace m
 			// Extract the n'th element and cast it to
 			// the expected type
 			// *******************************
-			template<typename T>
-			struct ArgExtractor<T, typename std::enable_if<!std::is_pointer<T>::value && !std::is_reference<T>::value>::type>
+			template<typename T, typename C>
+			struct ArgExtractor//<T, typename std::enable_if<!std::is_pointer<T>::value && !std::is_reference<T>::value>::type>
 			{
 				static T extract(const ArgContainer& args, u32 index)
 				{
-					MUON_ASSERT_BREAK(args[index].isCompatible<T>()
+					MUON_ASSERT_BREAK(args[index].compatible<T>()
 									  , "Argument does not match: expected '%s', got '%s'"
 									  , traits::TypeTraits<traits::RawType<T>::type>::name()
 									  , args[index].name().cStr());
 					return args[index].get<T>();
 				}
 			};
-
+			/*
 			template<typename T>
 			struct ArgExtractor<T, typename std::enable_if<std::is_reference<T>::value>::type>
 			{
-				static T& extract(const ArgContainer& args, u32 index)
-				{
-					MUON_ASSERT_BREAK(args[index].isCompatible<T>()
-									  , "Argument does not match: expected '%s&', got '%s'"
-									  , traits::TypeTraits<traits::RawType<T>::type>::name()
-									  , args[index].name().cStr());
-					return args[index].get<T&>();
-				}
+			static T extract(const ArgContainer& args, u32 index)
+			{
+			MUON_ASSERT_BREAK(args[index].compatible<T>()
+			, "Argument does not match: expected '%s&', got '%s'"
+			, traits::TypeTraits<traits::RawType<T>::type>::name()
+			, args[index].name().cStr());
+			return args[index].get<typename std::remove_reference<T>::type>();
+			}
 			};
 
 			template<typename T>
-			struct ArgExtractor<T, typename std::enable_if<std::is_pointer<T>::value>::type>
+			struct ArgExtractor<T, typename std::enable_if<
+			std::is_pointer<T>::value
+			&& !std::is_same<typename traits::RawType<T>::type, const char*>::value
+			>::type>
+			{
+			static T extract(const ArgContainer& args, u32 index)
+			{
+			MUON_ASSERT_BREAK(args[index].compatible<T>()
+			, "Argument does not match: expected '%s*', got '%s'"
+			, traits::TypeTraits<traits::RawType<T>::type>::name()
+			, args[index].name().cStr());
+			return args[index].get<T>();
+			}
+			};
+			//*/
+
+			// Specific case for (const) char*
+			template<typename T>
+			struct ArgExtractor<T, typename std::enable_if<
+				std::is_pointer<T>::value
+				&& std::is_same<typename traits::RawType<T>::type, const char*>::value
+			>::type>
 			{
 				static T extract(const ArgContainer& args, u32 index)
 				{
-					MUON_ASSERT_BREAK(args[index].isCompatible<T>()
-									  , "Argument does not match: expected '%s*', got '%s'"
+					MUON_ASSERT_BREAK(args[index].compatible<T>()
+									  , "Argument does not match: expected '%s', got '%s'"
 									  , traits::TypeTraits<traits::RawType<T>::type>::name()
 									  , args[index].name().cStr());
-					return args[index].get<T>();
+					return args[index].get<String>().cStr();
 				}
 			};
 
@@ -138,7 +159,7 @@ namespace m
 				}
 
 			protected:
-				virtual Value execute(const UserObject& obj, const ArgContainer& args) const
+				virtual Value execute(const ArgContainer& args) const
 				{
 					MUON_ASSERT_BREAK(args.count() == sizeof...(Args)
 									  , "Parameter count not matching for '%s': expected %d, got %d!"
@@ -168,7 +189,7 @@ namespace m
 				}
 
 			protected:
-				virtual Value execute(const UserObject& obj, const ArgContainer& args) const
+				virtual Value execute(const ArgContainer& args) const
 				{
 					MUON_ASSERT_BREAK(args.count() == 0
 									  , "Parameter count not matching for '%s': expected %d, got %d!"
