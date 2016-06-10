@@ -47,8 +47,8 @@ namespace m
 			// Extract the n'th element and cast it to
 			// the expected type
 			// *******************************
-			template<typename T, typename C>
-			struct ArgExtractor//<T, typename std::enable_if<!std::is_pointer<T>::value && !std::is_reference<T>::value>::type>
+			template<typename T>
+			struct ArgExtractor<T, typename std::enable_if<!std::is_pointer<T>::value>::type>
 			{
 				static T extract(const ArgContainer& args, u32 index)
 				{
@@ -59,38 +59,25 @@ namespace m
 					return args[index].get<T>();
 				}
 			};
-			/*
-			template<typename T>
-			struct ArgExtractor<T, typename std::enable_if<std::is_reference<T>::value>::type>
-			{
-			static T extract(const ArgContainer& args, u32 index)
-			{
-			MUON_ASSERT_BREAK(args[index].compatible<T>()
-			, "Argument does not match: expected '%s&', got '%s'"
-			, traits::TypeTraits<traits::RawType<T>::type>::name()
-			, args[index].name().cStr());
-			return args[index].get<typename std::remove_reference<T>::type>();
-			}
-			};
 
+			// Pointers (not const char*)
 			template<typename T>
 			struct ArgExtractor<T, typename std::enable_if<
-			std::is_pointer<T>::value
-			&& !std::is_same<typename traits::RawType<T>::type, const char*>::value
+				std::is_pointer<T>::value
+				&& !std::is_same<typename traits::RawType<T>::type, const char*>::value
 			>::type>
 			{
-			static T extract(const ArgContainer& args, u32 index)
-			{
-			MUON_ASSERT_BREAK(args[index].compatible<T>()
-			, "Argument does not match: expected '%s*', got '%s'"
-			, traits::TypeTraits<traits::RawType<T>::type>::name()
-			, args[index].name().cStr());
-			return args[index].get<T>();
-			}
+				static T extract(const ArgContainer& args, u32 index)
+				{
+					MUON_ASSERT_BREAK(args[index].compatible<T>()
+									  , "Argument does not match: expected '%s*', got '%s'"
+									  , traits::TypeTraits<traits::RawType<T>::type>::name()
+									  , args[index].name().cStr());
+					return &(args[index].get<typename std::remove_pointer<T>::type>());
+				}
 			};
-			//*/
 
-			// Specific case for (const) char*
+			// Specific case for const char*
 			template<typename T>
 			struct ArgExtractor<T, typename std::enable_if<
 				std::is_pointer<T>::value

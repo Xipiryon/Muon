@@ -40,6 +40,8 @@ namespace m
 		class MUON_API Value
 		{
 		public:
+			typedef m::traits::Variant<None, bool, u64, f64, String, EnumValue, UserObject> ValueVariant;
+
 			Value();
 			Value(const Value& o);
 			Value(const char* str);
@@ -48,22 +50,20 @@ namespace m
 			Value(T& o);
 
 			template<typename T>
-			operator T&() const;
-
-			template<typename T>
 			T& get() const;
 
 			template<typename T>
 			bool compatible() const;
 
 			void* object() const;
+			const ValueVariant& variant() const;
 
 			u64 id() const;
 			u32 size() const;
 			const String& name() const;
 
 		private:
-			m::traits::Variant<None, bool, u64, f64, String, EnumValue, UserObject> m_value;
+			ValueVariant m_value;
 		};
 	}
 }
@@ -77,14 +77,12 @@ m::reflect::Value::Value(T& o)
 }
 
 template<typename T>
-m::reflect::Value::operator T&() const
-{
-	return get<T>();
-}
-
-template<typename T>
 T& m::reflect::Value::get() const
 {
+	if (id() == traits::TypeTraits<UserObject>::id())
+	{
+		return detail::ValueMapper<T&>::from(m_value.get<UserObject>());
+	}
 	return detail::ValueMapper<T&>::from(*this);
 }
 

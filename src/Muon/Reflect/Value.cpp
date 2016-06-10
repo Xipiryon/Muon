@@ -52,6 +52,11 @@ namespace m
 			return m_value.object();
 		}
 
+		const Value::ValueVariant& Value::variant() const
+		{
+			return m_value;
+		}
+
 		u64 Value::id() const
 		{
 			return m_value.id();

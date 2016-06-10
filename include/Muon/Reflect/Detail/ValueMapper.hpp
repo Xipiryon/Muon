@@ -41,32 +41,12 @@ namespace m
 		{
 			template<typename T, typename Check = void> struct ValueMapper;
 			template<typename T, typename Check = void> struct ValueCompatibiliy;
-			template<typename T, typename Check = void> struct ValueTypeMapper;
 
 			template<typename T>
 			eType mapToEnum()
 			{
 				return static_cast<eType>(ValueMapper<T>::type);
 			}
-
-			//typename std::enable_if<std::is_reference<T>::value>::type >
-			template<typename T>
-			struct ValueTypeMapper<T>
-			{
-				typedef T type;
-			};
-
-			template<typename T>
-			struct ValueTypeMapper<T*>
-			{
-				typedef T* type;
-			};
-
-			template<typename T>
-			struct ValueTypeMapper<T&>
-			{
-				typedef T& type;
-			};
 
 #define _MUON_CONVERT_FROM(RetType, ArgType, ConvertCode) static RetType from(ArgType value) { ConvertCode ;}
 
@@ -141,7 +121,7 @@ namespace m
 				_MUON_CONVERT_FROM_STRING(bool, return (value == "true"));
 				_MUON_CONVERT_FROM_ENUM(bool, return value.value() != 0);
 				_MUON_CONVERT_FROM_USEROBJECT(bool, return false);
-				_MUON_CONVERT_FROM_VALUE(bool, return value.get<bool>());
+				_MUON_CONVERT_FROM_VALUE(bool, return *(bool*)value.object());
 			};
 
 			template<typename T>
@@ -158,7 +138,7 @@ namespace m
 				_MUON_CONVERT_FROM_FLOATING(T, return static_cast<T>(value));
 				_MUON_CONVERT_FROM_STRING(T, return ::atoi(value.cStr()));
 				_MUON_CONVERT_FROM_ENUM(T, return static_cast<T>(value.value()));
-				_MUON_CONVERT_FROM_VALUE(T, return value.get<T>());
+				_MUON_CONVERT_FROM_VALUE(T, return *(T*)value.object());
 			};
 
 			template<typename T>
@@ -175,7 +155,7 @@ namespace m
 				_MUON_CONVERT_FROM_FLOATING(T, return value);
 				_MUON_CONVERT_FROM_STRING(T, return ::atof(value.cStr()));
 				_MUON_CONVERT_FROM_ENUM(T, return static_cast<T>(value.value()));
-				_MUON_CONVERT_FROM_VALUE(T, return value.get<T>());
+				_MUON_CONVERT_FROM_VALUE(T, return *(T*)value.object());
 			};
 
 			template<>
@@ -193,7 +173,7 @@ namespace m
 				_MUON_CONVERT_FROM_FLOATING(String, char buffer[32]; ::m::ftoa(value, buffer); return buffer);
 				_MUON_CONVERT_FROM_STRING(String, return value);
 				_MUON_CONVERT_FROM_ENUM(String, return value.name());
-				_MUON_CONVERT_FROM_VALUE(String, return value.get<String>());
+				_MUON_CONVERT_FROM_VALUE(String, return *(String*)value.object());
 			};
 
 			template<>
@@ -206,7 +186,7 @@ namespace m
 				}
 
 				_MUON_CONVERT_FROM_ENUM(EnumValue, return value);
-				_MUON_CONVERT_FROM_VALUE(EnumValue, return value.get<EnumValue>());
+				_MUON_CONVERT_FROM_VALUE(EnumValue, return *(EnumValue*)value.object());
 			};
 
 			template<>
@@ -219,24 +199,13 @@ namespace m
 					return value;
 				}
 
-				_MUON_CONVERT_FROM_VALUE(None, return value.get<None>());
+				_MUON_CONVERT_FROM_VALUE(None, return *(None*)value.object());
 			};
 
 			template<>
 			struct ValueMapper<void>
 			{
 				static const i32 type = eType::NONE;
-			};
-
-			template<typename T>
-			struct ValueMapper<T*> : ValueMapper<T>
-			{
-				//_MUON_CONVERT_FROM_USEROBJECT(T*, return static_cast<T*>(value.getPointer()));
-			};
-
-			template<typename T>
-			struct ValueMapper<const T*> : ValueMapper<T*>
-			{
 			};
 
 			template<typename T>
@@ -248,12 +217,8 @@ namespace m
 				}
 
 				_MUON_CONVERT_FROM_USEROBJECT(T&, return *static_cast<T*>(value.object()));
-				_MUON_CONVERT_FROM_VALUE(T&, return *static_cast<T*>(((UserObject*)value.object())->object()));
-			};
-
-			template<typename T>
-			struct ValueMapper<const T&> : ValueMapper<T&>
-			{
+				//_MUON_CONVERT_FROM_VALUE(T&, return *static_cast<T*>(((UserObject*)value.object())->object()));
+				_MUON_CONVERT_FROM_VALUE(T&, return value.variant().get<T&>());
 			};
 
 			template<>
@@ -273,7 +238,7 @@ namespace m
 				}
 
 				_MUON_CONVERT_FROM_STRING(const char*, return value.cStr());
-				_MUON_CONVERT_FROM_VALUE(const char*, return value.get<String>().cStr());
+				_MUON_CONVERT_FROM_VALUE(const char*, return ((String*)value.object())->cStr());
 			};
 
 			template <i32 N>
@@ -376,7 +341,7 @@ namespace m
 			};
 
 			template<typename T>
-			struct ValueCompatibility<const T&> : ValueCompatibility<T>
+			struct ValueCompatibility<T*> : ValueCompatibility<T>
 			{
 			};
 		}

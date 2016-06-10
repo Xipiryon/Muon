@@ -43,6 +43,11 @@ namespace m
 		{
 		}
 
+		UserObject UserObject::ref(UserObject& obj)
+		{
+			return obj;
+		}
+
 		void* UserObject::object() const
 		{
 			return m_objectHolder.get()->object();

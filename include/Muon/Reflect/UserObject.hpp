@@ -40,7 +40,6 @@ namespace m
 		class MUON_API UserObject
 		{
 			static UserObject copy(UserObject& obj);
-			static UserObject ref(UserObject& obj);
 		public:
 
 			template<typename T>
@@ -48,6 +47,7 @@ namespace m
 
 			template<typename T>
 			static UserObject ref(T& obj);
+			static UserObject ref(UserObject& obj);
 
 			UserObject();
 			UserObject(const UserObject& o);
