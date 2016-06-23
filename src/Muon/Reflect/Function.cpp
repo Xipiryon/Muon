@@ -79,7 +79,7 @@ namespace m
 			return m_argTypes[i];
 		}
 
-		Value Function::call(const ArgContainer& args)
+		Object Function::call(const ArgContainer& args)
 		{
 			return execute(args);
 		}

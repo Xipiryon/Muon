@@ -41,5 +41,27 @@ namespace m
 		{
 			return *this;
 		}
+
+		Class::Class()
+			: m_id(traits::TypeTraits<void>::id())
+			, m_size(traits::TypeTraits<void>::size())
+			, m_name(traits::TypeTraits<void>::name())
+		{
+		}
+
+		u64 Class::id() const
+		{
+			return m_id;
+		}
+
+		u32 Class::size() const
+		{
+			return m_size;
+		}
+
+		const String& Class::name() const
+		{
+			return m_name;
+		}
 	}
 }

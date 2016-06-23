@@ -25,71 +25,93 @@
 *
 *************************************************************************/
 
-#ifndef INCLUDE_MUON_REFLECT_VALUE_HPP
-#define INCLUDE_MUON_REFLECT_VALUE_HPP
+#ifndef INCLUDE_MUON_REFLECT_OBJECT_HPP
+#define INCLUDE_MUON_REFLECT_OBJECT_HPP
 
-#include "Muon/Traits/Variant.hpp"
-#include "Muon/Reflect/Type.hpp"
-#include "Muon/Reflect/Enum.hpp"
-#include "Muon/Reflect/UserObject.hpp"
+#include <memory>
+#include "Muon/Traits/TypeTraits.hpp"
+#include "Muon/Reflect/Detail/ObjectHolder.hpp"
+#include "Muon/String.hpp"
 
 namespace m
 {
 	namespace reflect
 	{
-		class MUON_API Value
+		class Class;
+		class MUON_API Object
 		{
+			static Object ref(const char* str);
+			static Object ref(char* str);
+
+			static Object copy(Object& obj);
+
+			Object(detail::IObjectHolder*, const String&);
 		public:
-			typedef m::traits::Variant<None, bool, u64, f64, String, EnumValue, UserObject> ValueVariant;
-
-			Value();
-			Value(const Value& o);
-			Value(const char* str);
 
 			template<typename T>
-			Value(T& o);
+			static Object copy(const T& obj);
+			static Object copy(const char* str);
 
 			template<typename T>
-			T& get() const;
+			static Object ref(T& obj);
+			static Object ref(Object& obj);
 
-			template<typename T>
-			bool compatible() const;
+			Object();
+			Object(const Object& o);
 
 			void* object() const;
-			const ValueVariant& variant() const;
+			template<typename T>
+			bool check() const;
+
+			template<typename T>
+			T& as() const;
+
+			bool isCopy() const;
 
 			u64 id() const;
 			u32 size() const;
 			const String& name() const;
 
 		private:
-			ValueVariant m_value;
+			std::shared_ptr<detail::IObjectHolder> m_objectHolder;
+			const Class* m_class;
+			bool m_isCopy;
 		};
 	}
 }
 
+MUON_TRAITS_DECL(m::reflect::Object);
+
 #include "Muon/Reflect/Detail/ValueMapper.hpp"
 
 template<typename T>
-m::reflect::Value::Value(T& o)
+m::reflect::Object m::reflect::Object::copy(const T& obj)
 {
-	m_value = detail::ValueMapper<T>::to(o);
+	Object userObj(MUON_NEW(m::reflect::detail::ObjectHolderCopy<T>, const_cast<T*>(&obj))
+				   , traits::TypeTraits<T>::name());
+	userObj.m_isCopy = true;
+	return userObj;
 }
 
 template<typename T>
-T& m::reflect::Value::get() const
+m::reflect::Object m::reflect::Object::ref(T& obj)
 {
-	if (id() == traits::TypeTraits<UserObject>::id())
-	{
-		return detail::ValueMapper<T&>::from(m_value.get<UserObject>());
-	}
-	return detail::ValueMapper<T&>::from(*this);
+	Object userObj(MUON_NEW(m::reflect::detail::ObjectHolderRef<T>, const_cast<T*>(&obj))
+				   , traits::TypeTraits<T>::name());
+	userObj.m_isCopy = false;
+	return userObj;
 }
 
 template<typename T>
-bool m::reflect::Value::compatible() const
+bool m::reflect::Object::check() const
 {
-	return detail::ValueCompatibility<T>::compatible(*this);
+	return detail::ObjectCompatibility<T>::check(*this);
+}
+
+template<typename T>
+T& m::reflect::Object::as() const
+{
+	return *(T*)object();
 }
 
 #endif

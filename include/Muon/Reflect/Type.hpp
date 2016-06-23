@@ -40,7 +40,7 @@ namespace m
 		};
 
 		class EnumValue;
-		class UserObject;
+		class Object;
 
 		enum eType
 		{
@@ -49,8 +49,8 @@ namespace m
 			INTEGER,
 			FLOAT,
 			STRING,
-			ENUM_VALUE,
-			USER_OBJECT,
+			ENUM,
+			OBJECT,
 		};
 
 		static const char* eTypeStr[] = {
@@ -59,8 +59,8 @@ namespace m
 			"INTEGER",
 			"FLOAT",
 			"STRING",
-			"ENUM_VALUE",
-			"USER_OBJECT",
+			"ENUM",
+			"OBJECT",
 		};
 	}
 }

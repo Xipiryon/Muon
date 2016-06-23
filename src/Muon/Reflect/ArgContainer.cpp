@@ -33,13 +33,13 @@ namespace m
 	{
 		const ArgContainer ArgContainer::Empty;
 
-		ArgContainer& ArgContainer::operator+=(const Value& o)
+		ArgContainer& ArgContainer::operator+=(const Object& o)
 		{
 			m_args.push_back(o);
 			return *this;
 		}
 
-		ArgContainer ArgContainer::operator+(const m::reflect::Value& o)
+		ArgContainer ArgContainer::operator+(const m::reflect::Object& o)
 		{
 			m::reflect::ArgContainer r;
 			r.m_args = m_args;
@@ -57,12 +57,12 @@ namespace m
 			return m_args.size();
 		}
 
-		const Value& ArgContainer::operator[](u32 i) const
+		const Object& ArgContainer::operator[](u32 i) const
 		{
 			return m_args[i];
 		}
 
-		Value& ArgContainer::operator[](u32 i)
+		Object& ArgContainer::operator[](u32 i)
 		{
 			return m_args[i];
 		}

@@ -30,13 +30,14 @@
 
 #include "Muon/Traits/TypeTraits.hpp"
 #include "Muon/Reflect/Type.hpp"
-#include "Muon/Reflect/UserObject.hpp"
+#include "Muon/Reflect/Object.hpp"
 
 namespace m
 {
 	namespace reflect
 	{
 		class Class;
+
 		class MUON_API ClassBuilder
 		{
 		public:
@@ -51,7 +52,16 @@ namespace m
 		{
 			friend class ClassBuilder;
 		public:
+			Class();
+
+			u64 id() const;
+			u32 size() const;
+			const String& name() const;
+
 		private:
+			u64 m_id;
+			u32 m_size;
+			String m_name;
 		};
 	}
 }

@@ -29,7 +29,7 @@
 
 namespace
 {
-	static const m::reflect::Class Default;
+	const m::reflect::Class Default;
 }
 
 namespace m

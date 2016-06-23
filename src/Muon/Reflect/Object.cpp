@@ -25,37 +25,66 @@
 *
 *************************************************************************/
 
-#include "Muon/Reflect/UserObject.hpp"
+#include "Muon/Reflect/Object.hpp"
+#include "Muon/Reflect/Detail/ClassDatabase.hpp"
 
 namespace m
 {
 	namespace reflect
 	{
-		UserObject::UserObject()
+		Object::Object(detail::IObjectHolder* object, const String& className)
+			: m_objectHolder(object)
+			, m_class(&detail::ClassDatabase::getInstance().retrieve(className))
+		{
+		}
+
+		Object::Object()
 			: m_objectHolder()
-			, m_isReference(false)
+			, m_class(&detail::ClassDatabase::getInstance().retrieve("void"))
+			, m_isCopy(true)
 		{
 		}
 
-		UserObject::UserObject(const UserObject& o)
+		Object::Object(const Object& o)
 			: m_objectHolder(o.m_objectHolder)
-			, m_isReference(o.m_isReference)
+			, m_class(o.m_class)
+			, m_isCopy(o.m_isCopy)
 		{
 		}
 
-		UserObject UserObject::ref(UserObject& obj)
+		Object Object::copy(const char* str)
+		{
+			return copy(String(str));
+		}
+
+		Object Object::ref(Object& obj)
 		{
 			return obj;
 		}
 
-		void* UserObject::object() const
+		void* Object::object() const
 		{
 			return m_objectHolder.get()->object();
 		}
 
-		bool UserObject::isReference() const
+		bool Object::isCopy() const
 		{
-			return m_isReference;
+			return m_isCopy;
+		}
+
+		u64 Object::id() const
+		{
+			return m_class->id();
+		}
+
+		u32 Object::size() const
+		{
+			return m_class->size();
+		}
+
+		const String& Object::name() const
+		{
+			return m_class->name();
 		}
 	}
 }

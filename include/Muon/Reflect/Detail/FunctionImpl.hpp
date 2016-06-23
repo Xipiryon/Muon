@@ -32,6 +32,7 @@
 #include "Muon/Helper/IndexSequence.hpp"
 #include "Muon/Traits/TypeTraits.hpp"
 #include "Muon/Reflect/Function.hpp"
+#include "Muon/Reflect/Detail/ValueMapper.hpp"
 #include "Muon/Reflect/Detail/FunctionDatabase.hpp"
 
 namespace m
@@ -52,11 +53,11 @@ namespace m
 			{
 				static T extract(const ArgContainer& args, u32 index)
 				{
-					MUON_ASSERT_BREAK(args[index].compatible<T>()
+					MUON_ASSERT_BREAK(args[index].check<T>()
 									  , "Argument does not match: expected '%s', got '%s'"
 									  , traits::TypeTraits<traits::RawType<T>::type>::name()
 									  , args[index].name().cStr());
-					return args[index].get<T>();
+					return args[index].as<typename traits::RawType<T>::type>();
 				}
 			};
 
@@ -69,11 +70,11 @@ namespace m
 			{
 				static T extract(const ArgContainer& args, u32 index)
 				{
-					MUON_ASSERT_BREAK(args[index].compatible<T>()
+					MUON_ASSERT_BREAK(args[index].check<T>()
 									  , "Argument does not match: expected '%s*', got '%s'"
 									  , traits::TypeTraits<traits::RawType<T>::type>::name()
 									  , args[index].name().cStr());
-					return &(args[index].get<typename std::remove_pointer<T>::type>());
+					return &(args[index].as<typename std::remove_pointer<T>::type>());
 				}
 			};
 
@@ -81,16 +82,17 @@ namespace m
 			template<typename T>
 			struct ArgExtractor<T, typename std::enable_if<
 				std::is_pointer<T>::value
-				&& std::is_same<typename traits::RawType<T>::type, const char*>::value
+				&&
+				std::is_same<typename traits::RawType<T>::type, const char*>::value
 			>::type>
 			{
 				static T extract(const ArgContainer& args, u32 index)
 				{
-					MUON_ASSERT_BREAK(args[index].compatible<T>()
+					MUON_ASSERT_BREAK(args[index].check<T>()
 									  , "Argument does not match: expected '%s', got '%s'"
 									  , traits::TypeTraits<traits::RawType<T>::type>::name()
 									  , args[index].name().cStr());
-					return args[index].get<String>().cStr();
+					return args[index].as<String>().cStr();
 				}
 			};
 
@@ -100,14 +102,14 @@ namespace m
 			struct CallHelper
 			{
 				template<typename Func, typename...Args>
-				static Value call(const Func& function, const ArgContainer& args)
+				static Object call(const Func& function, const ArgContainer& args)
 				{
 					return callImpl<Func, Args...>(function, args, helper::make_index_sequence<sizeof...(Args)>());
 				}
 
 			protected:
 				template<typename Func, typename...Args, m::u32...Indexes>
-				static Value callImpl(const Func& function, const ArgContainer& args, helper::index_sequence<Indexes...>)
+				static Object callImpl(const Func& function, const ArgContainer& args, helper::index_sequence<Indexes...>)
 				{
 					return function(ArgExtractor<Args>::extract(args, Indexes)...);
 				}
@@ -119,17 +121,17 @@ namespace m
 			struct CallHelper<void>
 			{
 				template<typename Func, typename...Args>
-				static Value call(const Func& function, const ArgContainer& args)
+				static Object call(const Func& function, const ArgContainer& args)
 				{
 					return callImpl<Func, Args...>(function, args, helper::make_index_sequence<sizeof...(Args)>());
 				}
 
 			protected:
 				template<typename Func, typename...Args, m::u32...Indexes>
-				static Value callImpl(const Func& function, const ArgContainer& args, helper::index_sequence<Indexes...>)
+				static Object callImpl(const Func& function, const ArgContainer& args, helper::index_sequence<Indexes...>)
 				{
 					function(ArgExtractor<Args>::extract(args, Indexes)...);
-					return Value();
+					return Object();
 				}
 			};
 
@@ -146,7 +148,7 @@ namespace m
 				}
 
 			protected:
-				virtual Value execute(const ArgContainer& args) const
+				virtual Object execute(const ArgContainer& args) const
 				{
 					MUON_ASSERT_BREAK(args.count() == sizeof...(Args)
 									  , "Parameter count not matching for '%s': expected %d, got %d!"
@@ -156,7 +158,7 @@ namespace m
 					{
 						return CallHelper<Ret>::call<decltype(m_function), Args...>(m_function, args);
 					}
-					return Value();
+					return Object();
 				}
 			private:
 				std::function<Ret(Args...)> m_function;
@@ -176,7 +178,7 @@ namespace m
 				}
 
 			protected:
-				virtual Value execute(const ArgContainer& args) const
+				virtual Object execute(const ArgContainer& args) const
 				{
 					MUON_ASSERT_BREAK(args.count() == 0
 									  , "Parameter count not matching for '%s': expected %d, got %d!"
@@ -186,7 +188,7 @@ namespace m
 					{
 						return CallHelper<Ret>::call(m_function, args);
 					}
-					return Value();
+					return Object();
 				}
 			private:
 				std::function<Ret()> m_function;

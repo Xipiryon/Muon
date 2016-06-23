@@ -30,7 +30,7 @@
 
 #include <vector>
 #include "Muon/Traits/TypeTraits.hpp"
-#include "Muon/Reflect/Value.hpp"
+#include "Muon/Reflect/Object.hpp"
 
 namespace m
 {
@@ -41,16 +41,16 @@ namespace m
 		public:
 			static const ArgContainer Empty;
 
-			ArgContainer& operator+=(const Value& o);
-			ArgContainer operator+(const Value& o);
+			ArgContainer& operator+=(const Object& o);
+			ArgContainer operator+(const Object& o);
 
 			void clear();
 			u32 count() const;
-			const Value& operator[](u32 i) const;
-			Value& operator[](u32 i);
+			const Object& operator[](u32 i) const;
+			Object& operator[](u32 i);
 
 		private:
-			std::vector<Value> m_args;
+			std::vector<Object> m_args;
 		};
 	}
 }
