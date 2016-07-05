@@ -55,7 +55,7 @@ namespace m
 				{
 					MUON_ASSERT_BREAK(args[index].check<T>()
 									  , "Argument does not match: expected '%s', got '%s'"
-									  , traits::TypeTraits<traits::RawType<T>::type>::name()
+									  , traits::TypeTraits<typename traits::RawType<T>::type>::name()
 									  , args[index].name().cStr());
 					return args[index].as<typename traits::RawType<T>::type>();
 				}
@@ -72,7 +72,7 @@ namespace m
 				{
 					MUON_ASSERT_BREAK(args[index].check<T>()
 									  , "Argument does not match: expected '%s*', got '%s'"
-									  , traits::TypeTraits<traits::RawType<T>::type>::name()
+									  , traits::TypeTraits<typename traits::RawType<T>::type>::name()
 									  , args[index].name().cStr());
 					return &(args[index].as<typename std::remove_pointer<T>::type>());
 				}
@@ -90,7 +90,7 @@ namespace m
 				{
 					MUON_ASSERT_BREAK(args[index].check<T>()
 									  , "Argument does not match: expected '%s', got '%s'"
-									  , traits::TypeTraits<traits::RawType<T>::type>::name()
+									  , traits::TypeTraits<typename traits::RawType<T>::type>::name()
 									  , args[index].name().cStr());
 					return args[index].as<String>().cStr();
 				}

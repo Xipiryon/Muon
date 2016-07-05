@@ -76,7 +76,7 @@ namespace priv
 
 #define _MUON_TRAITS_FUNCTIONS_DECL(Type) _MUON_TRAITS_DECL_NAME(Type) _MUON_TRAITS_DECL_ID(Type) _MUON_TRAITS_DECL_SIZE(Type)
 
-#define MUON_TRAITS_DECL(Type) template<> struct m::traits::TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) };
+#define MUON_TRAITS_DECL(Type) namespace m { namespace traits { template<> struct TypeTraits<Type> { _MUON_TRAITS_FUNCTIONS_DECL(Type) }; } }
 
 #define MUON_TRAITS_GET(Type) ::m::traits::TypeTraits<Type>
 #define MUON_TRAITS_GET_NAME(Type) ::m::traits::TypeTraits<Type>::name()
