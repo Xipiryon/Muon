@@ -156,7 +156,7 @@ namespace m
 
 					if (args.count() == sizeof...(Args))
 					{
-						return CallHelper<Ret>::call<decltype(m_function), Args...>(m_function, args);
+						return CallHelper<Ret>::template call<decltype(m_function), Args...>(m_function, args);
 					}
 					return Object();
 				}
@@ -186,7 +186,7 @@ namespace m
 
 					if (args.count() == 0)
 					{
-						return CallHelper<Ret>::call(m_function, args);
+						return CallHelper<Ret>::template call(m_function, args);
 					}
 					return Object();
 				}

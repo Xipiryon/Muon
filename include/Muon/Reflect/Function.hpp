@@ -74,6 +74,7 @@ m::reflect::Function::Function(const String& name)
 {
 }
 
+#include "Muon/Reflect/Detail/FunctionDatabase.hpp"
 #include "Muon/Reflect/Detail/FunctionImpl.hpp"
 
 #endif

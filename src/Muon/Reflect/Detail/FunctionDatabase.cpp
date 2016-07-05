@@ -25,6 +25,7 @@
 *
 *************************************************************************/
 
+#include "Muon/Reflect/Function.hpp"
 #include "Muon/Reflect/Detail/FunctionDatabase.hpp"
 
 namespace

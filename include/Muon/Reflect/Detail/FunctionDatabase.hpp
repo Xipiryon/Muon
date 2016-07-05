@@ -31,12 +31,12 @@
 #include <map>
 #include "Muon/String.hpp"
 #include "Muon/Helper/Singleton.hpp"
-#include "Muon/Reflect/Function.hpp"
 
 namespace m
 {
 	namespace reflect
 	{
+		class Function;
 		namespace detail
 		{
 			class MUON_API FunctionDatabase
