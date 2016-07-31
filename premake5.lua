@@ -26,10 +26,6 @@ end
 
 solution "Muon"
 
-	if _OPTIONS["unittests"] then
-		startproject "Muon_UnitTests"
-	end
-
 	configurations { "DebugDLL", "DebugLib", "ReleaseLib", "ReleaseDLL", "FinalDLL", "FinalLib" }
 
 	implibdir "bin/lib"
@@ -95,10 +91,6 @@ solution "Muon"
 
 include("project_Lib")
 
-if _OPTIONS["unittests"] then
-	include("project_UnitTests")
-end
-
 ------------------------------
 -- Options
 ------------------------------
@@ -107,11 +99,6 @@ newoption {
 	trigger     = "installdir",
 	value       = "PATH",
 	description = "Folder to search lib & include; default: '"..G_Install.Root.."'",
-}
-
-newoption {
-	trigger     = "unittests",
-	description = "Enable compilation of unit tests",
 }
 
 ------------------------------
