@@ -39,11 +39,10 @@ namespace m
 	{
 		namespace detail
 		{
-			class MUON_API EnumDatabase
+			class MUON_API EnumDatabase : public helper::Singleton<EnumDatabase>
 			{
+				friend class helper::Singleton<EnumDatabase>;
 			public:
-				MUON_SINGLETON_GET(EnumDatabase);
-
 				Enum& add(const String& name);
 				void remove(const String& name);
 				const Enum& retrieve(const String& name);

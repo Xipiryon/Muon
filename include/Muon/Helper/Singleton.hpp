@@ -31,13 +31,22 @@
 #include "Muon/System/Assert.hpp"
 #include "Muon/Helper/NonCopyable.hpp"
 
-/*
-* @file Sinleton.hpp
-*/
 
-/*
-* @brief
-*/
-#define MUON_SINGLETON_GET(Type) static Type& getInstance() { static Type gInstance; return gInstance; }
+namespace m 
+{
+	namespace helper
+	{
+		template<typename T>
+		class Singleton : public NonCopyable
+		{
+		public:
+			static T& getInstance()
+			{
+				static T s_instance;
+				return s_instance;
+			}
+		};
+	}
+}
 
 #endif

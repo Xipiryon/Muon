@@ -39,10 +39,10 @@ namespace m
 		class Function;
 		namespace detail
 		{
-			class MUON_API FunctionDatabase
+			class MUON_API FunctionDatabase : public helper::Singleton<FunctionDatabase>
 			{
+				friend class helper::Singleton<FunctionDatabase>;
 			public:
-				MUON_SINGLETON_GET(FunctionDatabase);
 				~FunctionDatabase();
 
 				Function& add(const String& name, Function* function);

@@ -39,10 +39,10 @@ namespace m
 	{
 		namespace detail
 		{
-			class MUON_API ClassDatabase
+			class MUON_API ClassDatabase : public helper::Singleton<ClassDatabase>
 			{
+				friend class helper::Singleton<ClassDatabase>;
 			public:
-				MUON_SINGLETON_GET(ClassDatabase);
 				~ClassDatabase();
 
 				Class& add(const String& name);
