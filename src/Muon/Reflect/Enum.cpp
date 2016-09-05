@@ -84,7 +84,9 @@ namespace m
 
 		EnumBuilder Enum::declare(const String& name)
 		{
-			return EnumBuilder(detail::EnumDatabase::getInstance().add(name));
+			auto& e = detail::EnumDatabase::getInstance().add(name);
+			e.m_name = name;
+			return EnumBuilder(e);
 		}
 
 		void Enum::undeclare(const String& name)
