@@ -38,6 +38,11 @@ namespace m
 	{
 		namespace detail
 		{
+			ClassDatabase::ClassDatabase()
+			{
+				//Class::declare("void");
+			}
+
 			ClassDatabase::~ClassDatabase()
 			{
 			}
@@ -55,18 +60,7 @@ namespace m
 				return it->second;
 			}
 
-			void ClassDatabase::remove(const String& name)
-			{
-				auto it = m_classes.find(name);
-				MUON_ASSERT_BREAK(it != m_classes.end(), "Class '%s' not registered!", name.cStr());
-
-				if (it != m_classes.end())
-				{
-					m_classes.erase(it);
-				}
-			}
-
-			const Class& ClassDatabase::retrieve(const String& name)
+			const Class& ClassDatabase::get(const String& name)
 			{
 				auto it = m_classes.find(name);
 				MUON_ASSERT_BREAK(it != m_classes.end(), "Class '%s' not registered!", name.cStr());

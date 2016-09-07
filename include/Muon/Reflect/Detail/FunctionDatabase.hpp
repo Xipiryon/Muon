@@ -46,8 +46,7 @@ namespace m
 				~FunctionDatabase();
 
 				Function& add(const String& name, Function* function);
-				void remove(const String& name);
-				Function& get(const String& name);
+				const Function& get(const String& name);
 
 				u32 size() const;
 				bool exists(const String& name);

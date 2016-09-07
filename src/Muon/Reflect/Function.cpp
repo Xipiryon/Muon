@@ -49,12 +49,7 @@ namespace m
 		{
 		}
 
-		void Function::undeclare(const String& name)
-		{
-			detail::FunctionDatabase::getInstance().remove(name);
-		}
-
-		Function& Function::retrieve(const String& name)
+		const Function& Function::retrieve(const String& name)
 		{
 			return detail::FunctionDatabase::getInstance().get(name);
 		}

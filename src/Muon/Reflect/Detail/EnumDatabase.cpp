@@ -51,18 +51,7 @@ namespace m
 				return it->second;
 			}
 
-			void EnumDatabase::remove(const String& name)
-			{
-				auto it = m_enums.find(name);
-				MUON_ASSERT_BREAK(it != m_enums.end(), "Enum '%s' not registered!", name.cStr());
-
-				if (it != m_enums.end())
-				{
-					m_enums.erase(it);
-				}
-			}
-
-			const Enum& EnumDatabase::retrieve(const String& name)
+			const Enum& EnumDatabase::get(const String& name)
 			{
 				auto it = m_enums.find(name);
 				MUON_ASSERT_BREAK(it != m_enums.end(), "Enum '%s' not registered!", name.cStr());

@@ -34,13 +34,13 @@ namespace m
 	{
 		Object::Object(detail::IObjectHolder* object, const String& className)
 			: m_objectHolder(object)
-			, m_class(&detail::ClassDatabase::getInstance().retrieve(className))
+			, m_class(&detail::ClassDatabase::getInstance().get(className))
 		{
 		}
 
 		Object::Object()
 			: m_objectHolder()
-			, m_class(&detail::ClassDatabase::getInstance().retrieve("void"))
+			, m_class(&detail::ClassDatabase::getInstance().get("void"))
 			, m_isCopy(true)
 		{
 		}

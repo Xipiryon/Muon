@@ -42,12 +42,13 @@ namespace m
 			class MUON_API ClassDatabase : public helper::Singleton<ClassDatabase>
 			{
 				friend class helper::Singleton<ClassDatabase>;
+				ClassDatabase();
+
 			public:
 				~ClassDatabase();
 
 				Class& add(const String& name);
-				void remove(const String& name);
-				const Class& retrieve(const String& name);
+				const Class& get(const String& name);
 
 				u32 size() const;
 				bool exists(const String& name);

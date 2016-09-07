@@ -38,16 +38,11 @@ namespace m
 		class MUON_API Function
 		{
 		public:
-			template<typename Ret, typename...Args>
-			Function(const String& name);
-
-			Function(const String& name);
 			virtual ~Function();
 
 			template<typename Ret, typename...Args>
 			static Function& declare(const String& name, Ret(*fptr)(Args...));
-			static void undeclare(const String& name);
-			static Function& retrieve(const String& name);
+			static const Function& retrieve(const String& name);
 
 			String name() const;
 			u32 getArgsCount() const;
@@ -58,6 +53,8 @@ namespace m
 
 		protected:
 			virtual Object execute(const ArgContainer& args) const = 0;
+
+			Function(const String& name);
 			Function(const String& name, eType retType, const std::vector<eType>& argTypes);
 
 		private:
@@ -66,12 +63,6 @@ namespace m
 			std::vector<eType> m_argTypes;
 		};
 	}
-}
-
-template<typename Ret, typename...Args>
-m::reflect::Function::Function(const String& name)
-	: m_name(name)
-{
 }
 
 #include "Muon/Reflect/Detail/FunctionDatabase.hpp"

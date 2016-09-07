@@ -71,7 +71,6 @@ namespace m
 		public:
 
 			static EnumBuilder declare(const String& name);
-			static void undeclare(const String& name);
 			static const Enum& retrieve(const String& name);
 
 			String name() const;

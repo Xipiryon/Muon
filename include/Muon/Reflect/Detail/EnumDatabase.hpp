@@ -44,8 +44,7 @@ namespace m
 				friend class helper::Singleton<EnumDatabase>;
 			public:
 				Enum& add(const String& name);
-				void remove(const String& name);
-				const Enum& retrieve(const String& name);
+				const Enum& get(const String& name);
 
 				u32 size() const;
 				bool exists(const String& name);

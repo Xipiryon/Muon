@@ -52,6 +52,7 @@ namespace m
 					MUON_DELETE(it->second);
 				}
 			}
+
 			Function& FunctionDatabase::add(const m::String& name, Function* function)
 			{
 				auto it = m_functions.find(name);
@@ -66,18 +67,7 @@ namespace m
 				return (*it->second);
 			}
 
-			void FunctionDatabase::remove(const String& name)
-			{
-				auto it = m_functions.find(name);
-				MUON_ASSERT_BREAK(it != m_functions.end(), "Function '%s' not registered!", name.cStr());
-
-				if (it != m_functions.end())
-				{
-					m_functions.erase(it);
-				}
-			}
-
-			Function& FunctionDatabase::get(const String& name)
+			const Function& FunctionDatabase::get(const String& name)
 			{
 				auto it = m_functions.find(name);
 				MUON_ASSERT_BREAK(it != m_functions.end(), "Function '%s' not registered!", name.cStr());

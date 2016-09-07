@@ -27,6 +27,7 @@
 
 #include "Muon/Reflect/Detail/EnumDatabase.hpp"
 #include "Muon/Reflect/Enum.hpp"
+#include "Muon/Reflect/Registrar.hpp"
 
 namespace
 {
@@ -46,6 +47,7 @@ namespace m
 		EnumBuilder& EnumBuilder::value(const String& name, m::i32 value)
 		{
 			m_enum.m_pairs[name] = value;
+			RegistrarManager::getInstance().forwardRegisterEnumValue(m_enum, EnumValue(m_enum, name, value));
 			return *this;
 		}
 
@@ -86,17 +88,13 @@ namespace m
 		{
 			auto& e = detail::EnumDatabase::getInstance().add(name);
 			e.m_name = name;
+			RegistrarManager::getInstance().forwardRegisterEnum(e);
 			return EnumBuilder(e);
-		}
-
-		void Enum::undeclare(const String& name)
-		{
-			detail::EnumDatabase::getInstance().remove(name);
 		}
 
 		const Enum& Enum::retrieve(const String& name)
 		{
-			return detail::EnumDatabase::getInstance().retrieve(name);
+			return detail::EnumDatabase::getInstance().get(name);
 		}
 
 		String Enum::name() const
