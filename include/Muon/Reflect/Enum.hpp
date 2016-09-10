@@ -36,6 +36,10 @@ namespace m
 {
 	namespace reflect
 	{
+		namespace detail
+		{
+			class EnumDatabase;
+		}
 		class Enum;
 
 		class MUON_API EnumBuilder
@@ -71,6 +75,7 @@ namespace m
 		public:
 
 			static EnumBuilder declare(const String& name);
+			static detail::EnumDatabase& database();
 
 			String name() const;
 			u32 size() const;

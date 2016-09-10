@@ -36,7 +36,13 @@ namespace m
 {
 	namespace reflect
 	{
+		namespace detail
+		{
+			class ClassDatabase;
+		}
+
 		class Class;
+		class Property;
 
 		class MUON_API ClassBuilder
 		{
@@ -48,11 +54,23 @@ namespace m
 			Class& m_class;
 		};
 
+		class MUON_API Property
+		{
+			friend class ClassBuilder;
+		public:
+			Property();
+
+		private:
+		};
+
 		class MUON_API Class
 		{
 			friend class ClassBuilder;
 		public:
 			Class();
+
+			static ClassBuilder declare(const String& name);
+			static detail::ClassDatabase& database();
 
 			u64 id() const;
 			u32 size() const;

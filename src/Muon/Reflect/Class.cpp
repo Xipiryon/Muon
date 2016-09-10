@@ -49,6 +49,19 @@ namespace m
 		{
 		}
 
+
+		ClassBuilder Class::declare(const String& name)
+		{
+			auto& c = detail::ClassDatabase::getInstance().add(name);
+			c.m_name = name;
+			return ClassBuilder(c);
+		}
+
+		detail::ClassDatabase& Class::database()
+		{
+			return detail::ClassDatabase::getInstance();
+		}
+
 		u64 Class::id() const
 		{
 			return m_id;

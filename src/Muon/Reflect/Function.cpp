@@ -32,6 +32,11 @@ namespace m
 {
 	namespace reflect
 	{
+		detail::FunctionDatabase& Function::database()
+		{
+			return detail::FunctionDatabase::getInstance();
+		}
+
 		Function::Function(const String& name)
 			: m_name(name)
 			, m_retType(eType::NONE)

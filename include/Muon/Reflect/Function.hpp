@@ -35,6 +35,11 @@ namespace m
 {
 	namespace reflect
 	{
+		namespace detail
+		{
+			class FunctionDatabase;
+		}
+
 		class MUON_API Function
 		{
 		public:
@@ -42,6 +47,7 @@ namespace m
 
 			template<typename Ret, typename...Args>
 			static Function& declare(const String& name, Ret(*fptr)(Args...));
+			static detail::FunctionDatabase& database();
 
 			String name() const;
 			u32 getArgsCount() const;
