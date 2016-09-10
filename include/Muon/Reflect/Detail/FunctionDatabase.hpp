@@ -47,6 +47,7 @@ namespace m
 
 				Function& add(const String& name, Function* function);
 				const Function& get(const String& name);
+				bool remove(const String& name);
 
 				u32 size() const;
 				bool exists(const String& name);

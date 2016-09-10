@@ -79,6 +79,19 @@ namespace m
 				return EMPTY_FUNCTION;
 			}
 
+			bool FunctionDatabase::remove(const String& name)
+			{
+				auto it = m_functions.find(name);
+				MUON_ASSERT_BREAK(it != m_functions.end(), "Function '%s' not registered!", name.cStr());
+
+				if (it != m_functions.end())
+				{
+					m_functions.erase(it);
+					return true;
+				}
+				return false;
+			}
+
 			u32 FunctionDatabase::size() const
 			{
 				return m_functions.size();

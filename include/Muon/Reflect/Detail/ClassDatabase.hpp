@@ -49,6 +49,7 @@ namespace m
 
 				Class& add(const String& name);
 				const Class& get(const String& name);
+				bool remove(const String& name);
 
 				u32 size() const;
 				bool exists(const String& name);

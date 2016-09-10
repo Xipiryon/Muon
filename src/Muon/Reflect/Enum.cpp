@@ -92,11 +92,6 @@ namespace m
 			return EnumBuilder(e);
 		}
 
-		const Enum& Enum::retrieve(const String& name)
-		{
-			return detail::EnumDatabase::getInstance().get(name);
-		}
-
 		String Enum::name() const
 		{
 			return m_name;

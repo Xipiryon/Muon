@@ -42,7 +42,6 @@ namespace m
 
 			template<typename Ret, typename...Args>
 			static Function& declare(const String& name, Ret(*fptr)(Args...));
-			static const Function& retrieve(const String& name);
 
 			String name() const;
 			u32 getArgsCount() const;

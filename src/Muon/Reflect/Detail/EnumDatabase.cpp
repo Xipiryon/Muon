@@ -63,6 +63,19 @@ namespace m
 				return INVALID_ENUM;
 			}
 
+			bool EnumDatabase::remove(const String& name)
+			{
+				auto it = m_enums.find(name);
+				MUON_ASSERT_BREAK(it != m_enums.end(), "Enum '%s' not registered!", name.cStr());
+
+				if (it != m_enums.end())
+				{
+					m_enums.erase(it);
+					return true;
+				}
+				return false;
+			}
+
 			u32 EnumDatabase::size() const
 			{
 				return m_enums.size();

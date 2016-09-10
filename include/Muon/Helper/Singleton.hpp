@@ -32,7 +32,7 @@
 #include "Muon/Helper/NonCopyable.hpp"
 
 
-namespace m 
+namespace m
 {
 	namespace helper
 	{

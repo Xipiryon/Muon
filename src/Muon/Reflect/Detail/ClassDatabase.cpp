@@ -29,7 +29,7 @@
 
 namespace
 {
-	const m::reflect::Class Default;
+	const m::reflect::Class EMPTY_CLASS;
 }
 
 namespace m
@@ -69,7 +69,20 @@ namespace m
 				{
 					return it->second;
 				}
-				return Default;
+				return EMPTY_CLASS;
+			}
+
+			bool ClassDatabase::remove(const String& name)
+			{
+				auto it = m_classes.find(name);
+				MUON_ASSERT_BREAK(it != m_classes.end(), "Class '%s' not registered!", name.cStr());
+
+				if (it != m_classes.end())
+				{
+					m_classes.erase(it);
+					return true;
+				}
+				return false;
 			}
 
 			u32 ClassDatabase::size() const

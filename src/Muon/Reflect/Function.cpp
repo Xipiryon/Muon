@@ -49,11 +49,6 @@ namespace m
 		{
 		}
 
-		const Function& Function::retrieve(const String& name)
-		{
-			return detail::FunctionDatabase::getInstance().get(name);
-		}
-
 		String Function::name() const
 		{
 			return m_name;

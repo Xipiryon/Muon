@@ -45,6 +45,7 @@ namespace m
 			public:
 				Enum& add(const String& name);
 				const Enum& get(const String& name);
+				bool remove(const String& name);
 
 				u32 size() const;
 				bool exists(const String& name);
